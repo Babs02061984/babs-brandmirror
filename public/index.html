@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Brand Mirror v3.1 - typo fix -->
 <html lang="de">
 <head>
 <meta charset="UTF-8">
@@ -201,6 +202,20 @@ body{font-family:'Jost',sans-serif;background:#111;display:flex;align-items:cent
 .btn-ghost:hover{border-color:rgba(255,92,0,.6);color:#FF5C00}
 @media(min-width:500px){.app{margin:24px auto;min-height:auto;border-radius:24px;box-shadow:0 32px 80px rgba(0,0,0,.5)}}
 
+/* TYPO SPECIMEN - FORCE WHITE TEXT */
+.typo-wrap { color: #FFFFFF; }
+.typo-wrap .tz-upper { 
+  font-weight: 700; font-size: 15px; letter-spacing: 2px;
+  line-height: 1.6; word-break: break-all; margin-bottom: 10px;
+  opacity: 1;
+}
+.typo-wrap .tz-lower { 
+  font-weight: 400; font-size: 14px; letter-spacing: 1px;
+  word-break: break-all; margin-bottom: 10px; opacity: 0.65;
+}
+.typo-wrap .tz-num { 
+  font-size: 24px; font-weight: 700; letter-spacing: 4px; margin-bottom: 14px;
+}
 /* EMAIL CAPTURE SCREEN */
 .email-screen{
   background:var(--night);
@@ -795,9 +810,11 @@ function renderResult(){
   var typoFont = th.typoFonts ? '"'+th.typoFonts[0]+'",'+th.typoFonts[1] : '"Jost",sans-serif';
   var typoTextColor = th.text || '#FFFFFF';
   var typoAZ =
-    '<div style="all:unset;display:block;font-family:'+typoFont+';font-weight:700;font-size:15px;letter-spacing:2px;color:'+typoTextColor+' !important;margin-bottom:10px;line-height:1.6;word-break:break-all;opacity:1;">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</div>'+
-    '<div style="all:unset;display:block;font-family:'+typoFont+';font-weight:400;font-size:14px;letter-spacing:1px;color:'+typoTextColor+' !important;margin-bottom:10px;word-break:break-all;opacity:0.65;">a b c d e f g h i j k l m n o p q r s t u v w x y z</div>'+
-    '<div style="all:unset;display:block;font-size:24px;font-weight:700;letter-spacing:4px;color:'+th.accent+' !important;margin-bottom:14px;font-family:monospace;">0 1 2 3 4 5 6 7 8 9</div>';
+    '<div class="typo-wrap" style="color:'+typoTextColor+';">'+
+      '<div class="tz-upper" style="font-family:'+typoFont+';color:'+typoTextColor+';">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</div>'+
+      '<div class="tz-lower" style="font-family:'+typoFont+';color:'+typoTextColor+';">a b c d e f g h i j k l m n o p q r s t u v w x y z</div>'+
+      '<div class="tz-num" style="color:'+th.accent+';">0 1 2 3 4 5 6 7 8 9</div>'+
+    '</div>';
   var typo = r.typografie ? sec('Typografie – '+th.typoLabel,
     '<div class="typo-spec" style="background:'+th.bg+';border-color:rgba(255,255,255,.1);">'+
     typoAZ+
