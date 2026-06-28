@@ -3,1282 +3,742 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Archetypen-Finder · Frischmuth. Design</title>
-<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,700&display=swap" rel="stylesheet">
+<title>Brand Mirror · Frischmuth.Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,700;1,700&family=Playfair+Display:ital,wght@0,700;1,700&family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-:root {
-  --midnight: #0D0B14;
-  --purple: #5B3FA0;
-  --purple-soft: #7B5BC4;
-  --orange: #FF5C00;
-  --white: #FFFFFF;
-  --off-white: #FAFAFA;
-  --text-dark: #0D0B14;
-  --text-muted: #4A4540;
-  --text-hint: #6B6560;
-  --text-on-dark: #E8E4DE;
-  --text-muted-dark: #B8B0A8;
-  --border: #E0D8D0;
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --night:#0D0B14;--orange:#FF5C00;--orange-light:#FFF0E8;
+  --purple:#5B3FA0;--white:#FFFFFF;--off:#FAFAFA;
+  --muted:#4A4540;--hint:#6B6560;--border:#E0D8D0;
+  --on-dark:#E8E4DE;--muted-dark:#B8B0A8;--green:#2D8A4E;
 }
+body{font-family:'Jost',sans-serif;background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.app{width:100%;max-width:430px;min-height:100vh;background:var(--off);display:flex;flex-direction:column;position:relative;overflow:hidden}
 
-body {
-  font-family: 'Jost', sans-serif;
-  background: #111;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+/* SLIDE */
+.slide{width:100%;flex:1;display:flex;flex-direction:column;animation:sIn .35s ease}
+@keyframes sIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+.slide.back{animation:sBk .35s ease}
+@keyframes sBk{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── SPARK OVERLAY ── */
+#spark-overlay{position:fixed;inset:0;z-index:9999;pointer-events:none;display:none;overflow:hidden}
+.spark{position:absolute;border-radius:50%;animation:sparkFly var(--dur) ease-out forwards}
+@keyframes sparkFly{
+  0%{transform:translate(0,0) scale(1);opacity:1}
+  100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}
 }
 
-.app {
-  width: 100%;
-  max-width: 430px;
-  min-height: 100vh;
-  background: var(--off-white);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
+/* ── LOADING ANIMATION ── */
+.load-screen{background:var(--night);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;padding:48px 32px;flex:1;position:relative;overflow:hidden}
+.load-screen::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(91,63,160,.3) 0%,transparent 70%);border-radius:50%}
+.load-screen::after{content:'';position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(255,92,0,.2) 0%,transparent 70%);border-radius:50%}
 
-/* ── TRANSITIONS ── */
-.slide {
-  width: 100%;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(32px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-.slide.back {
-  animation: slideInBack 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-@keyframes slideInBack {
-  from { opacity: 0; transform: translateX(-32px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
+.orbit-loader{position:relative;width:120px;height:120px;z-index:1}
+.orbit-ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;animation:orbitSpin var(--spd) linear infinite}
+.orbit-ring:nth-child(1){border-top-color:var(--orange);border-right-color:rgba(255,92,0,.3);--spd:1.8s;inset:0}
+.orbit-ring:nth-child(2){border-top-color:var(--purple);border-left-color:rgba(91,63,160,.3);--spd:2.8s;inset:16px;animation-direction:reverse}
+.orbit-ring:nth-child(3){border-bottom-color:rgba(255,255,255,.2);--spd:4s;inset:32px}
+.orbit-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--orange);top:50%;left:50%;transform:translate(-50%,-50%);animation:orbitPulse 1.2s ease-in-out infinite}
+@keyframes orbitSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes orbitPulse{0%,100%{transform:translate(-50%,-50%) scale(1);box-shadow:0 0 0 0 rgba(255,92,0,.4)}50%{transform:translate(-50%,-50%) scale(1.5);box-shadow:0 0 0 8px rgba(255,92,0,0)}}
 
-/* ── SHAKE ANIMATION ── */
-@keyframes shake {
-  0%,100% { transform: translateX(0); }
-  20%      { transform: translateX(-4px); }
-  40%      { transform: translateX(4px); }
-  60%      { transform: translateX(-3px); }
-  80%      { transform: translateX(3px); }
-}
-.shake { animation: shake 0.35s ease; }
+.load-label{font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--muted-dark);z-index:1;text-align:center}
+.dots{display:flex;gap:8px;z-index:1}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:dp 1.4s ease-in-out infinite}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes dp{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1.2)}}
 
-/* ── TYPEWRITER ── */
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-.cursor {
-  display: inline-block;
-  width: 3px;
-  height: 1em;
-  background: var(--orange);
-  margin-left: 2px;
-  vertical-align: text-bottom;
-  animation: blink 0.8s step-end infinite;
-}
+/* ── TOP NAV (back button) ── */
+.top-nav{display:flex;align-items:center;padding:14px 20px 0;min-height:48px}
+.back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;font-family:'Jost',sans-serif;font-size:15px;font-weight:400;color:var(--hint);cursor:pointer;padding:6px 8px;border-radius:8px;transition:color .15s,background .15s}
+.back-btn:hover{color:var(--night);background:rgba(0,0,0,.04)}
+.back-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2}
+.top-nav-dark{background:var(--night)}
+.top-nav-dark .back-btn{color:var(--muted-dark)}
+.top-nav-dark .back-btn:hover{color:var(--white);background:rgba(255,255,255,.08)}
 
-/* ── PROGRESS ── */
-.progress-wrap {
-  background: var(--midnight);
-  padding: 0;
-}
-.progress-bar {
-  height: 3px;
-  background: rgba(255,255,255,0.1);
-}
-.progress-fill {
-  height: 100%;
-  background: var(--orange);
-  transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-.progress-label {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-muted-dark);
-  padding: 10px 24px 14px;
-}
+/* PROGRESS */
+.prog-wrap{background:var(--night)}
+.prog-bar{height:3px;background:rgba(255,255,255,.1)}
+.prog-fill{height:100%;background:var(--orange);transition:width .5s ease}
+.prog-label{font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted-dark);padding:10px 20px 14px}
 
-/* ── CHIP ── */
-.chip {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 5px 12px;
-  border-radius: 4px;
-  border: 1px solid var(--orange);
-  color: var(--orange);
-  background: transparent;
-}
+/* START */
+.start-bar{height:4px;background:var(--orange)}
+.start-body{background:var(--night);color:var(--white);flex:1;display:flex;flex-direction:column;padding:32px 28px 52px;position:relative;overflow:hidden}
+.start-body::before{content:'';position:absolute;top:-60px;right:-60px;width:280px;height:280px;background:radial-gradient(circle,rgba(91,63,160,.45) 0%,transparent 70%);border-radius:50%}
+.start-body::after{content:'';position:absolute;bottom:-40px;left:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(255,92,0,.25) 0%,transparent 70%);border-radius:50%}
+.logo-w{position:relative;z-index:2;margin-bottom:44px}
+.logo-w img{height:28px}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--orange);margin-bottom:12px;position:relative;z-index:2}
+.h1{font-size:52px;font-weight:700;font-style:italic;text-transform:uppercase;line-height:1.1;letter-spacing:-1.5px;color:var(--white);flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+.h1 span{color:var(--orange)}
+.divider{width:40px;height:3px;background:var(--orange);margin:24px 0 18px;position:relative;z-index:2}
+.start-p{font-size:15px;color:var(--on-dark);line-height:1.55;margin-bottom:8px;position:relative;z-index:2}
+.start-p.accent{color:var(--orange);font-weight:500;margin-bottom:28px}
+.btn-start{width:100%;padding:18px;background:var(--orange);color:var(--white);border:none;border-radius:12px;font-family:'Jost',sans-serif;font-size:16px;font-weight:700;cursor:pointer;position:relative;z-index:2;transition:opacity .2s,transform .15s;box-shadow:0 4px 20px rgba(255,92,0,.35)}
+.btn-start:hover{opacity:.92;transform:translateY(-1px)}
+.btn-start:active{transform:scale(.98)}
+.footnote{text-align:center;font-size:11px;color:rgba(255,255,255,.2);margin-top:14px;letter-spacing:1px;position:relative;z-index:2}
 
-/* ── START SCREEN ── */
-.start-screen {
-  background: var(--midnight);
-}
-.start-top-bar {
-  height: 4px;
-  background: var(--orange);
-}
-.start-content {
-  padding: 40px 28px 52px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.start-logo {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-muted-dark);
-  margin-bottom: 56px;
-}
-.start-eyebrow {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--orange);
-  margin-bottom: 16px;
-}
-.start-headline {
-  font-size: 54px;
-  font-weight: 700;
-  font-style: italic;
-  text-transform: uppercase;
-  line-height: 1.0;
-  letter-spacing: -1.5px;
-  color: var(--white);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.start-headline span { color: var(--orange); display: block; }
-.start-divider {
-  width: 40px;
-  height: 3px;
-  background: var(--orange);
-  margin: 32px 0 20px;
-}
-.start-sub {
-  font-size: 16px;
-  color: var(--text-muted-dark);
-  line-height: 1.65;
-  margin-bottom: 6px;
-  font-weight: 300;
-}
-.start-dry {
-  font-size: 13px;
-  color: var(--text-hint-dark, #9E9890);
-  font-style: italic;
-  margin-bottom: 40px;
-}
-.btn-primary {
-  width: 100%;
-  padding: 18px;
-  background: var(--orange);
-  color: var(--white);
-  border: none;
-  border-radius: 12px;
-  font-family: 'Jost', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  letter-spacing: 0.5px;
-  transition: transform 0.15s, opacity 0.15s;
-  position: relative;
-  overflow: hidden;
-}
-.btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
-.btn-primary:active { transform: scale(0.98); }
-.start-footnote {
-  text-align: center;
-  font-size: 11px;
-  color: rgba(255,255,255,0.2);
-  margin-top: 16px;
-  letter-spacing: 1px;
-}
+/* QUESTION */
+.q-screen{background:var(--off);display:flex;flex-direction:column}
+.q-content{padding:4px 20px 24px;flex:1;display:flex;flex-direction:column}
+.q-headline{font-size:23px;font-weight:700;font-style:italic;text-transform:uppercase;line-height:1.35;letter-spacing:-.5px;color:var(--night);margin-bottom:6px}
+.q-hint{font-size:13px;color:var(--hint);margin-bottom:20px;line-height:1.5;font-style:italic}
+.answers{display:flex;flex-direction:column;gap:10px;flex:1}
 
-/* ── QUESTION SCREEN ── */
-.question-screen { background: var(--off-white); }
-.question-content {
-  padding: 20px 24px 28px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.question-quip {
-  font-size: 13px;
-  font-style: italic;
-  color: var(--text-hint);
-  margin-bottom: 20px;
-  padding: 10px 14px;
-  background: rgba(255,92,0,0.06);
-  border-left: 2px solid var(--orange);
-  border-radius: 0 8px 8px 0;
-}
-.question-headline {
-  font-size: 25px;
-  font-weight: 700;
-  font-style: italic;
-  text-transform: uppercase;
-  line-height: 1.1;
-  letter-spacing: -0.5px;
-  color: var(--text-dark);
-  margin: 14px 0 8px;
-}
-.question-hint {
-  font-size: 13px;
-  color: var(--text-hint);
-  margin-bottom: 24px;
-  line-height: 1.5;
-}
-.answers {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
-}
-.answer-btn {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 16px;
-  background: var(--white);
-  border: 1.5px solid var(--border);
-  border-radius: 12px;
-  cursor: pointer;
-  text-align: left;
-  transition: border-color 0.15s, background 0.15s, transform 0.1s;
-  font-family: 'Jost', sans-serif;
-  width: 100%;
-}
-.answer-btn:hover {
-  border-color: var(--orange);
-  background: rgba(255,92,0,0.03);
-  transform: translateX(2px);
-}
-.answer-btn.selected {
-  background: var(--midnight);
-  border-color: var(--midnight);
-  animation: shake 0.35s ease;
-}
-.answer-badge {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: #EEE8E0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-dark);
-  flex-shrink: 0;
-  transition: all 0.2s;
-}
-.answer-btn.selected .answer-badge {
-  background: var(--orange);
-  color: var(--white);
-}
-.answer-text {
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--text-muted);
-  padding-top: 6px;
-  transition: color 0.2s;
-}
-.answer-btn.selected .answer-text { color: var(--white); }
-.back-link {
-  background: none;
-  border: none;
-  font-family: 'Jost', sans-serif;
-  font-size: 13px;
-  color: var(--text-hint);
-  cursor: pointer;
-  padding: 16px 24px;
-  text-align: left;
-  transition: color 0.15s;
-}
-.back-link:hover { color: var(--text-dark); }
+/* ANSWER BUTTONS */
+.ans-btn{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:var(--white);border:1.5px solid var(--border);border-radius:12px;cursor:pointer;text-align:left;width:100%;font-family:'Jost',sans-serif;transition:border-color .15s,background .15s,transform .1s;opacity:0;animation:ansIn .4s ease forwards}
+.ans-btn:nth-child(1){animation-delay:.06s}
+.ans-btn:nth-child(2){animation-delay:.12s}
+.ans-btn:nth-child(3){animation-delay:.18s}
+.ans-btn:nth-child(4){animation-delay:.24s}
+@keyframes ansIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.ans-btn:hover{border-color:var(--orange);background:rgba(255,92,0,.03);transform:translateX(2px)}
+.ans-btn.picked{background:var(--night);border-color:var(--night)}
 
-/* ── VALIDATION SCREEN ── */
-.validation-screen { background: var(--off-white); }
-.validation-content {
-  padding: 20px 24px 32px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.reveal-card {
-  background: var(--midnight);
-  border-radius: 16px;
-  padding: 28px 24px;
-  margin-bottom: 24px;
-  position: relative;
-  overflow: hidden;
-}
-.reveal-card::after {
-  content: '';
-  position: absolute;
-  top: 0; right: 0;
-  width: 120px; height: 120px;
-  background: radial-gradient(circle, rgba(91,63,160,0.3) 0%, transparent 70%);
-  border-radius: 50%;
-}
-.reveal-label {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-muted-dark);
-  margin-bottom: 14px;
-}
-.reveal-name {
-  font-size: 44px;
-  font-weight: 700;
-  font-style: italic;
-  text-transform: uppercase;
-  color: var(--white);
-  line-height: 1.0;
-  margin-bottom: 14px;
-  letter-spacing: -1px;
-}
-.reveal-accent {
-  width: 44px;
-  height: 3px;
-  background: var(--purple);
-  border-radius: 2px;
-  margin-bottom: 16px;
-}
-.reveal-text {
-  font-size: 14px;
-  line-height: 1.65;
-  color: var(--text-muted-dark);
-  font-weight: 300;
-  position: relative;
-  z-index: 1;
-}
-.validation-question {
-  font-size: 22px;
-  font-weight: 700;
-  font-style: italic;
-  text-transform: uppercase;
-  color: var(--text-dark);
-  margin-bottom: 16px;
-  line-height: 1.15;
-  letter-spacing: -0.5px;
-}
-.val-btns { display: flex; flex-direction: column; gap: 10px; }
-.val-btn {
-  padding: 17px 20px;
-  border-radius: 12px;
-  border: 1.5px solid var(--border);
-  background: var(--white);
-  font-family: 'Jost', sans-serif;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text-dark);
-  cursor: pointer;
-  text-align: left;
-  transition: all 0.15s;
-}
-.val-btn:first-child {
-  background: var(--midnight);
-  border-color: var(--midnight);
-  color: var(--white);
-}
-.val-btn:hover:not(:first-child) {
-  border-color: var(--orange);
-}
-.val-btn:hover:first-child { opacity: 0.9; }
+/* CIRCLE LETTER BADGE */
+.ans-badge{width:32px;height:32px;border-radius:50%;background:var(--orange-light);border:1.5px solid rgba(255,92,0,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;font-weight:700;color:var(--orange);transition:all .2s;margin-top:2px}
+.ans-btn.picked .ans-badge{background:var(--orange);border-color:var(--orange);color:var(--white)}
 
-/* ── CORRECTION SCREEN ── */
-.correction-screen { background: var(--off-white); }
-.correction-content {
-  padding: 20px 24px 32px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.correction-headline {
-  font-size: 26px;
-  font-weight: 700;
-  font-style: italic;
-  text-transform: uppercase;
-  line-height: 1.1;
-  color: var(--text-dark);
-  margin: 14px 0 8px;
-  letter-spacing: -0.5px;
-}
-.correction-dry {
-  font-size: 13px;
-  font-style: italic;
-  color: var(--text-hint);
-  margin-bottom: 24px;
-}
-.archetype-cards { display: flex; flex-direction: column; gap: 12px; flex: 1; }
-.archetype-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 18px 20px;
-  background: var(--white);
-  border: 1.5px solid var(--border);
-  border-left: 4px solid var(--orange);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.15s;
-  font-family: 'Jost', sans-serif;
-  text-align: left;
-  width: 100%;
-}
-.archetype-card:nth-child(even) { border-left-color: var(--midnight); }
-.archetype-card:hover { transform: translateX(3px); border-color: var(--orange); }
-.card-emoji { font-size: 28px; flex-shrink: 0; }
-.card-name {
-  font-size: 16px;
-  font-weight: 700;
-  font-style: italic;
-  text-transform: uppercase;
-  color: var(--text-dark);
-  margin-bottom: 4px;
-  letter-spacing: 0.3px;
-}
-.card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
-.restart-link {
-  background: none;
-  border: none;
-  font-family: 'Jost', sans-serif;
-  font-size: 13px;
-  color: var(--text-hint);
-  cursor: pointer;
-  padding: 20px 0 0;
-  text-align: center;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  width: 100%;
-  transition: color 0.15s;
-}
-.restart-link:hover { color: var(--text-dark); }
+.ans-text{font-size:14px;line-height:1.55;color:var(--muted);padding-top:4px;flex:1;transition:color .2s}
+.ans-btn.picked .ans-text{color:var(--white)}
+.ans-bold{font-weight:700;color:var(--night)}
+.ans-btn.picked .ans-bold{color:var(--white)}
 
-/* ── LOADING SCREEN ── */
-.loading-screen {
-  background: var(--midnight);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
-  padding: 48px 32px;
-  flex: 1;
-}
-.loading-record {
-  width: 100px;
-  height: 100px;
-  position: relative;
-}
-.record-outer {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: var(--midnight);
-  border: 3px solid var(--orange);
-  animation: spin 2s linear infinite;
-  position: absolute;
-}
-.record-groove {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid rgba(255,92,0,0.2);
-}
-.record-groove:nth-child(2) { width: 80px; height: 80px; top: 7px; left: 7px; }
-.record-groove:nth-child(3) { width: 60px; height: 60px; top: 17px; left: 17px; }
-.record-center {
-  position: absolute;
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  background: var(--orange);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-}
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+/* VALIDATION */
+.val-screen{background:var(--off);display:flex;flex-direction:column}
+.val-content{padding:4px 20px 32px;flex:1;display:flex;flex-direction:column}
+.reveal-card{background:var(--night);border-radius:16px;padding:28px 24px;margin-bottom:22px;position:relative;overflow:hidden}
+.reveal-card::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(91,63,160,.4) 0%,transparent 70%);border-radius:50%}
+.reveal-card::after{content:'';position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(255,92,0,.2) 0%,transparent 70%);border-radius:50%}
+.reveal-label{font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--muted-dark);margin-bottom:14px;position:relative;z-index:1}
+.reveal-name{font-size:44px;font-weight:700;font-style:italic;text-transform:uppercase;color:var(--white);line-height:1.1;margin-bottom:12px;letter-spacing:-1px;position:relative;z-index:1}
+.reveal-bar{width:44px;height:3px;background:var(--purple);border-radius:2px;margin-bottom:14px;position:relative;z-index:1}
+.reveal-text{font-size:15px;line-height:1.7;color:var(--white);font-weight:500;position:relative;z-index:1}
+.val-q{font-size:22px;font-weight:700;font-style:italic;text-transform:uppercase;color:var(--night);margin-bottom:16px;line-height:1.35;letter-spacing:-.5px}
+.val-btns{display:flex;flex-direction:column;gap:10px}
+.val-btn{padding:17px 20px;border-radius:12px;border:1.5px solid var(--border);background:var(--white);font-family:'Jost',sans-serif;font-size:15px;font-weight:500;color:var(--night);cursor:pointer;text-align:left;transition:all .15s}
+.val-btn.primary{background:var(--night);border-color:var(--night);color:var(--white)}
+.val-btn:hover:not(.primary){border-color:var(--orange)}
 
-.loading-texts {
-  text-align: center;
-}
-.loading-main {
-  font-size: 20px;
-  font-weight: 700;
-  font-style: italic;
-  text-transform: uppercase;
-  color: var(--white);
-  margin-bottom: 8px;
-  letter-spacing: -0.5px;
-}
-.loading-dry {
-  font-size: 13px;
-  font-style: italic;
-  color: var(--text-muted-dark);
-  line-height: 1.6;
-}
-.loading-dots { display: flex; gap: 8px; }
-.dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--orange);
-  animation: dotPulse 1.4s ease-in-out infinite;
-}
-.dot:nth-child(2) { animation-delay: 0.2s; }
-.dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes dotPulse {
-  0%,80%,100% { opacity: 0.3; transform: scale(0.8); }
-  40%          { opacity: 1;   transform: scale(1.2); }
-}
+/* CORRECTION */
+.corr-screen{background:var(--off);display:flex;flex-direction:column}
+.corr-content{padding:4px 20px 32px;flex:1;display:flex;flex-direction:column}
+.corr-h{font-size:26px;font-weight:700;font-style:italic;text-transform:uppercase;line-height:1.35;color:var(--night);margin-bottom:8px;letter-spacing:-.5px}
+.corr-sub{font-size:13px;font-style:italic;color:var(--hint);margin-bottom:22px}
+.alt-cards{display:flex;flex-direction:column;gap:12px;flex:1}
+.alt-card{display:flex;align-items:flex-start;gap:16px;padding:18px 20px;background:var(--white);border:1.5px solid var(--border);border-left:4px solid var(--orange);border-radius:12px;cursor:pointer;font-family:'Jost',sans-serif;text-align:left;width:100%;transition:all .15s}
+.alt-card:nth-child(even){border-left-color:var(--night)}
+.alt-card:hover{transform:translateX(3px);border-color:var(--orange)}
+.alt-name{font-size:15px;font-weight:700;font-style:italic;text-transform:uppercase;color:var(--night);margin-bottom:4px}
+.alt-desc{font-size:13px;color:var(--muted);line-height:1.5}
+.restart-link{background:none;border:none;font-family:'Jost',sans-serif;font-size:14px;color:var(--hint);cursor:pointer;padding:18px 0 0;text-align:center;text-decoration:underline;text-underline-offset:3px;width:100%}
 
-/* ── RESULT SCREEN ── */
-.result-screen { background: var(--off-white); }
-.result-hero {
-  background: var(--midnight);
-  padding: 44px 28px 36px;
-  position: relative;
-  overflow: hidden;
-}
-.result-hero::before {
-  content: '';
-  position: absolute;
-  top: -40px; right: -40px;
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(91,63,160,0.4) 0%, transparent 70%);
-  border-radius: 50%;
-}
-.result-hero::after {
-  content: '';
-  position: absolute;
-  bottom: -20px; left: -20px;
-  width: 140px; height: 140px;
-  background: radial-gradient(circle, rgba(255,92,0,0.2) 0%, transparent 70%);
-  border-radius: 50%;
-}
-.result-top-bar {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: var(--orange);
-}
-.result-label {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-muted-dark);
-  margin-bottom: 12px;
-  position: relative;
-  z-index: 1;
-}
-.result-name {
-  font-size: 60px;
-  font-weight: 700;
-  font-style: italic;
-  text-transform: uppercase;
-  color: var(--white);
-  line-height: 1.0;
-  letter-spacing: -2px;
-  margin-bottom: 16px;
-  position: relative;
-  z-index: 1;
-}
-.result-orange-bar {
-  width: 52px; height: 4px;
-  background: var(--orange);
-  border-radius: 2px;
-  margin-bottom: 18px;
-  position: relative;
-  z-index: 1;
-}
-.result-tagline {
-  font-size: 16px;
-  color: var(--text-muted-dark);
-  line-height: 1.7;
-  font-weight: 300;
-  position: relative;
-  z-index: 1;
-}
-.result-body {
-  padding: 28px 24px 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
-.section-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--text-hint);
-  margin-bottom: 12px;
-}
-.result-box {
-  background: var(--white);
-  border-radius: 14px;
-  padding: 20px;
-  border: 1px solid var(--border);
-}
-.color-row { display: flex; gap: 10px; }
-.color-swatch-wrap { flex: 1; text-align: center; }
-.color-swatch {
-  height: 56px;
-  border-radius: 10px;
-  margin-bottom: 6px;
-  border: 1px solid rgba(0,0,0,0.06);
-}
-.swatch-name { font-size: 10px; font-weight: 600; color: var(--text-dark); margin-bottom: 2px; }
-.swatch-hex { font-size: 9px; color: var(--text-hint); letter-spacing: 0.5px; }
-.quote-list { display: flex; flex-direction: column; gap: 10px; }
-.quote-item {
-  padding: 12px 16px;
-  border-left: 3px solid var(--orange);
-  background: rgba(255,92,0,0.04);
-  border-radius: 0 8px 8px 0;
-  font-size: 14px;
-  font-style: italic;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-.keyword-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.keyword {
-  padding: 6px 14px;
-  background: var(--midnight);
-  color: var(--white);
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-.client-list { display: flex; flex-direction: column; gap: 10px; }
-.client-item {
-  padding: 14px 16px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--orange);
-  background: var(--white);
-}
-.client-item.anti {
-  border-left-color: #C04040;
-  background: #FFF8F8;
-}
-.client-name { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; font-style: italic; }
-.client-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
-.contract-list { display: flex; flex-direction: column; gap: 10px; }
-.contract-item {
-  font-size: 14px;
-  color: var(--text-muted);
-  line-height: 1.5;
-  padding-left: 20px;
-  position: relative;
-}
-.contract-item::before {
-  position: absolute;
-  left: 0;
-  font-weight: 700;
-}
-.contract-item.yes::before { content: "✓"; color: var(--orange); }
-.contract-item.no::before  { content: "✗"; color: #C04040; }
-.contract-item.no { color: #C04040; }
-.steps-list { display: flex; flex-direction: column; gap: 12px; }
-.step-item {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-}
-.step-num {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  background: var(--orange);
-  color: var(--white);
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.step-text { font-size: 14px; color: var(--text-muted); line-height: 1.5; padding-top: 4px; }
-.result-cta {
-  background: var(--midnight);
-  padding: 28px 24px 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.cta-dry {
-  font-size: 13px;
-  font-style: italic;
-  color: var(--text-muted-dark);
-  text-align: center;
-  margin-bottom: 4px;
-}
-.btn-cta {
-  width: 100%;
-  padding: 18px;
-  background: var(--orange);
-  color: var(--white);
-  border: none;
-  border-radius: 12px;
-  font-family: 'Jost', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.15s, transform 0.1s;
-}
-.btn-cta:hover { opacity: 0.9; transform: translateY(-1px); }
-.btn-cta-ghost {
-  width: 100%;
-  padding: 16px;
-  background: transparent;
-  color: var(--text-muted-dark);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  font-family: 'Jost', sans-serif;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.btn-cta-ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
-
-@media (min-width: 500px) {
-  .app {
-    margin: 24px auto;
-    min-height: auto;
-    border-radius: 24px;
-    box-shadow: 0 32px 80px rgba(0,0,0,0.5);
-  }
-}
+/* RESULT */
+.res-screen{background:var(--off)}
+.res-hero{padding:44px 28px 36px;position:relative;overflow:hidden}
+.res-topbar{position:absolute;top:0;left:0;right:0;height:4px}
+.res-label{font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;position:relative;z-index:1;opacity:.7}
+.res-name{font-size:58px;font-weight:700;line-height:1.05;letter-spacing:-2px;margin-bottom:14px;position:relative;z-index:1}
+.res-bar{width:52px;height:4px;border-radius:2px;margin-bottom:16px;position:relative;z-index:1}
+.res-tagline{font-size:15px;line-height:1.75;font-weight:400;position:relative;z-index:1;opacity:.85}
+.res-body{padding:28px 20px 48px;display:flex;flex-direction:column;gap:26px}
+.sec-label{font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--hint);margin-bottom:12px}
+.res-box{background:var(--white);border-radius:14px;padding:20px;border:1px solid var(--border)}
+.color-row{display:flex;gap:10px}
+.sw-wrap{flex:1;text-align:center}
+.sw{height:60px;border-radius:10px;margin-bottom:6px;border:1px solid rgba(0,0,0,.06)}
+.sw-name{font-size:11px;font-weight:600;color:var(--night)}
+.kw-row{display:flex;flex-wrap:wrap;gap:8px}
+.kw{font-size:13px;font-weight:500;color:var(--orange)}.kw::before{content:"#"}
+.quote-list{display:flex;flex-direction:column;gap:10px}
+.quote-item{padding:12px 16px;border-left:3px solid var(--orange);background:rgba(255,92,0,.04);border-radius:0 8px 8px 0;font-size:14px;font-style:italic;color:var(--muted);line-height:1.5}
+.client-list{display:flex;flex-direction:column;gap:8px}
+.dd{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;background:var(--white)}
+.dd-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;background:var(--white);border:none;width:100%;font-family:'Jost',sans-serif;text-align:left;transition:background .15s}
+.dd-hdr:hover{background:rgba(255,92,0,.04)}
+.dd.open .dd-hdr{background:var(--night)}
+.dd-name{font-size:14px;font-weight:700;font-style:italic;text-transform:uppercase;color:var(--night);letter-spacing:.3px}
+.dd.open .dd-name{color:var(--white)}
+.dd-arrow{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;transition:transform .3s,background .2s,border-color .2s;flex-shrink:0}
+.dd.open .dd-arrow{transform:rotate(180deg);background:var(--orange);border-color:var(--orange)}
+.dd-arrow svg{width:10px;height:10px;stroke:var(--hint);fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5;transition:stroke .2s}
+.dd.open .dd-arrow svg{stroke:var(--white)}
+.dd-body{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;padding:0 18px;font-size:13px;color:var(--muted);line-height:1.65}
+.dd.open .dd-body{max-height:200px;padding:14px 18px;border-top:1px solid rgba(0,0,0,.06)}
+.anti-card{padding:14px 16px;border-radius:10px;border:1px solid #FFE0E0;border-left:4px solid #C04040;background:#FFF8F8}
+.anti-name{font-size:14px;font-weight:700;font-style:italic;color:var(--night);margin-bottom:4px}
+.anti-desc{font-size:13px;color:#C04040;line-height:1.4}
+.contract-list{display:flex;flex-direction:column;gap:10px}
+.ci{font-size:14px;color:var(--muted);line-height:1.5;padding-left:22px;position:relative}
+.ci::before{position:absolute;left:0;font-weight:700}
+.ci.yes::before{content:"\2713";color:#2D8A4E}
+.ci.no::before{content:"\2717";color:#C04040}.ci.no{color:#C04040}
+.steps-list{display:flex;flex-direction:column;gap:12px}
+.step{display:flex;gap:14px;align-items:flex-start}
+.step-n{width:28px;height:28px;border-radius:50%;background:var(--orange);color:var(--white);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-t{font-size:14px;color:var(--muted);line-height:1.5;padding-top:4px}
+.typo-spec{background:var(--white);border-radius:14px;padding:24px 20px;border:1px solid var(--border)}
+.typo-div{height:1px;background:var(--border);margin:14px 0}
+.typo-desc{font-size:13px;color:var(--muted);line-height:1.7}
+.marke-pill{font-size:13px;font-weight:600;color:var(--night);padding:6px 14px;background:var(--white);border:1px solid var(--border);border-radius:8px}
+.res-cta{padding:28px 20px 40px;display:flex;flex-direction:column;gap:12px}
+.cta-quote{font-size:18px;font-weight:500;font-style:italic;text-align:center;margin-bottom:4px;line-height:1.5}
+.btn-cta{width:100%;padding:18px;color:#FFFFFF;border:none;border-radius:12px;font-family:'Jost',sans-serif;font-size:16px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;background:linear-gradient(135deg,#FF5C00 0%,#FF8C00 50%,#5B3FA0 100%);background-size:200% auto;box-shadow:0 4px 24px rgba(255,92,0,.45);transition:transform .2s,box-shadow .2s,background-position .4s}
+.btn-cta .arrow{display:inline-block;transition:transform .35s cubic-bezier(0.34,1.56,0.64,1),opacity .25s}
+.btn-cta:hover .arrow{transform:translateX(5px)}
+.btn-cta.firing .arrow{animation:arrowFly .5s cubic-bezier(0.25,0.46,0.45,0.94) forwards}
+@keyframes arrowFly{0%{transform:translateX(0);opacity:1}60%{transform:translateX(24px);opacity:0}61%{transform:translateX(-20px);opacity:0}100%{transform:translateX(0);opacity:1}}
+.btn-cta::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);transition:left .55s ease}
+.btn-cta:hover::before{left:100%}
+.btn-cta:hover{transform:translateY(-2px);background-position:right center;box-shadow:0 10px 36px rgba(255,92,0,.55),0 0 0 3px rgba(91,63,160,.3)}
+.btn-cta:active{transform:scale(.98)}
+.btn-ghost{width:100%;padding:16px;background:transparent;border:1.5px solid rgba(255,255,255,.25);border-radius:12px;font-family:'Jost',sans-serif;font-size:14px;cursor:pointer;transition:all .15s;color:rgba(255,255,255,.65);letter-spacing:.3px}
+.btn-ghost:hover{border-color:rgba(255,92,0,.6);color:#FF5C00}
+@media(min-width:500px){.app{margin:24px auto;min-height:auto;border-radius:24px;box-shadow:0 32px 80px rgba(0,0,0,.5)}}
 </style>
 </head>
 <body>
+<div id="spark-overlay"></div>
 <div class="app" id="app"></div>
 <script>
-
-// ── DRY WIT COPY ──────────────────────────────────────────
-const QUIPS = {
-  q1: "Keine falsche Bescheidenheit. Was ist es wirklich?",
-  q2a: "Change-Maker. Okay. Aber wie genau?",
-  q2b: "Leader. Gut. Was unterscheidet dich von jedem anderen, der das auch sagt?",
-  q2c: "Connector. Klingt nach LinkedIn-Bio. Aber okay – was davon?",
-  q3a: "Fast da. Noch eine Frage. Wir versprechen, es ist die letzte.",
-  q3b: "Letzte Frage. Ernsthaft diesmal."
+// ── ARCHETYPE THEMES (unique per archetype) ──────────────
+var THEMES = {
+  OUTLAW:{
+    bg:'#0D0B14',text:'#FAFAFA',accent:'#FF5C00',bar:'#FF5C00',
+    ctaBg:'#FF5C00',ctaText:'white',ghostColor:'rgba(255,255,255,.15)',ghostText:'rgba(255,255,255,.6)',
+    quoteColor:'rgba(255,255,255,.8)',
+    font:"font-family:'Space Grotesk',sans-serif;font-style:normal;text-transform:uppercase;",
+    heroGrad:'radial-gradient(circle at 80% 20%,rgba(255,92,0,.35) 0%,transparent 60%),radial-gradient(circle at 20% 80%,rgba(91,63,160,.3) 0%,transparent 60%)',
+    typoFonts:['Space Grotesk','sans-serif'],typoLabel:'Space Grotesk Bold',
+    typoStyle:'font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:20px;letter-spacing:-0.5px;'
+  },
+  EXPLORER:{
+    bg:'#0A1628',text:'#EEF2F7',accent:'#4ECDC4',bar:'#4ECDC4',
+    ctaBg:'linear-gradient(135deg,#4ECDC4,#45B7D1)',ctaText:'white',ghostColor:'rgba(78,205,196,.15)',ghostText:'rgba(255,255,255,.6)',
+    quoteColor:'rgba(255,255,255,.85)',
+    font:"font-family:'Space Grotesk',sans-serif;font-style:normal;",
+    heroGrad:'radial-gradient(circle at 70% 30%,rgba(78,205,196,.3) 0%,transparent 60%),radial-gradient(circle at 30% 70%,rgba(69,183,209,.2) 0%,transparent 60%)',
+    typoFonts:['Space Grotesk','sans-serif'],typoLabel:'Space Grotesk',
+    typoStyle:'font-family:"Space Grotesk",sans-serif;font-weight:500;font-size:20px;letter-spacing:0.5px;'
+  },
+  MAGIER:{
+    bg:'#0F0A1E',text:'#EDE8FF',accent:'#A78BFA',bar:'#A78BFA',
+    ctaBg:'linear-gradient(135deg,#7C3AED,#A78BFA)',ctaText:'white',ghostColor:'rgba(167,139,250,.15)',ghostText:'rgba(255,255,255,.6)',
+    quoteColor:'rgba(255,255,255,.85)',
+    font:"font-family:'Cormorant Garamond',serif;font-style:italic;",
+    heroGrad:'radial-gradient(circle at 60% 20%,rgba(167,139,250,.4) 0%,transparent 60%),radial-gradient(circle at 40% 80%,rgba(124,58,237,.3) 0%,transparent 60%)',
+    typoFonts:['Cormorant Garamond','serif'],typoLabel:'Cormorant Garamond',
+    typoStyle:'font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:24px;'
+  },
+  HERRSCHER:{
+    bg:'#0C0C0C',text:'#F5F0E8',accent:'#C9A84C',bar:'#C9A84C',
+    ctaBg:'linear-gradient(135deg,#1A1A1A,#2D2D2D)',ctaText:'#C9A84C',ghostColor:'rgba(201,168,76,.15)',ghostText:'rgba(255,255,255,.5)',
+    quoteColor:'rgba(255,255,255,.8)',
+    font:"font-family:'Playfair Display',serif;font-style:normal;text-transform:uppercase;",
+    heroGrad:'radial-gradient(circle at 75% 25%,rgba(201,168,76,.25) 0%,transparent 60%),radial-gradient(circle at 25% 75%,rgba(201,168,76,.1) 0%,transparent 60%)',
+    typoFonts:['Playfair Display','serif'],typoLabel:'Playfair Display',
+    typoStyle:'font-family:"Playfair Display",serif;font-weight:700;font-size:22px;letter-spacing:1px;'
+  },
+  WEISER:{
+    bg:'#0E1620',text:'#E8EDF5',accent:'#60A5FA',bar:'#60A5FA',
+    ctaBg:'linear-gradient(135deg,#1E3A5F,#2E5090)',ctaText:'white',ghostColor:'rgba(96,165,250,.15)',ghostText:'rgba(255,255,255,.6)',
+    quoteColor:'rgba(255,255,255,.85)',
+    font:"font-family:'Space Grotesk',sans-serif;font-style:normal;",
+    heroGrad:'radial-gradient(circle at 65% 35%,rgba(96,165,250,.3) 0%,transparent 60%),radial-gradient(circle at 35% 65%,rgba(30,58,95,.5) 0%,transparent 60%)',
+    typoFonts:['Space Grotesk','sans-serif'],typoLabel:'Space Grotesk',
+    typoStyle:'font-family:"Space Grotesk",sans-serif;font-weight:400;font-size:18px;line-height:1.6;'
+  },
+  HELD:{
+    bg:'#0D0B14',text:'#FAFAFA',accent:'#F59E0B',bar:'#F59E0B',
+    ctaBg:'linear-gradient(135deg,#D97706,#F59E0B)',ctaText:'white',ghostColor:'rgba(245,158,11,.15)',ghostText:'rgba(255,255,255,.6)',
+    quoteColor:'rgba(255,255,255,.85)',
+    font:"font-family:'Space Grotesk',sans-serif;font-style:normal;font-weight:700;text-transform:uppercase;",
+    heroGrad:'radial-gradient(circle at 80% 20%,rgba(245,158,11,.4) 0%,transparent 60%),radial-gradient(circle at 20% 80%,rgba(217,119,6,.2) 0%,transparent 60%)',
+    typoFonts:['Space Grotesk','sans-serif'],typoLabel:'Space Grotesk Bold',
+    typoStyle:'font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:1px;'
+  },
+  LIEBHABER:{
+    bg:'#1A0A0F',text:'#FAF0F0',accent:'#F472B6',bar:'#F472B6',
+    ctaBg:'linear-gradient(135deg,#9D174D,#F472B6)',ctaText:'white',ghostColor:'rgba(244,114,182,.15)',ghostText:'rgba(255,255,255,.6)',
+    quoteColor:'rgba(255,255,255,.85)',
+    font:"font-family:'Cormorant Garamond',serif;font-style:italic;",
+    heroGrad:'radial-gradient(circle at 70% 30%,rgba(244,114,182,.35) 0%,transparent 60%),radial-gradient(circle at 30% 70%,rgba(157,23,77,.3) 0%,transparent 60%)',
+    typoFonts:['Cormorant Garamond','serif'],typoLabel:'Cormorant Garamond Italic',
+    typoStyle:'font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:26px;'
+  },
+  LIEBENDER:{
+    bg:'#0F1A14',text:'#F0FAF4',accent:'#6EE7B7',bar:'#6EE7B7',
+    ctaBg:'linear-gradient(135deg,#065F46,#6EE7B7)',ctaText:'white',ghostColor:'rgba(110,231,183,.15)',ghostText:'rgba(255,255,255,.6)',
+    quoteColor:'rgba(255,255,255,.85)',
+    font:"font-family:'Jost',sans-serif;font-style:normal;font-weight:300;",
+    heroGrad:'radial-gradient(circle at 60% 40%,rgba(110,231,183,.3) 0%,transparent 60%),radial-gradient(circle at 40% 60%,rgba(6,95,70,.4) 0%,transparent 60%)',
+    typoFonts:['Jost','sans-serif'],typoLabel:'Jost Light',
+    typoStyle:'font-family:"Jost",sans-serif;font-weight:300;font-size:20px;letter-spacing:0.5px;'
+  },
+  JESTER:{
+    bg:'#0A0A1A',text:'#FAFFFE',accent:'#FBBF24',bar:'#FBBF24',
+    ctaBg:'linear-gradient(135deg,#7C2D12,#FBBF24)',ctaText:'white',ghostColor:'rgba(251,191,36,.15)',ghostText:'rgba(255,255,255,.6)',
+    quoteColor:'rgba(255,255,255,.85)',
+    font:"font-family:'Space Grotesk',sans-serif;font-style:normal;",
+    heroGrad:'radial-gradient(circle at 80% 20%,rgba(251,191,36,.3) 0%,transparent 60%),radial-gradient(circle at 20% 80%,rgba(124,45,18,.4) 0%,transparent 60%)',
+    typoFonts:['Space Grotesk','sans-serif'],typoLabel:'Space Grotesk',
+    typoStyle:'font-family:"Space Grotesk",sans-serif;font-weight:500;font-size:20px;letter-spacing:0.3px;'
+  },
+  EVERYMAN:{
+    bg:'#141414',text:'#F5F5F5',accent:'#94A3B8',bar:'#94A3B8',
+    ctaBg:'linear-gradient(135deg,#334155,#64748B)',ctaText:'white',ghostColor:'rgba(148,163,184,.15)',ghostText:'rgba(255,255,255,.6)',
+    quoteColor:'rgba(255,255,255,.8)',
+    font:"font-family:'Jost',sans-serif;font-style:normal;font-weight:400;",
+    heroGrad:'radial-gradient(circle at 60% 40%,rgba(148,163,184,.2) 0%,transparent 60%),radial-gradient(circle at 40% 60%,rgba(51,65,85,.5) 0%,transparent 60%)',
+    typoFonts:['Jost','sans-serif'],typoLabel:'Jost Regular',
+    typoStyle:'font-family:"Jost",sans-serif;font-weight:400;font-size:18px;'
+  },
+  UNSCHULDIGE:{
+    bg:'#0F1520',text:'#EEF4FF',accent:'#93C5FD',bar:'#93C5FD',
+    ctaBg:'linear-gradient(135deg,#1E3A8A,#93C5FD)',ctaText:'white',ghostColor:'rgba(147,197,253,.15)',ghostText:'rgba(255,255,255,.6)',
+    quoteColor:'rgba(255,255,255,.85)',
+    font:"font-family:'Cormorant Garamond',serif;font-style:normal;font-weight:600;",
+    heroGrad:'radial-gradient(circle at 65% 35%,rgba(147,197,253,.3) 0%,transparent 60%),radial-gradient(circle at 35% 65%,rgba(30,58,138,.4) 0%,transparent 60%)',
+    typoFonts:['Cormorant Garamond','serif'],typoLabel:'Cormorant Garamond',
+    typoStyle:'font-family:"Cormorant Garamond",serif;font-weight:600;font-size:24px;letter-spacing:0.5px;'
+  }
 };
 
-const LOADING_TEXTS = [
-  "Dein Profil wird analysiert...",
-  "Archetypische Muster werden abgeglichen...",
-  "Fast fertig. Wir lügen nicht."
+var ARCHETYPES = ['OUTLAW','EXPLORER','MAGIER','HERRSCHER','WEISER','HELD','LIEBHABER','LIEBENDER','JESTER','EVERYMAN','UNSCHULDIGE'];
+
+var QUESTIONS = [
+  {id:1,text:"Was treibt dich in deinem Business wirklich an?",hint:"Dein erstes Gefühl ist meistens richtig – keine falsche Bescheidenheit.",answers:[
+    {t:"Ich will etwas verändern – das System, die Branche, die Norm.",s:{OUTLAW:2,EXPLORER:1,MAGIER:1}},
+    {t:"Ich will führen, Strukturen schaffen und Exzellenz beweisen.",s:{HERRSCHER:2,HELD:1,WEISER:1}},
+    {t:"Ich will echte Verbindungen schaffen und Menschen wirklich helfen.",s:{LIEBENDER:2,LIEBHABER:1,EVERYMAN:1}},
+    {t:"Ich will Visionen in Realität verwandeln – Dinge möglich machen.",s:{MAGIER:2,EXPLORER:1,HELD:1}}
+  ]},
+  {id:2,text:"Regeln sind für dich …",hint:"Antworte ohne lange nachzudenken – wie verhältst du dich wirklich?",answers:[
+    {t:"Da zum Brechen. Wer nicht riskiert, gewinnt nicht.",s:{OUTLAW:2,EXPLORER:1}},
+    {t:"Wichtig – sie geben Struktur und schaffen Verlässlichkeit.",s:{HERRSCHER:2,WEISER:1,EVERYMAN:1}},
+    {t:"Okay, solange sie Sinn ergeben. Sonst: ändern.",s:{HELD:2,MAGIER:1}},
+    {t:"Ehrlich gesagt egal – mich interessieren Menschen, nicht Systeme.",s:{LIEBHABER:2,LIEBENDER:1,JESTER:1}}
+  ]},
+  {id:3,text:"Wie kommunizierst du am liebsten mit Kunden?",hint:"Denk an dein letztes richtig gutes Gespräch – wie war dein Ton?",answers:[
+    {t:"Direkt, klar, ohne Umschweife – ich sage, was ich denke.",s:{OUTLAW:2,HELD:1,WEISER:1}},
+    {t:"Warm, empathisch, mit echtem Interesse für den Menschen.",s:{LIEBENDER:2,LIEBHABER:1,EVERYMAN:1}},
+    {t:"Inspirierend, visionär – ich zeige, was möglich ist.",s:{MAGIER:2,EXPLORER:1}},
+    {t:"Mit Humor und Leichtigkeit – Ernsthaftigkeit muss nicht schwer sein.",s:{JESTER:2,EVERYMAN:1,EXPLORER:1}}
+  ]},
+  {id:4,text:"Was ist deine größte Stärke im Business?",hint:"Was sagen Kunden, die dich weiterempfehlen – wofür stehst du wirklich?",answers:[
+    {t:"Ich analysiere tief und erkläre Komplexes verständlich.",s:{WEISER:2,HERRSCHER:1}},
+    {t:"Ich setze um – schnell, fokussiert, ergebnisorientiert.",s:{HELD:2,HERRSCHER:1}},
+    {t:"Ich sehe Möglichkeiten, wo andere Probleme sehen.",s:{MAGIER:2,EXPLORER:1,OUTLAW:1}},
+    {t:"Ich baue Vertrauen auf – Menschen fühlen sich bei mir sicher.",s:{LIEBENDER:2,UNSCHULDIGE:1,EVERYMAN:1}}
+  ]},
+  {id:5,text:"Ein Projekt läuft schief. Deine erste Reaktion?",hint:"Sei ehrlich – nicht wie du sein solltest, sondern wie du wirklich bist.",answers:[
+    {t:"Ich analysiere, was falsch lief – dann mache ich es besser.",s:{WEISER:2,HELD:1}},
+    {t:"Ich suche sofort eine kreative Lösung – Probleme sind Chancen.",s:{MAGIER:2,EXPLORER:1,OUTLAW:1}},
+    {t:"Ich spreche offen darüber – Fehler gehören dazu.",s:{OUTLAW:2,EVERYMAN:1}},
+    {t:"Ich kümmere mich zuerst um die betroffenen Menschen.",s:{LIEBENDER:2,LIEBHABER:1}}
+  ]},
+  {id:6,text:"Welcher Satz beschreibt dein Business am besten?",hint:"Welcher trifft es wirklich – nicht welcher klingt am besten.",answers:[
+    {t:"Wir machen es richtig – nicht einfach nur fertig.",s:{HERRSCHER:2,WEISER:1,HELD:1}},
+    {t:"Wir denken, was andere noch nicht denken.",s:{MAGIER:2,EXPLORER:1,OUTLAW:1}},
+    {t:"Wir sind ehrlich, direkt – und sagen, was wir meinen.",s:{OUTLAW:2,HELD:1}},
+    {t:"Wir sehen den Menschen hinter dem Projekt.",s:{LIEBHABER:2,LIEBENDER:1,EVERYMAN:1}}
+  ]},
+  {id:7,text:"Welcher Kundentyp geht dir wirklich auf die Nerven?",hint:"Das ist eine Ausschluss-Frage – wer bringt dich wirklich aus dem Gleichgewicht?",answers:[
+    {t:"Jemand, der alles kontrolliert und mir keinen Freiraum lässt.",s:{HERRSCHER:-2,OUTLAW:2,EXPLORER:1}},
+    {t:"Jemand, der keine Entscheidungen trifft und ständig schwankt.",s:{UNSCHULDIGE:-1,HELD:2,HERRSCHER:1}},
+    {t:"Jemand, der nur auf den Preis schaut und Qualität nicht versteht.",s:{EVERYMAN:-1,HERRSCHER:2,LIEBHABER:1}},
+    {t:"Jemand, der keine echte Verbindung will – rein transaktional.",s:{HERRSCHER:-2,LIEBHABER:2,LIEBENDER:1}}
+  ]},
+  {id:8,text:"Was würdest du sofort ablehnen?",hint:"Kein Zögern – was ist ein klares Nein, das du klar und deutlich spürst?",answers:[
+    {t:"Ein Projekt, in dem ich meine Meinung nicht sagen darf.",s:{EVERYMAN:-2,UNSCHULDIGE:-1,OUTLAW:2}},
+    {t:"Ein Auftrag ohne klares Ziel und messbare Ergebnisse.",s:{JESTER:-1,LIEBHABER:-1,HELD:2,HERRSCHER:1}},
+    {t:"Eine Zusammenarbeit, die sich kalt und unpersönlich anfühlt.",s:{HERRSCHER:-2,WEISER:-1,LIEBENDER:2,LIEBHABER:1}},
+    {t:"Alles, was langweilig, vorhersehbar oder 08/15 ist.",s:{EVERYMAN:-2,UNSCHULDIGE:-1,EXPLORER:2,JESTER:1}}
+  ]},
+  {id:9,text:"Ein neuer Kontakt fragt dich, warum er mit dir arbeiten soll. Was sagst du?",hint:"Spontan antworten – dein erster Impuls ist dein Archetyp.",answers:[
+    {t:"Weil ich Dinge sage, die andere sich nicht trauen.",s:{OUTLAW:2,WEISER:1}},
+    {t:"Weil ich nicht ruhe, bis es wirklich gut ist.",s:{HERRSCHER:2,HELD:1,WEISER:1}},
+    {t:"Weil ich zuhöre, bevor ich antworte.",s:{LIEBENDER:2,LIEBHABER:1,EVERYMAN:1}},
+    {t:"Weil ich zeige, was möglich ist – auch wenn du es noch nicht siehst.",s:{MAGIER:2,EXPLORER:1}}
+  ]}
 ];
 
-// ── DECISION TREE ──────────────────────────────────────────
-const DECISION_TREE = {
-  q1: {
-    text: "Was treibt dich in deinem Business wirklich an?",
-    hint: "Antworte spontan – das erste Gefühl zählt.",
-    chip: "Grundorientierung",
-    step: 1, total: 3,
-    answers: [
-      { label: "A", text: "Ich will VERÄNDERN – Branchen, Konventionen, das System." },
-      { label: "B", text: "Ich will FÜHREN – Strukturen schaffen, Expertise zeigen." },
-      { label: "C", text: "Ich will VERBINDEN – Menschen erreichen, echte Beziehungen." }
-    ],
-    next: ["q2a", "q2b", "q2c"]
-  },
-  q2a: {
-    text: "Was ist deine tiefste Motivation, wenn du etwas veränderst?",
-    hint: "Antworte intuitiv – kein langes Nachdenken.",
-    chip: "Change-Maker",
-    step: 2, total: 3,
-    answers: [
-      { label: "A", text: "Mich ärgert, was nicht funktioniert. Ich sage laut, was andere denken aber nicht aussprechen." },
-      { label: "B", text: "Mich fasziniert, was noch möglich ist. Ich entdecke Neues und gehe unbekannte Wege." },
-      { label: "C", text: "Ich sehe, was andere nicht sehen. Ich verwandle Visionen in echte Ergebnisse." }
-    ],
-    next: ["OUTLAW", "EXPLORER", "MAGIER"]
-  },
-  q2b: {
-    text: "Was ist deine Führungsstärke?",
-    hint: "Antworte intuitiv – kein langes Nachdenken.",
-    chip: "Leader",
-    step: 2, total: 3,
-    answers: [
-      { label: "A", text: "Ich schaffe Exzellenz & Struktur. Mittelmaß ist keine Option – nur das Beste reicht." },
-      { label: "B", text: "Ich analysiere tief & teile Wissen. Kompetenz und Wahrheit sind meine Währung." },
-      { label: "C", text: "Ich packe an & liefere Ergebnisse. Probleme sind Trainingseinheiten für mich." }
-    ],
-    next: ["HERSCHER", "WEISER", "HELD"]
-  },
-  q2c: {
-    text: "Wie verbindest du dich am liebsten mit Menschen?",
-    hint: "Antworte intuitiv – kein langes Nachdenken.",
-    chip: "Connector",
-    step: 2, total: 3,
-    answers: [
-      { label: "A", text: "Mit Tiefe & Leidenschaft – echte, intensive Beziehungen die etwas bedeuten." },
-      { label: "B", text: "Mit Leichtigkeit & Humor – ich bringe Freude und mache Schweres leicht." },
-      { label: "C", text: "Mit Einfachheit & Zugehörigkeit – bei mir fühlt sich jeder willkommen." }
-    ],
-    next: ["q3a", "JESTER", "q3b"]
-  },
-  q3a: {
-    text: "Was treibt dich in Beziehungen wirklich an?",
-    hint: "Beide klingen ähnlich – schau genau hin.",
-    chip: "Letzte Frage",
-    step: 3, total: 3,
-    answers: [
-      { label: "A", text: "Ich begeistere & inspiriere. Leidenschaft, Ästhetik und Energie sind meine Sprache." },
-      { label: "B", text: "Ich unterstütze & sorge. Ich bin da, halte den Rücken frei – verlässlich und warm." }
-    ],
-    next: ["LIEBHABER", "LIEBENDER"]
-  },
-  q3b: {
-    text: "Was ist deine Botschaft an deine Kunden?",
-    hint: "Antworte spontan – das erste Gefühl zählt.",
-    chip: "Letzte Frage",
-    step: 3, total: 3,
-    answers: [
-      { label: "A", text: "Ich bin wie du – echt, normal, auf Augenhöhe. Kein Bullshit, keine Fassade." },
-      { label: "B", text: "Es wird gut – vertrau dem Prozess. Ich mache es einfach und sicher für dich." }
-    ],
-    next: ["EVERYMAN", "UNSCHULDIGE"]
+var VALIDATIONS = {
+  OUTLAW:"Du sagst laut, was andere denken aber nicht aussprechen. Radikale Ehrlichkeit ist deine einzige Option. Provokation ist für dich keine Strategie – sie ist Haltung.",
+  EXPLORER:"Du erkundest Neues. Du gehst Wege, die andere nicht sehen. Freiheit und Neugier sind dein Antrieb – nicht Rebellion, sondern Faszination.",
+  MAGIER:"Du siehst, was andere nicht sehen. Du verwandelst Visionen in Realität. Transformation ist nicht was du tust – es ist wer du bist.",
+  HERRSCHER:"Du führst mit Klarheit und Exzellenz. Struktur ist deine Stärke. Mittelmaß ist für dich keine Option – nur das Beste zählt.",
+  WEISER:"Du tauchst tief ein. Du analysierst, verstehst und erklärst. Kompetenz und Wahrheit sind deine Währung – Fakten statt Fassade.",
+  HELD:"Du packst an. Du lieferst Ergebnisse. Probleme sind für dich Trainingseinheiten – du gewinnst durch Taten, nicht durch Worte.",
+  LIEBHABER:"Du arbeitest aus Leidenschaft. Du baust echte, tiefe Beziehungen. Ästhetik, Energie und Intensität sind deine Sprache.",
+  LIEBENDER:"Du sorgst für andere. Du bist da, hältst den Rücken frei. Bei dir fühlen sich Menschen sicher, gesehen und gehalten.",
+  JESTER:"Du bringst Leichtigkeit. Humor ist deine Strategie. Du machst ernste Themen zugänglich – und bist dabei völlig authentisch.",
+  EVERYMAN:"Du bist auf Augenhöhe. Echt, normal, ohne Fassade. Bei dir fühlt sich jeder willkommen – Zugehörigkeit ist dein Kernversprechen.",
+  UNSCHULDIGE:"Du bringst Optimismus und Sicherheit. Du vereinfachst Komplexes. Bei dir wird alles leichter – und das ist deine echte Superkraft."
+};
+
+var CORRECTIONS = {
+  OUTLAW:[{n:"EXPLORER",d:"Du erkundest Neues. Freiheit und Neugier – Faszination statt Rebellion."},{n:"MAGIER",d:"Du siehst, was andere nicht sehen. Visionen werden Realität."}],
+  EXPLORER:[{n:"OUTLAW",d:"Du brichst Regeln. Sagst laut, was andere denken aber schweigen."},{n:"MAGIER",d:"Du siehst, was andere nicht sehen. Transformation ist dein Ding."}],
+  MAGIER:[{n:"OUTLAW",d:"Du brichst Regeln. Radikale Ehrlichkeit statt diplomatischem Schweigen."},{n:"EXPLORER",d:"Du erkundest Neues. Neugier als Lebenshaltung."}],
+  HERRSCHER:[{n:"WEISER",d:"Du tauchst tief ein. Kompetenz ist deine echte Währung."},{n:"HELD",d:"Du packst an. Ergebnisse statt Ankündigungen."}],
+  WEISER:[{n:"HERRSCHER",d:"Du führst mit Klarheit. Nur das Beste reicht – und das weißt du."},{n:"HELD",d:"Du packst an. Taten statt Theorien."}],
+  HELD:[{n:"HERRSCHER",d:"Du führst mit Struktur und Exzellenz. Du gibst den Ton vor."},{n:"WEISER",d:"Du analysierst tief. Fakten sind dein Fundament."}],
+  LIEBHABER:[{n:"LIEBENDER",d:"Du sorgst für andere. Verlässlich, warm, rückenfreihaltend."},{n:"JESTER",d:"Du bringst Leichtigkeit. Humor als echte Strategie."}],
+  LIEBENDER:[{n:"LIEBHABER",d:"Du arbeitest aus Leidenschaft. Ästhetik und Intensität sind deine Sprache."},{n:"EVERYMAN",d:"Du bist auf Augenhöhe. Echt, normal, ohne Fassade."}],
+  JESTER:[{n:"EXPLORER",d:"Du erkundest Neues. Neugier ohne Angst vor dem Unbekannten."},{n:"LIEBHABER",d:"Du arbeitest aus Leidenschaft. Intensität als Markenzeichen."}],
+  EVERYMAN:[{n:"LIEBENDER",d:"Du sorgst für andere. Verlässlich und warm."},{n:"UNSCHULDIGE",d:"Du bringst Optimismus. Bei dir wird es einfacher."}],
+  UNSCHULDIGE:[{n:"EVERYMAN",d:"Du bist auf Augenhöhe. Kein Bullshit, keine Fassade."},{n:"LIEBENDER",d:"Du sorgst für andere. Sicherheit als echtes Versprechen."}]
+};
+
+var LOGO = 'data:image/png;base64,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';
+
+// ── STATE ─────────────────────────────────────
+var state = {screen:'start',qi:0,scores:{},answers:[],archetype:null,result:null};
+function initScores(){var s={};ARCHETYPES.forEach(function(a){s[a]=0;});return s;}
+function topArchetype(sc){return ARCHETYPES.reduce(function(b,a){return sc[a]>(sc[b]||0)?a:b;},ARCHETYPES[0]);}
+
+// ── SPARK EFFECT ─────────────────────────────
+function launchSparks(){
+  var overlay = document.getElementById('spark-overlay');
+  overlay.style.display = 'block';
+  overlay.innerHTML = '';
+  var colors = ['#FF5C00','#FFB347','#FFD700','#FF6B6B','#A78BFA','#60A5FA','#FBBF24','#34D399'];
+  var app = document.getElementById('app');
+  var rect = app ? app.getBoundingClientRect() : {left:0,top:0,width:window.innerWidth,height:window.innerHeight};
+  var cx = rect.left + rect.width/2;
+  var cy = rect.top + rect.height/2;
+  for(var i=0;i<80;i++){
+    var el = document.createElement('div');
+    el.className = 'spark';
+    var angle = Math.random()*Math.PI*2;
+    var dist = 80 + Math.random()*300;
+    var tx = Math.cos(angle)*dist;
+    var ty = Math.sin(angle)*dist;
+    var size = 4 + Math.random()*10;
+    var dur = 0.6 + Math.random()*0.8;
+    el.style.cssText = 'left:'+(cx+Math.random()*60-30)+'px;top:'+(cy+Math.random()*60-30)+'px;width:'+size+'px;height:'+size+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';--tx:'+tx+'px;--ty:'+ty+'px;--dur:'+dur+'s;animation-delay:'+(Math.random()*0.3)+'s';
+    overlay.appendChild(el);
   }
-};
-
-const VALIDATIONS = {
-  OUTLAW:     { emoji: "⚡", text: "Du sagst laut, was andere denken aber nicht aussprechen. Radikale Ehrlichkeit ist deine einzige Option. Provokation ist für dich keine Strategie – sie ist Haltung." },
-  EXPLORER:   { emoji: "🗺️", text: "Du erkundest Neues. Du gehst Wege, die andere nicht sehen. Freiheit und Neugier sind dein Antrieb – nicht Rebellion, sondern Faszination." },
-  MAGIER:     { emoji: "✨", text: "Du siehst, was andere nicht sehen. Du verwandelst Visionen in Realität. Transformation ist nicht was du tust – es ist wer du bist." },
-  HERSCHER:   { emoji: "👑", text: "Du führst mit Klarheit und Exzellenz. Struktur ist deine Stärke. Mittelmaß ist für dich keine Option – nur das Beste zählt." },
-  WEISER:     { emoji: "🧠", text: "Du tauchst tief ein. Du analysierst, verstehst und erklärst. Kompetenz und Wahrheit sind deine Währung – Fakten statt Fassade." },
-  HELD:       { emoji: "⚔️", text: "Du packst an. Du lieferst Ergebnisse. Probleme sind für dich Trainingseinheiten – du gewinnst durch Taten, nicht durch Worte." },
-  LIEBHABER:  { emoji: "❤️", text: "Du arbeitest aus Leidenschaft. Du baust echte, tiefe Beziehungen. Ästhetik, Energie und Intensität sind deine Sprache." },
-  LIEBENDER:  { emoji: "🫂", text: "Du sorgst für andere. Du bist da, hältst den Rücken frei. Bei dir fühlen sich Menschen sicher, gesehen und gehalten." },
-  JESTER:     { emoji: "🎉", text: "Du bringst Leichtigkeit. Humor ist deine Strategie. Du machst ernste Themen zugänglich – und bist dabei völlig authentisch." },
-  EVERYMAN:   { emoji: "🤝", text: "Du bist auf Augenhöhe. Echt, normal, ohne Fassade. Bei dir fühlt sich jeder willkommen – Zugehörigkeit ist dein Kernversprechen." },
-  UNSCHULDIGE:{ emoji: "🕊️", text: "Du bringst Optimismus und Sicherheit. Du vereinfachst Komplexes. Bei dir wird alles leichter – und das ist deine echte Superkraft." }
-};
-
-const CORRECTIONS = {
-  OUTLAW:  [
-    { name: "EXPLORER", emoji: "🗺️", desc: "Du erkundest Neues. Freiheit & Neugier – Faszination statt Rebellion." },
-    { name: "MAGIER", emoji: "✨", desc: "Du siehst, was andere nicht sehen. Visionen werden Realität." }
-  ],
-  EXPLORER: [
-    { name: "OUTLAW", emoji: "⚡", desc: "Du brichst Regeln. Sagst laut, was andere denken aber schweigen." },
-    { name: "MAGIER", emoji: "✨", desc: "Du siehst, was andere nicht sehen. Transformation ist dein Ding." }
-  ],
-  MAGIER: [
-    { name: "OUTLAW", emoji: "⚡", desc: "Du brichst Regeln. Radikale Ehrlichkeit statt diplomatischem Schweigen." },
-    { name: "EXPLORER", emoji: "🗺️", desc: "Du erkundest Neues. Neugier als Lebenshaltung." }
-  ],
-  HERSCHER: [
-    { name: "WEISER", emoji: "🧠", desc: "Du tauchst tief ein. Kompetenz ist deine echte Währung." },
-    { name: "HELD", emoji: "⚔️", desc: "Du packst an. Ergebnisse statt Ankündigungen." }
-  ],
-  WEISER: [
-    { name: "HERSCHER", emoji: "👑", desc: "Du führst mit Klarheit. Nur das Beste reicht – und das weißt du." },
-    { name: "HELD", emoji: "⚔️", desc: "Du packst an. Taten statt Theorien." }
-  ],
-  HELD: [
-    { name: "HERSCHER", emoji: "👑", desc: "Du führst mit Struktur & Exzellenz. Der Ton gibt's vor." },
-    { name: "WEISER", emoji: "🧠", desc: "Du analysierst tief. Fakten sind dein Fundament." }
-  ],
-  LIEBHABER: [
-    { name: "LIEBENDER", emoji: "🫂", desc: "Du sorgst für andere. Verlässlich, warm, rückenfreihaltend." },
-    { name: "JESTER", emoji: "🎉", desc: "Du bringst Leichtigkeit. Humor als echte Strategie." }
-  ],
-  LIEBENDER: [
-    { name: "LIEBHABER", emoji: "❤️", desc: "Du arbeitest aus Leidenschaft. Ästhetik & Intensität sind deine Sprache." },
-    { name: "EVERYMAN", emoji: "🤝", desc: "Du bist auf Augenhöhe. Echt, normal, ohne Fassade." }
-  ],
-  JESTER: [
-    { name: "EXPLORER", emoji: "🗺️", desc: "Du erkundest Neues. Neugier ohne Angst vor dem Unbekannten." },
-    { name: "LIEBHABER", emoji: "❤️", desc: "Du arbeitest aus Leidenschaft. Intensität als Markenzeichen." }
-  ],
-  EVERYMAN: [
-    { name: "LIEBENDER", emoji: "🫂", desc: "Du sorgst für andere. Verlässlich und warm." },
-    { name: "UNSCHULDIGE", emoji: "🕊️", desc: "Du bringst Optimismus. Bei dir wird's einfacher." }
-  ],
-  UNSCHULDIGE: [
-    { name: "EVERYMAN", emoji: "🤝", desc: "Du bist auf Augenhöhe. Kein Bullshit, keine Fassade." },
-    { name: "LIEBENDER", emoji: "🫂", desc: "Du sorgst für andere. Sicherheit als echtes Versprechen." }
-  ]
-};
-
-// ── STATE ──────────────────────────────────────────────────
-const state = {
-  screen: 'start',
-  history: [],
-  currentQuestion: null,
-  answers: [],
-  archetype: null,
-  result: null,
-  loadingTextIndex: 0
-};
-
-// ── PROMPT ────────────────────────────────────────────────
-function buildPrompt(archetype, answers) {
-  return `Du bist ein Experte für Brand-Archetypen nach C.G. Jung im Business-Kontext.
-Der Archetyp dieser Person ist: ${archetype}
-Quiz-Antworten: ${answers.map((a,i) => `Frage ${i+1}: ${a}`).join(' | ')}
-
-Antworte NUR mit validem JSON, kein Markdown, keine Backticks, kein Preamble:
-{"narrative":"3-4 Sätze, direkte Du-Ansprache, konkret & inspirierend","marken":["Marke1","Marke2","Marke3"],"farben":[{"name":"Name","hex":"#XXXXXX","rolle":"Basis/Akzent/Support"},{"name":"Name","hex":"#XXXXXX","rolle":"Basis/Akzent/Support"},{"name":"Name","hex":"#XXXXXX","rolle":"Basis/Akzent/Support"},{"name":"Name","hex":"#XXXXXX","rolle":"Basis/Akzent/Support"}],"farbharmonie":"1 Satz Farbharmonie","typografie":"1-2 Sätze Typografie","bildsprache":"1-2 Sätze Bildsprache","quotes":["Satz1","Satz2","Satz3"],"keywords":["K1","K2","K3","K4","K5","K6"],"traumkunden":[{"archetyp":"Name","beschreibung":"Warum passend"},{"archetyp":"Name","beschreibung":"Warum passend"},{"archetyp":"Name","beschreibung":"Warum passend"}],"antikunden":[{"archetyp":"Name","beschreibung":"Warum nicht passend"},{"archetyp":"Name","beschreibung":"Warum nicht passend"}],"konditionen_ja":["Punkt1","Punkt2","Punkt3"],"konditionen_nein":["Punkt1","Punkt2"],"next_steps":["Schritt1","Schritt2","Schritt3"]}`;
+  setTimeout(function(){overlay.style.display='none';overlay.innerHTML='';},1500);
 }
 
-// ── RENDER ─────────────────────────────────────────────────
-function render() {
-  const app = document.getElementById('app');
-  switch(state.screen) {
-    case 'start':      app.innerHTML = renderStart(); break;
-    case 'question':   app.innerHTML = renderQuestion(); break;
-    case 'validation': app.innerHTML = renderValidation(); break;
-    case 'correction': app.innerHTML = renderCorrection(); break;
-    case 'loading':    app.innerHTML = renderLoading(); break;
-    case 'result':     app.innerHTML = renderResult(); break;
-  }
+// ── RENDER ─────────────────────────────────────
+function render(){
+  var app = document.getElementById('app');
+  if(!app) return;
+  var html = '';
+  if(state.screen==='start') html = renderStart();
+  else if(state.screen==='question') html = renderQuestion();
+  else if(state.screen==='validation') html = renderValidation();
+  else if(state.screen==='correction') html = renderCorrection();
+  else if(state.screen==='loading') html = renderLoading();
+  else if(state.screen==='result') html = renderResult();
+  app.innerHTML = html;
 }
 
-function renderStart() {
-  return `<div class="slide start-screen">
-    <div class="start-top-bar"></div>
-    <div class="start-content">
-      <div class="start-logo">Frischmuth. Design</div>
-      <div class="start-eyebrow">Brand Archetypen-Finder</div>
-      <div class="start-headline">
-        Finde<br>deinen<br>
-        <span>Archetypen.</span>
-      </div>
-      <div class="start-divider"></div>
-      <p class="start-sub">Wer du wirklich bist, entscheidet wen du anziehst – und wen nicht.</p>
-      <p class="start-dry">"Das ist kein Persönlichkeitstest. Das ist ein Spiegel."</p>
-      <button class="btn-primary" onclick="startQuiz()">Jetzt herausfinden →</button>
-      <p class="start-footnote">3 Fragen · 3 Minuten · Kein Bullshit</p>
-    </div>
-  </div>`;
+function backBtn(dark){
+  var cls = dark ? 'top-nav top-nav-dark' : 'top-nav';
+  return '<div class="'+cls+'">' +
+    '<button class="back-btn" onclick="goBack()">' +
+      '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>' +
+      'Zurück' +
+    '</button>' +
+  '</div>';
 }
 
-function renderQuestion() {
-  const q = DECISION_TREE[state.currentQuestion];
-  const pct = (q.step / q.total) * 100;
-  return `<div class="slide question-screen">
-    <div class="progress-wrap">
-      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-      <div class="progress-label">Schritt ${q.step} von ${q.total}</div>
-    </div>
-    <div class="question-content">
-      <span class="chip">${q.chip}</span>
-      <div class="question-quip">${QUIPS[state.currentQuestion] || ''}</div>
-      <h2 class="question-headline">${q.text}</h2>
-      <p class="question-hint">${q.hint}</p>
-      <div class="answers">
-        ${q.answers.map((a,i) => `
-          <button class="answer-btn" onclick="selectAnswer(${i})">
-            <div class="answer-badge">${a.label}</div>
-            <div class="answer-text">${a.text}</div>
-          </button>`).join('')}
-      </div>
-    </div>
-    ${state.history.length > 0 ? `<button class="back-link" onclick="goBack()">← Zurück</button>` : ''}
-  </div>`;
+function renderStart(){
+  return '<div class="slide">' +
+    '<div class="start-bar"></div>' +
+    '<div class="start-body">' +
+      '<div class="logo-w"><img src="'+LOGO+'" alt="Frischmuth Design" style="height:28px;"></div>' +
+      '<div class="eyebrow">Brand Brand Mirror</div>' +
+      '<div class="h1">Dein<br>Brand<br><span>Mirror.</span></div>' +
+      '<div class="divider"></div>' +
+      '<p class="start-p">Die stärksten Marken der Welt haben eines gemeinsam: sie wissen, wer sie sind.</p>' +
+      '<p class="start-p" style="margin-top:8px;">Dein Archetyp ist der Kern deiner Marke.</p>' +
+      '<p class="start-p accent" style="margin-top:8px;">Finde heraus, wie du kommunizieren darfst, damit du ein Magnet für deine Traumkunden wirst.</p>' +
+      '<button class="btn-start" onclick="startQuiz()">Jetzt herausfinden &#8594;</button>' +
+      '<p class="footnote">4 Fragen &nbsp;&middot;&nbsp; 210 Sekunden &nbsp;&middot;&nbsp; Eine Gewissheit mehr</p>' +
+    '</div>' +
+  '</div>';
 }
 
-function renderValidation() {
-  const v = VALIDATIONS[state.archetype];
-  return `<div class="slide validation-screen">
-    <div class="progress-wrap">
-      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
-      <div class="progress-label">Fast geschafft.</div>
-    </div>
-    <div class="validation-content">
-      <div class="reveal-card">
-        <div class="reveal-label">Wir denken, du bist ein...</div>
-        <div class="reveal-name">${v.emoji} ${state.archetype}</div>
-        <div class="reveal-accent"></div>
-        <div class="reveal-text">${v.text}</div>
-      </div>
-      <h3 class="validation-question">Stimmt das?</h3>
-      <div class="val-btns">
-        <button class="val-btn" onclick="validateYes()">✅ Ja. Genau das.</button>
-        <button class="val-btn" onclick="validatePartly()">🤔 Teilweise – aber nicht ganz</button>
-        <button class="val-btn" onclick="validateNo()">❌ Nein. Daneben.</button>
-      </div>
-    </div>
-    <button class="back-link" onclick="goBack()">← Zurück</button>
-  </div>`;
+function renderQuestion(){
+  var q = QUESTIONS[state.qi];
+  var pct = (state.qi/QUESTIONS.length)*100;
+  var lbls = ['A','B','C','D'];
+  var btns = q.answers.map(function(a,i){
+    return '<button class="ans-btn" onclick="pickAnswer('+i+')">' +
+      '<div class="ans-badge">'+lbls[i]+'</div>' +
+      '<div class="ans-text"><span class="ans-bold">'+a.t+'</span></div>' +
+    '</button>';
+  }).join('');
+  var nav = state.qi > 0 ? backBtn(false) : '<div style="height:14px"></div>';
+  return '<div class="slide q-screen">' +
+    '<div class="prog-wrap">' +
+      '<div class="prog-bar"><div class="prog-fill" style="width:'+pct+'%"></div></div>' +
+      '<div class="prog-label">Frage '+(state.qi+1)+' von '+QUESTIONS.length+'</div>' +
+    '</div>' +
+    nav +
+    '<div class="q-content">' +
+      '<h2 class="q-headline">'+q.text+'</h2>' +
+      '<p class="q-hint">'+q.hint+'</p>' +
+      '<div class="answers">'+btns+'</div>' +
+    '</div>' +
+  '</div>';
 }
 
-function renderCorrection() {
-  const alts = CORRECTIONS[state.archetype] || [];
-  return `<div class="slide correction-screen">
-    <div class="progress-wrap">
-      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
-      <div class="progress-label">Kein Problem.</div>
-    </div>
-    <div class="correction-content">
-      <span class="chip">Alternativ-Check</span>
-      <h2 class="correction-headline">Welcher passt besser?</h2>
-      <p class="correction-dry">"Einer davon trifft's. Garantiert."</p>
-      <div class="archetype-cards">
-        ${alts.map(a => `
-          <button class="archetype-card" onclick="selectAlternative('${a.name}')">
-            <div class="card-emoji">${a.emoji}</div>
-            <div>
-              <div class="card-name">${a.name}</div>
-              <div class="card-desc">${a.desc}</div>
-            </div>
-          </button>`).join('')}
-      </div>
-      <button class="restart-link" onclick="restart()">Keiner davon? Von vorne starten.</button>
-    </div>
-  </div>`;
+function renderValidation(){
+  var v = VALIDATIONS[state.archetype]||'';
+  return '<div class="slide val-screen">' +
+    '<div class="prog-wrap">' +
+      '<div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>' +
+      '<div class="prog-label">Fast geschafft!</div>' +
+    '</div>' +
+    backBtn(false) +
+    '<div class="val-content">' +
+      '<div class="reveal-card">' +
+        '<div class="reveal-label">Wir denken, du bist ein &#8230;</div>' +
+        '<div class="reveal-name">'+state.archetype+'</div>' +
+        '<div class="reveal-bar"></div>' +
+        '<div class="reveal-text">'+v+'</div>' +
+      '</div>' +
+      '<h3 class="val-q">Stimmt das?</h3>' +
+      '<div class="val-btns">' +
+        '<button class="val-btn primary" onclick="validateYes()">&#10003; Ja, das bin ich.</button>' +
+        '<button class="val-btn" onclick="validatePartly()">&#8212; Teilweise – aber nicht ganz</button>' +
+        '<button class="val-btn" onclick="validateNo()">&#10007; Nein, das passt nicht.</button>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
 }
 
-function renderLoading() {
-  return `<div class="slide loading-screen">
-    <div class="loading-record">
-      <div class="record-outer"></div>
-      <div class="record-groove"></div>
-      <div class="record-groove"></div>
-      <div class="record-center"></div>
-    </div>
-    <div class="loading-texts">
-      <div class="loading-main">Dein Profil<br>wird erstellt.</div>
-      <div class="loading-dry">"Kurz gedulden.<br>Gutes braucht eine Minute."</div>
-    </div>
-    <div class="loading-dots">
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-    </div>
-  </div>`;
+function renderCorrection(){
+  var alts = CORRECTIONS[state.archetype]||[];
+  var cards = alts.map(function(a){
+    return '<button class="alt-card" onclick="pickAlt(\''+a.n+'\')">'+
+      '<div><div class="alt-name">'+a.n+'</div><div class="alt-desc">'+a.d+'</div></div>'+
+    '</button>';
+  }).join('');
+  return '<div class="slide corr-screen">' +
+    '<div class="prog-wrap">' +
+      '<div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>' +
+      '<div class="prog-label">Kein Problem!</div>' +
+    '</div>' +
+    backBtn(false) +
+    '<div class="corr-content">' +
+      '<h2 class="corr-h">Welcher passt besser?</h2>' +
+      '<p class="corr-sub">"Einer davon trifft es. Garantiert."</p>' +
+      '<div class="alt-cards">'+cards+'</div>' +
+      '<button class="restart-link" onclick="restart()">Keiner davon trifft es? Von vorne starten.</button>' +
+    '</div>' +
+  '</div>';
 }
 
-function renderResult() {
-  const r = state.result;
-  const v = VALIDATIONS[state.archetype];
-  if (!r) return '';
-  return `<div class="slide result-screen">
-    <div class="result-hero">
-      <div class="result-top-bar"></div>
-      <div class="result-label">Dein Archetyp</div>
-      <div class="result-name">${v.emoji} ${state.archetype}</div>
-      <div class="result-orange-bar"></div>
-      <p class="result-tagline">${r.narrative}</p>
-    </div>
-    <div class="result-body">
-
-      ${r.marken?.length ? `<div>
-        <div class="section-label">Marken die so ticken wie du</div>
-        <div class="keyword-row">${r.marken.map(m=>`<span class="keyword">${m}</span>`).join('')}</div>
-      </div>` : ''}
-
-      ${r.farben?.length ? `<div>
-        <div class="section-label">Deine Farbpalette</div>
-        <div class="color-row">${r.farben.map(f=>`
-          <div class="color-swatch-wrap">
-            <div class="color-swatch" style="background:${f.hex}"></div>
-            <div class="swatch-name">${f.name}</div>
-            <div class="swatch-hex">${f.hex}</div>
-          </div>`).join('')}</div>
-        <p style="font-size:13px;color:var(--text-hint);margin-top:10px;line-height:1.5;">${r.farbharmonie}</p>
-      </div>` : ''}
-
-      ${r.typografie ? `<div>
-        <div class="section-label">Typografie & Bildsprache</div>
-        <div class="result-box">
-          <p style="font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:10px;">${r.typografie}</p>
-          <p style="font-size:13px;color:var(--text-hint);line-height:1.6;">${r.bildsprache}</p>
-        </div>
-      </div>` : ''}
-
-      ${r.quotes?.length ? `<div>
-        <div class="section-label">Dein Wording</div>
-        <div class="quote-list">${r.quotes.map(q=>`<div class="quote-item">"${q}"</div>`).join('')}</div>
-      </div>` : ''}
-
-      ${r.keywords?.length ? `<div>
-        <div class="section-label">Schlüsselwörter</div>
-        <div class="keyword-row">${r.keywords.map(k=>`<span class="keyword">${k}</span>`).join('')}</div>
-      </div>` : ''}
-
-      ${r.traumkunden?.length ? `<div>
-        <div class="section-label">Deine Traumkunden</div>
-        <div class="client-list">${r.traumkunden.map(c=>`
-          <div class="client-item">
-            <div class="client-name">${c.archetyp}</div>
-            <div class="client-desc">${c.beschreibung}</div>
-          </div>`).join('')}</div>
-      </div>` : ''}
-
-      ${r.antikunden?.length ? `<div>
-        <div class="section-label">Anti-Kunden – vermeide diese.</div>
-        <div class="client-list">${r.antikunden.map(c=>`
-          <div class="client-item anti">
-            <div class="client-name">${c.archetyp}</div>
-            <div class="client-desc">${c.beschreibung}</div>
-          </div>`).join('')}</div>
-      </div>` : ''}
-
-      ${r.konditionen_ja?.length ? `<div>
-        <div class="section-label">Passende Projekte & Konditionen</div>
-        <div class="result-box">
-          <div class="contract-list">
-            ${r.konditionen_ja.map(k=>`<div class="contract-item yes">${k}</div>`).join('')}
-            ${r.konditionen_nein?.map(k=>`<div class="contract-item no">${k}</div>`).join('') || ''}
-          </div>
-        </div>
-      </div>` : ''}
-
-      ${r.next_steps?.length ? `<div>
-        <div class="section-label">Deine nächsten 3 Schritte</div>
-        <div class="steps-list">${r.next_steps.map((s,i)=>`
-          <div class="step-item">
-            <div class="step-num">${i+1}</div>
-            <div class="step-text">${s}</div>
-          </div>`).join('')}</div>
-      </div>` : ''}
-
-    </div>
-    <div class="result-cta">
-      <p class="cta-dry">"Du weißt jetzt, wer du bist. Die Frage ist: was machst du damit?"</p>
-      <button class="btn-cta" onclick="window.open('mailto:hallo@frischmuth.design?subject=Branding%20–%20${state.archetype}','_blank')">
-        Mit Babs zusammenarbeiten →
-      </button>
-      <button class="btn-cta-ghost" onclick="restart()">Quiz wiederholen</button>
-    </div>
-  </div>`;
+function renderLoading(){
+  return '<div class="slide load-screen">' +
+    '<div class="orbit-loader">' +
+      '<div class="orbit-ring"></div>' +
+      '<div class="orbit-ring"></div>' +
+      '<div class="orbit-ring"></div>' +
+      '<div class="orbit-dot"></div>' +
+    '</div>' +
+    '<div class="load-label">Dein Profil wird erstellt</div>' +
+    '<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>' +
+  '</div>';
 }
 
-// ── ACTIONS ────────────────────────────────────────────────
-function startQuiz() {
-  state.screen = 'question';
-  state.currentQuestion = 'q1';
-  state.history = [];
-  state.answers = [];
+function renderResult(){
+  var r = state.result;
+  var th = THEMES[state.archetype] || THEMES.OUTLAW;
+  if(!r) return '<div class="slide"><p style="padding:40px;color:red;">Kein Ergebnis.</p></div>';
+
+  function sec(label,html){return '<div><div class="sec-label">'+label+'</div>'+html+'</div>';}
+
+  var marken = r.marken && r.marken.length ? sec('Marken, die so ticken wie du','<div class="kw-row">'+r.marken.map(function(m){return '<span class="marke-pill">'+m+'</span>';}).join('')+'</div>') : '';
+
+  var farben = r.farben && r.farben.length ? sec('Deine Farbpalette',
+    '<div class="color-row">'+r.farben.map(function(f){return '<div class="sw-wrap"><div class="sw" style="background:'+f.hex+'"></div><div class="sw-name">'+f.name+'</div></div>';}).join('')+'</div>'+
+    '<p style="font-size:13px;color:var(--hint);margin-top:10px;line-height:1.5;">'+(r.farbharmonie||'')+'</p>') : '';
+
+  var typoAZ =
+    '<div style="font-family:inherit;font-weight:700;font-size:14px;letter-spacing:2.5px;color:#FFFFFF;margin-bottom:8px;line-height:1.6;word-break:break-all;">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</div>'+
+    '<div style="font-family:inherit;font-weight:400;font-size:13px;letter-spacing:1.5px;color:rgba(255,255,255,.65);margin-bottom:10px;word-break:break-all;">a b c d e f g h i j k l m n o p q r s t u v w x y z</div>'+
+    '<div style="font-family:monospace;font-size:22px;font-weight:700;letter-spacing:4px;color:'+th.accent+';margin-bottom:14px;">0 1 2 3 4 5 6 7 8 9</div>';
+  var typo = r.typografie ? sec('Typografie',
+    '<div class="typo-spec" style="background:'+th.bg+';border-color:rgba(255,255,255,.1);">'+
+    typoAZ+
+    '<div class="typo-div" style="background:rgba(255,255,255,.1);"></div>'+
+    '<div class="typo-desc" style="color:'+th.text+';opacity:.8;">'+r.typografie+'</div>'+
+    '</div>') : '';
+
+  var bild = r.bildsprache ? sec('Bildsprache','<div class="res-box"><p style="font-size:14px;color:var(--muted);line-height:1.7;">'+r.bildsprache+'</p></div>') : '';
+
+  var quotes = r.quotes && r.quotes.length ? sec('Dein Wording','<div class="quote-list" style="border-left-color:'+th.accent+'">'+r.quotes.map(function(q){return '<div class="quote-item" style="border-left-color:'+th.accent+';background:'+th.accent+'15;">&#8220;'+q+'&#8221;</div>';}).join('')+'</div>') : '';
+
+  var kws = r.keywords && r.keywords.length ? sec('Schlüsselwörter','<div class="kw-row">'+r.keywords.map(function(k){return '<span class="kw" style="color:'+th.accent+'">'+k+'</span>';}).join('')+'</div>') : '';
+
+  var traum = r.traumkunden && r.traumkunden.length ? sec('Deine Traumkunden',
+    '<div class="client-list">'+r.traumkunden.map(function(c,i){
+      return '<div class="dd" id="dd'+i+'">'+
+        '<button class="dd-hdr" onclick="toggleDD('+i+')">'+
+          '<span class="dd-name">'+c.archetyp+'</span>'+
+          '<div class="dd-arrow"><svg viewBox="0 0 10 10"><path d="M2 3.5L5 6.5l3-3"/></svg></div>'+
+        '</button>'+
+        '<div class="dd-body">'+c.beschreibung+'</div>'+
+      '</div>';
+    }).join('')+'</div>') : '';
+
+  var anti = r.antikunden && r.antikunden.length ? sec('Anti-Kunden – vermeide diese!',
+    '<div class="client-list">'+r.antikunden.map(function(c,i){
+      return '<div class="dd anti-dd" id="add'+i+'">'+
+        '<button class="dd-hdr anti-hdr" onclick="toggleADD('+i+')">'+
+          '<span class="dd-name anti-dd-name">'+c.archetyp+'</span>'+
+          '<div class="dd-arrow anti-arrow"><svg viewBox="0 0 10 10" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M2 3.5L5 6.5l3-3"/></svg></div>'+
+        '</button>'+
+        '<div class="dd-body">'+c.beschreibung+'</div>'+
+      '</div>';
+    }).join('')+'</div>') : '';
+
+  var kond = r.konditionen_ja && r.konditionen_ja.length ? sec('Passende Projekte & Konditionen',
+    '<div class="res-box"><div class="contract-list">'+
+    r.konditionen_ja.map(function(k){return '<div class="ci yes">'+k+'</div>';}).join('')+
+    (r.konditionen_nein||[]).map(function(k){return '<div class="ci no">'+k+'</div>';}).join('')+
+    '</div></div>') : '';
+
+  var steps = r.next_steps && r.next_steps.length ? sec('Deine nächsten 3 Schritte',
+    '<div class="steps-list">'+r.next_steps.map(function(s,i){return '<div class="step"><div class="step-n" style="background:'+th.accent+';">'+(i+1)+'</div><div class="step-t">'+s+'</div></div>';}).join('')+'</div>') : '';
+
+  var ctaStyle = ''; /* Always use CSS class gradient */
+
+  return '<div class="slide res-screen">' +
+    '<div class="res-hero" style="background:'+th.bg+';">' +
+      '<div class="res-topbar" style="background:'+th.bar+';"></div>' +
+      '<div style="position:absolute;inset:0;'+th.heroGrad.replace('radial-gradient','background:radial-gradient')+';pointer-events:none;"></div>' +
+      '<div class="res-label" style="color:'+th.text+';position:relative;z-index:1;">Dein Archetyp</div>' +
+      '<div class="res-name" style="color:'+th.text+';'+th.font+'position:relative;z-index:1;">'+state.archetype+'</div>' +
+      '<div class="res-bar" style="background:'+th.accent+';"></div>' +
+      '<p class="res-tagline" style="color:'+th.text+';">'+(r.narrative||'')+'</p>' +
+    '</div>' +
+    '<div class="res-body">'+marken+farben+typo+bild+quotes+kws+traum+anti+kond+steps+'</div>' +
+    '<div class="res-cta" style="background:'+th.bg+';">' +
+      '<p class="cta-quote" style="color:'+th.text+';opacity:.8;">"Du weißt jetzt, wer du bist.<br>Die Frage ist: Was machst du damit?"</p>' +
+      '<button class="btn-cta" onclick="ctaClick(this)">Mit Babs zusammenarbeiten <span class="arrow">&#8594;</span></button>' +
+      '<button class="btn-ghost" onclick="restart()">Quiz nochmal machen</button>' +
+    '</div>' +
+  '</div>';
+}
+
+// ── ACTIONS ─────────────────────────────────────
+function startQuiz(){
+  state.screen='question';state.qi=0;
+  state.scores=initScores();state.answers=[];
+  state.archetype=null;state.result=null;
   render();
 }
 
-function selectAnswer(index) {
-  const q = DECISION_TREE[state.currentQuestion];
-  const next = q.next[index];
-  state.history.push({ question: state.currentQuestion, answers: [...state.answers] });
-  state.answers.push(q.answers[index].text);
-  if (DECISION_TREE[next]) {
-    state.currentQuestion = next;
-    state.screen = 'question';
-  } else {
-    state.archetype = next;
-    state.screen = 'validation';
+function pickAnswer(i){
+  var q = QUESTIONS[state.qi];
+  var a = q.answers[i];
+  Object.keys(a.s).forEach(function(arch){state.scores[arch]=(state.scores[arch]||0)+a.s[arch];});
+  state.answers.push(a.t);
+  state.qi++;
+  if(state.qi>=QUESTIONS.length){
+    state.archetype=topArchetype(state.scores);
+    state.screen='validation';
   }
   render();
 }
 
-function validateYes() { generateResult(); }
-function validatePartly() { state.screen = 'correction'; render(); }
-function validateNo() { state.screen = 'correction'; render(); }
-function selectAlternative(a) { state.archetype = a; generateResult(); }
+function validateYes(){launchSparks();setTimeout(function(){generateResult();},400);}
+function validatePartly(){state.screen='correction';render();}
+function validateNo(){state.screen='correction';render();}
+function pickAlt(name){state.archetype=name;launchSparks();setTimeout(function(){generateResult();},400);}
 
-function goBack() {
-  if (state.history.length > 0) {
-    const prev = state.history.pop();
-    state.currentQuestion = prev.question;
-    state.answers = prev.answers;
-    state.screen = 'question';
-    render();
-    document.querySelector('.slide')?.classList.add('back');
-  }
-}
-
-function restart() {
-  Object.assign(state, { screen:'start', history:[], answers:[], archetype:null, result:null });
-  render();
-}
-
-// ── API ────────────────────────────────────────────────────
-async function generateResult() {
-  state.screen = 'loading';
-  render();
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 1000,
-        messages: [{ role: "user", content: buildPrompt(state.archetype, state.answers) }]
-      })
+function goBack(){
+  if(state.screen==='validation'||state.screen==='correction'){
+    state.qi--;state.answers.pop();
+    state.scores=initScores();
+    state.answers.forEach(function(t,qi){
+      var m=QUESTIONS[qi].answers.find(function(a){return a.t===t;});
+      if(m) Object.keys(m.s).forEach(function(arch){state.scores[arch]=(state.scores[arch]||0)+m.s[arch];});
     });
-    const data = await res.json();
-    const text = data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
-    state.result = JSON.parse(text.replace(/```json|```/g,"").trim());
-  } catch(e) {
-    state.result = getFallback(state.archetype);
+    state.screen='question';render();
+    var s=document.querySelector('.slide');if(s)s.classList.add('back');
+    return;
   }
-  state.screen = 'result';
+  if(state.qi>0){
+    state.qi--;state.answers.pop();
+    state.scores=initScores();
+    state.answers.forEach(function(t,qi){
+      var m=QUESTIONS[qi].answers.find(function(a){return a.t===t;});
+      if(m) Object.keys(m.s).forEach(function(arch){state.scores[arch]=(state.scores[arch]||0)+m.s[arch];});
+    });
+    state.screen='question';render();
+    var s=document.querySelector('.slide');if(s)s.classList.add('back');
+  }
+}
+
+function restart(){
+  state.screen='start';state.qi=0;
+  state.scores=initScores();state.answers=[];
+  state.archetype=null;state.result=null;
   render();
 }
 
-function getFallback(a) {
-  const base = {
-    marken: ["Harley-Davidson","Patagonia","Oatly"],
-    farben: [
-      {name:"Midnight",hex:"#0D0B14",rolle:"Basis"},
-      {name:"Electric Orange",hex:"#FF5C00",rolle:"Akzent"},
-      {name:"Royal Purple",hex:"#5B3FA0",rolle:"Support"},
-      {name:"Off-White",hex:"#FAFAFA",rolle:"Hintergrund"}
-    ],
-    farbharmonie: "Komplementär mit hohem Kontrast – Energie durch Spannung.",
-    typografie: "Geometric Sans-Serif, bold und direkt. Keine Schnörkel.",
-    bildsprache: "Ungefiltert, real, High-Contrast. Menschen die provozieren, nicht posieren.",
-    keywords: ["Authentisch","Direkt","Mutig","Anders","Klar","Echt"],
-    traumkunden: [
-      {archetyp:"Outlaw",beschreibung:"Rebels – anti-konformistisch und authentisch"},
-      {archetyp:"Liebhaber",beschreibung:"Leidenschaftlich, tiefe Connection"},
-      {archetyp:"Magier",beschreibung:"Visionär und transformativ"}
-    ],
-    antikunden: [
-      {archetyp:"Everyman",beschreibung:"Zu konformistisch – will Sicherheit statt Disruption"},
-      {archetyp:"Herscher",beschreibung:"Zu kontrollierend – gibt keine kreative Freiheit"}
-    ],
-    konditionen_ja: ["Volle kreative Freiheit","Flache Hierarchien & schnelle Entscheidungen","Raum für Experimente"],
-    konditionen_nein: ["Mikromanagement-Projekte","Kunden die alles absegnen müssen"],
-    next_steps: [
-      "Überprüfe deine Website – sagst du klar was du NICHT machst?",
-      "Definiere 3 Kernaussagen die dich wirklich abheben",
-      "Wähle bewusst einen Kunden-Typ dem du ab jetzt Nein sagst"
-    ]
+function toggleDD(i){var el=document.getElementById('dd'+i);if(el)el.classList.toggle('open');}
+function toggleADD(i){var el=document.getElementById('add'+i);if(el)el.classList.toggle('open');}
+
+function ctaClick(btn){
+  btn.classList.add('firing');
+  btn.style.transform='scale(1.03)';
+  btn.style.boxShadow='0 12px 40px rgba(255,92,0,.6)';
+  setTimeout(function(){
+    btn.style.transform='';
+    btn.style.boxShadow='';
+    btn.classList.remove('firing');
+    window.open('mailto:hallo@frischmuth.design?subject=Brand Mirror Anfrage','_blank');
+  },500);
+}
+
+async function generateResult(){
+  state.screen='loading';render();
+  var th = THEMES[state.archetype]||THEMES.OUTLAW;
+  var prompt = 'Du bist Experte fuer Brand-Archetypen nach C.G. Jung. Archetyp: '+state.archetype+'. Antworten: '+state.answers.map(function(a,i){return 'F'+(i+1)+': '+a;}).join(' | ')+'. WICHTIG: Nutze NICHT die Farben #0D0B14 #FF5C00 #5B3FA0 #FAFAFA. Waehle AUSSERGEWOEHNLICHE, AKTUELLE 2025/2026 Farben fuer diesen Archetyp. Denke an Premium-Branding, nicht Standard. Antworte NUR mit JSON ohne Markdown: {"narrative":"3-4 Saetze Du-Ansprache konkret inspirierend","marken":["M1","M2","M3"],"farben":[{"name":"N","hex":"#XXX","rolle":"Basis"},{"name":"N","hex":"#XXX","rolle":"Akzent"},{"name":"N","hex":"#XXX","rolle":"Support"},{"name":"N","hex":"#XXX","rolle":"Hintergrund"}],"farbharmonie":"1 Satz","typografie":"Konkrete Schrift-Empfehlung 2-3 Saetze warum sie zu diesem Archetyp passt","bildsprache":"1-2 Saetze","quotes":["S1","S2","S3"],"keywords":["K1","K2","K3","K4","K5","K6"],"traumkunden":[{"archetyp":"N","beschreibung":"Persoenlichkeit wie er als Mensch ist was im Umgang wichtig"},{"archetyp":"N","beschreibung":"..."},{"archetyp":"N","beschreibung":"..."}],"antikunden":[{"archetyp":"N","beschreibung":"Warum nicht passend"},{"archetyp":"N","beschreibung":"..."}],"konditionen_ja":["P1","P2","P3"],"konditionen_nein":["P1","P2"],"next_steps":["S1","S2","Schreib 3 Saetze ueber dich die unerwartet sind und neugierig machen wer du bist"]}';
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    var data=await res.json();
+    var txt=data.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');
+    var clean=txt.replace(/```json|```/g,'').trim();
+    state.result=JSON.parse(clean);
+  }catch(e){
+    state.result=getFallback(state.archetype);
+  }
+  state.screen='result';render();
+}
+
+function getFallback(a){
+  var ns={OUTLAW:"Du bist der Archetyp, der sagt was alle denken – aber niemand ausspricht. Dein Business funktioniert, weil du radikal ehrlich bist. Kunden wählen dich nicht trotz deiner Direktheit, sondern wegen ihr.",EXPLORER:"Du bist nie wirklich angekommen – und genau das ist deine Stärke. Dein Business lebt von Bewegung, neuen Perspektiven, der Frage: Was wäre, wenn?",MAGIER:"Du denkst in Zukunft, während andere noch über die Gegenwart diskutieren. Du verkaufst nicht nur eine Lösung – du verkaufst eine neue Realität.",HERRSCHER:"Du bist nicht hier um mitzuschwimmen – du bist hier um den Ton anzugeben. Klare Strukturen, hohe Standards, kein Kompromiss.",WEISER:"Während andere an der Oberfläche bleiben, gehst du in die Tiefe. Du bist die Stimme der Vernunft in einer Branche voller Buzzwords.",HELD:"Du redest nicht lange – du machst. Dein Business ist auf Ergebnisse ausgelegt: messbar, sichtbar, spürbar.",LIEBHABER:"Für dich ist Business nie nur Business – es ist Ausdruck, Hingabe, Verbindung. Menschen spüren, wenn etwas mit Liebe gemacht wurde.",LIEBENDER:"Du bist der ruhende Punkt für deine Kunden. Dein Business basiert auf Vertrauen, das über Jahre wächst.",JESTER:"Du nimmst dich selbst nicht zu ernst – und genau das macht dich unwiderstehlich. Humor ist bei dir keine Lücke, sondern die Strategie.",EVERYMAN:"Du machst keinen auf besonders – und genau das ist deine Stärke. Bei dir muss niemand etwas vorspielen.",UNSCHULDIGE:"In einer Welt voller Überforderung bist du die Ausnahme: bei dir wird es einfach."};
+  var fallFarben = {
+    OUTLAW:[{name:"Void",hex:"#0A0A0F",rolle:"Basis"},{name:"Ember",hex:"#E63946",rolle:"Akzent"},{name:"Ash",hex:"#6B6B76",rolle:"Support"},{name:"Chalk",hex:"#F5F5F0",rolle:"Hintergrund"}],
+    EXPLORER:[{name:"Deep Ocean",hex:"#0A1628",rolle:"Basis"},{name:"Teal Wave",hex:"#4ECDC4",rolle:"Akzent"},{name:"Horizon",hex:"#45B7D1",rolle:"Support"},{name:"Mist",hex:"#EEF6F8",rolle:"Hintergrund"}],
+    MAGIER:[{name:"Abyss",hex:"#0F0A1E",rolle:"Basis"},{name:"Amethyst",hex:"#A78BFA",rolle:"Akzent"},{name:"Mauve",hex:"#7C3AED",rolle:"Support"},{name:"Lavender",hex:"#F0EAFF",rolle:"Hintergrund"}],
+    HERRSCHER:[{name:"Obsidian",hex:"#0C0C0C",rolle:"Basis"},{name:"Champagne",hex:"#C9A84C",rolle:"Akzent"},{name:"Pewter",hex:"#3D3D3D",rolle:"Support"},{name:"Ivory",hex:"#F5F0E8",rolle:"Hintergrund"}],
+    WEISER:[{name:"Midnight Blue",hex:"#0E1620",rolle:"Basis"},{name:"Cerulean",hex:"#60A5FA",rolle:"Akzent"},{name:"Steel",hex:"#334155",rolle:"Support"},{name:"Ice",hex:"#EEF4FF",rolle:"Hintergrund"}],
+    HELD:[{name:"Carbon",hex:"#0D0B14",rolle:"Basis"},{name:"Amber",hex:"#F59E0B",rolle:"Akzent"},{name:"Rust",hex:"#D97706",rolle:"Support"},{name:"Cream",hex:"#FFFBEB",rolle:"Hintergrund"}],
+    LIEBHABER:[{name:"Burgundy Night",hex:"#1A0A0F",rolle:"Basis"},{name:"Rose Quartz",hex:"#F472B6",rolle:"Akzent"},{name:"Blush",hex:"#EC4899",rolle:"Support"},{name:"Petal",hex:"#FFF0F6",rolle:"Hintergrund"}],
+    LIEBENDER:[{name:"Forest",hex:"#0F1A14",rolle:"Basis"},{name:"Sage",hex:"#6EE7B7",rolle:"Akzent"},{name:"Moss",hex:"#34D399",rolle:"Support"},{name:"Dew",hex:"#ECFDF5",rolle:"Hintergrund"}],
+    JESTER:[{name:"Ink",hex:"#0A0A1A",rolle:"Basis"},{name:"Saffron",hex:"#FBBF24",rolle:"Akzent"},{name:"Paprika",hex:"#F97316",rolle:"Support"},{name:"Vanilla",hex:"#FFFBEB",rolle:"Hintergrund"}],
+    EVERYMAN:[{name:"Graphite",hex:"#141414",rolle:"Basis"},{name:"Slate",hex:"#94A3B8",rolle:"Akzent"},{name:"Pewter",hex:"#64748B",rolle:"Support"},{name:"Paper",hex:"#F8F9FA",rolle:"Hintergrund"}],
+    UNSCHULDIGE:[{name:"Deep Sky",hex:"#0F1520",rolle:"Basis"},{name:"Periwinkle",hex:"#93C5FD",rolle:"Akzent"},{name:"Cornflower",hex:"#60A5FA",rolle:"Support"},{name:"Cloud",hex:"#EEF4FF",rolle:"Hintergrund"}]
   };
-  const narratives = {
-    OUTLAW: "Du bist der Archetyp, der sagt was alle denken – aber niemand ausspricht. Dein Business funktioniert, weil du radikal ehrlich bist. Kunden wählen dich nicht trotz deiner Direktheit, sondern wegen ihr.",
-    EXPLORER: "Du bist nie wirklich angekommen – und genau das ist deine Stärke. Dein Business lebt von Bewegung, neuen Perspektiven, der Frage 'Was wäre, wenn?'. Kunden kommen zu dir, weil du ihnen zeigst was jenseits des Bekannten liegt.",
-    MAGIER: "Du denkst in Zukunft, während andere noch über die Gegenwart diskutieren. Dein Business hat eine Vision die größer ist als das Produkt selbst. Du verkaufst nicht nur eine Lösung – du verkaufst eine neue Realität.",
-    HERSCHER: "Du bist nicht hier um mitzuschwimmen – du bist hier um den Ton anzugeben. Dein Business strahlt Souveränität aus: klare Strukturen, hohe Standards, kein Kompromiss. Kunden wählen dich, weil sie das Beste wollen.",
-    WEISER: "Während andere an der Oberfläche bleiben, gehst du in die Tiefe. Dein Business basiert auf echtem Verständnis, nicht auf Trends. Du bist die Stimme der Vernunft in einer Branche voller Buzzwords.",
-    HELD: "Du redest nicht lange – du machst. Dein Business ist auf Ergebnisse ausgelegt: messbar, sichtbar, spürbar. Während andere noch planen, hast du schon geliefert.",
-    LIEBHABER: "Für dich ist Business nie nur Business – es ist Ausdruck, Hingabe, Verbindung. Du investierst Herzblut in jedes Detail, weil du weißt: Menschen spüren, wenn etwas mit Liebe gemacht wurde.",
-    LIEBENDER: "Du bist der ruhende Punkt für deine Kunden. Während andere nur liefern, bist du da – auch wenn's mal nicht läuft. Dein Business basiert auf Vertrauen das über Jahre wächst.",
-    JESTER: "Du nimmst dich selbst nicht zu ernst – und genau das macht dich unwiderstehlich. Dein Business bricht mit der drögen Norm deiner Branche. Humor ist bei dir keine Lücke, sondern die Strategie.",
-    EVERYMAN: "Du machst keinen auf besonders – und genau das ist deine Stärke. Menschen vertrauen dir, weil du nicht 'von oben' sprichst, sondern als einer von ihnen. Bei dir muss niemand etwas vorspielen.",
-    UNSCHULDIGE: "In einer Welt voller Überforderung bist du die Ausnahme: bei dir wird's einfach. Du versprichst nicht das Unmögliche – du sorgst dafür, dass sich Menschen sicher fühlen."
-  };
-  return { ...base, narrative: narratives[a] || narratives.OUTLAW };
+  return{narrative:ns[a]||ns.OUTLAW,marken:["Patagonia","Oatly","Innocent"],farben:fallFarben[a]||fallFarben.OUTLAW,farbharmonie:"Sorgfältig abgestimmte Palette mit starkem Kontrast – Tiefe trifft Präzision.",typografie:"Für diesen Archetyp empfehlen sich Schriften mit klarer Haltung. Die Buchstabenform spiegelt Charakter wider – nicht beliebig, sondern bewusst gewählt.",bildsprache:"Authentisch und ungestellt. Kein Stockphoto-Feeling – echte Momente, echte Menschen.",quotes:["Wir machen, was wir sagen.","Keine versteckten Kosten – keine versteckten Absichten.","Du weißt immer, woran du bist."],keywords:["Authentisch","Klar","Verlässlich","Direkt","Echt","Substanz"],traumkunden:[{archetyp:"Held",beschreibung:"Zielorientiert und direkt – will Ergebnisse sehen, nicht Versprechen hören."},{archetyp:"Weiser",beschreibung:"Analytisch und gründlich – schätzt Transparenz und fundierte Antworten."},{archetyp:"Explorer",beschreibung:"Rastlos und neugierig – sucht jemanden der mithält wenn er neue Wege geht."}],antikunden:[{archetyp:"Herrscher",beschreibung:"Braucht Kontrolle und gibt sie nicht ab – das führt zu Dauerreibung."},{archetyp:"Unschuldige",beschreibung:"Erwartet reibungslosen Ablauf ohne Eigeninitiative zu zeigen."}],konditionen_ja:["Klare Briefings mit echtem Ziel","Direkte Kommunikation ohne Umwege","Vertrauen in den Prozess ohne Mikromanagement"],konditionen_nein:["Projekte ohne definierten Erfolg","Kunden die Ergebnisse ablehnen aber keine Richtung geben"],next_steps:["Überprüfe deine Kommunikation – bist du wirklich so direkt wie du glaubst?","Definiere einen Kundentyp dem du ab jetzt bewusst Nein sagst","Schreib 3 Sätze über dich, die unerwartet sind und neugierig machen, wer du bist"]};
 }
 
 render();
