@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brand Mirror · Frischmuth.Design</title>
-<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,700;1,700&family=Playfair+Display:ital,wght@0,700;1,700&family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,700;1,700&family=Playfair+Display:ital,wght@0,700;1,700&family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -200,6 +200,193 @@ body{font-family:'Jost',sans-serif;background:#111;display:flex;align-items:cent
 .btn-ghost{width:100%;padding:16px;background:transparent;border:1.5px solid rgba(255,255,255,.25);border-radius:12px;font-family:'Jost',sans-serif;font-size:14px;cursor:pointer;transition:all .15s;color:rgba(255,255,255,.65);letter-spacing:.3px}
 .btn-ghost:hover{border-color:rgba(255,92,0,.6);color:#FF5C00}
 @media(min-width:500px){.app{margin:24px auto;min-height:auto;border-radius:24px;box-shadow:0 32px 80px rgba(0,0,0,.5)}}
+
+/* EMAIL CAPTURE SCREEN */
+.email-screen{
+  background:var(--night);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:48px 28px;flex:1;
+  position:relative;overflow:hidden;
+}
+.email-screen::before{
+  content:'';position:absolute;
+  top:-60px;right:-60px;
+  width:280px;height:280px;
+  background:radial-gradient(circle,rgba(91,63,160,.45) 0%,transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.email-screen::after{
+  content:'';position:absolute;
+  bottom:-40px;left:-40px;
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(255,92,0,.25) 0%,transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.email-icon{font-size:44px;margin-bottom:20px;position:relative;z-index:1;}
+.email-headline{
+  font-size:32px;font-weight:700;font-style:italic;
+  text-transform:uppercase;color:var(--white);
+  text-align:center;line-height:1.15;
+  margin-bottom:12px;letter-spacing:-1px;
+  position:relative;z-index:1;
+}
+.email-headline span{color:var(--orange);}
+.email-sub{
+  font-size:15px;color:var(--muted-dark);
+  text-align:center;line-height:1.65;
+  margin-bottom:32px;font-weight:300;
+  position:relative;z-index:1;
+}
+.email-form{width:100%;position:relative;z-index:1;}
+.email-input{
+  width:100%;padding:18px 20px;
+  background:rgba(255,255,255,.08);
+  border:1.5px solid rgba(255,255,255,.15);
+  border-radius:12px;font-family:'Jost',sans-serif;
+  font-size:16px;color:var(--white);
+  outline:none;transition:border-color .2s;
+  margin-bottom:12px;
+}
+.email-input::placeholder{color:rgba(255,255,255,.3);}
+.email-input:focus{border-color:var(--orange);}
+.email-error{
+  font-size:13px;color:#FF6B6B;
+  margin-bottom:12px;text-align:center;
+  display:none;position:relative;z-index:1;
+}
+.btn-email{
+  width:100%;padding:18px;
+  background:linear-gradient(135deg,#FF5C00 0%,#FF8C00 50%,#5B3FA0 100%);
+  color:var(--white);border:none;border-radius:12px;
+  font-family:'Jost',sans-serif;font-size:16px;font-weight:700;
+  cursor:pointer;transition:opacity .2s,transform .15s;
+  box-shadow:0 4px 20px rgba(255,92,0,.35);
+  position:relative;overflow:hidden;
+}
+.btn-email::before{
+  content:'';position:absolute;top:0;left:-100%;
+  width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  transition:left .5s ease;
+}
+.btn-email:hover::before{left:100%;}
+.btn-email:hover{opacity:.92;transform:translateY(-1px);}
+.email-skip{
+  background:none;border:none;
+  font-family:'Jost',sans-serif;font-size:13px;
+  color:rgba(255,255,255,.3);cursor:pointer;
+  margin-top:14px;text-decoration:underline;
+  text-underline-offset:3px;width:100%;
+  text-align:center;transition:color .2s;
+  display:block;
+}
+.email-skip:hover{color:rgba(255,255,255,.6);}
+.code-divider{
+  display:flex;align-items:center;gap:12px;
+  margin:20px 0 16px;position:relative;z-index:1;
+}
+.code-divider::before,.code-divider::after{
+  content:'';flex:1;height:1px;
+  background:rgba(255,255,255,.1);
+}
+.code-divider span{
+  font-size:12px;color:rgba(255,255,255,.3);
+  font-weight:400;letter-spacing:1px;text-transform:uppercase;
+}
+.code-section{width:100%;position:relative;z-index:1;}
+.code-label{
+  font-size:13px;color:rgba(255,255,255,.4);
+  margin-bottom:10px;text-align:center;
+}
+.code-row{display:flex;gap:8px;}
+.code-input{
+  flex:1;padding:14px 16px;
+  background:rgba(255,255,255,.06);
+  border:1.5px solid rgba(255,255,255,.1);
+  border-radius:10px;font-family:'Jost',sans-serif;
+  font-size:14px;color:var(--white);outline:none;
+  transition:border-color .2s;letter-spacing:1px;
+}
+.code-input::placeholder{color:rgba(255,255,255,.2);}
+.code-input:focus{border-color:var(--purple);}
+.btn-code{
+  width:48px;height:48px;
+  background:rgba(91,63,160,.4);
+  border:1.5px solid rgba(91,63,160,.5);
+  border-radius:10px;color:var(--white);
+  font-size:18px;cursor:pointer;
+  transition:all .2s;flex-shrink:0;
+}
+.btn-code:hover{background:var(--purple);border-color:var(--purple);}
+.code-error{
+  font-size:12px;color:#FF6B6B;
+  margin-top:8px;text-align:center;
+}
+.email-privacy{
+  font-size:11px;color:rgba(255,255,255,.2);
+  text-align:center;margin-top:20px;
+  line-height:1.6;position:relative;z-index:1;
+}
+
+/* PRINT / PDF STYLES */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background: white !important; margin: 0 !important; }
+  #spark-overlay { display: none !important; }
+  .res-cta { display: none !important; }
+  .prog-wrap { display: none !important; }
+  .top-nav { display: none !important; }
+  .start-bar { display: none !important; }
+  .app {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    min-height: auto !important;
+  }
+  .res-hero {
+    padding: 32px 28px !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .res-body { padding: 24px 28px 32px !important; }
+  .res-name { font-size: 48px !important; }
+  .btn-download { display: none !important; }
+  .btn-ghost { display: none !important; }
+  .dd-body { max-height: 200px !important; padding: 14px 18px !important; }
+  .dd.open .dd-body, .dd-body { max-height: none !important; }
+  .kw { page-break-inside: avoid; }
+  .result-section { page-break-inside: avoid; }
+  @page { margin: 0; size: A4; }
+}
+/* DOWNLOAD BUTTON */
+.btn-download {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,.2);
+  border-radius: 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,.6);
+  cursor: pointer;
+  transition: all .2s;
+  letter-spacing: .3px;
+}
+.btn-download:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+.btn-download svg {
+  width: 16px; height: 16px;
+  stroke: currentColor; fill: none;
+  stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;
+}
 </style>
 </head>
 <body>
@@ -298,6 +485,15 @@ var THEMES = {
     typoFonts:['Jost','sans-serif'],typoLabel:'Jost Regular',
     typoStyle:'font-family:"Jost",sans-serif;font-weight:400;font-size:18px;'
   },
+  SCHOEPFER:{
+    bg:'#12100E',text:'#F5EDD7',accent:'#E8531A',bar:'#E8531A',
+    ctaBg:'linear-gradient(135deg,#E8531A,#C2400F)',ctaText:'white',ghostColor:'rgba(232,83,26,.15)',ghostText:'rgba(255,255,255,.6)',
+    quoteColor:'rgba(255,255,255,.85)',
+    font:"font-family:'DM Serif Display',serif;font-style:italic;",
+    heroGrad:'radial-gradient(circle at 70% 30%,rgba(232,83,26,.35) 0%,transparent 60%),radial-gradient(circle at 30% 70%,rgba(194,64,15,.25) 0%,transparent 60%)',
+    typoFonts:['DM Serif Display','serif'],typoLabel:'DM Serif Display',
+    typoStyle:"font-family:'DM Serif Display',serif;font-style:italic;font-weight:400;font-size:24px;"
+  },
   UNSCHULDIGE:{
     bg:'#0F1520',text:'#EEF4FF',accent:'#93C5FD',bar:'#93C5FD',
     ctaBg:'linear-gradient(135deg,#1E3A8A,#93C5FD)',ctaText:'white',ghostColor:'rgba(147,197,253,.15)',ghostText:'rgba(255,255,255,.6)',
@@ -309,42 +505,42 @@ var THEMES = {
   }
 };
 
-var ARCHETYPES = ['OUTLAW','EXPLORER','MAGIER','HERRSCHER','WEISER','HELD','LIEBHABER','LIEBENDER','JESTER','EVERYMAN','UNSCHULDIGE'];
+var ARCHETYPES = ['OUTLAW','EXPLORER','MAGIER','HERRSCHER','WEISER','HELD','LIEBHABER','LIEBENDER','JESTER','EVERYMAN','UNSCHULDIGE','SCHOEPFER'];
 
 var QUESTIONS = [
   {id:1,text:"Was treibt dich in deinem Business wirklich an?",hint:"Dein erstes Gefühl ist meistens richtig – keine falsche Bescheidenheit.",answers:[
     {t:"Ich will etwas verändern – das System, die Branche, die Norm.",s:{OUTLAW:2,EXPLORER:1,MAGIER:1}},
     {t:"Ich will führen, Strukturen schaffen und Exzellenz beweisen.",s:{HERRSCHER:2,HELD:1,WEISER:1}},
     {t:"Ich will echte Verbindungen schaffen und Menschen wirklich helfen.",s:{LIEBENDER:2,LIEBHABER:1,EVERYMAN:1}},
-    {t:"Ich will Visionen in Realität verwandeln – Dinge möglich machen.",s:{MAGIER:2,EXPLORER:1,HELD:1}}
+    {t:"Ich will Visionen in Realität verwandeln – Dinge möglich machen.",s:{MAGIER:2,EXPLORER:1,HELD:1,SCHOEPFER:1}}
   ]},
   {id:2,text:"Regeln sind für dich …",hint:"Antworte ohne lange nachzudenken – wie verhältst du dich wirklich?",answers:[
     {t:"Da zum Brechen. Wer nicht riskiert, gewinnt nicht.",s:{OUTLAW:2,EXPLORER:1}},
     {t:"Wichtig – sie geben Struktur und schaffen Verlässlichkeit.",s:{HERRSCHER:2,WEISER:1,EVERYMAN:1}},
-    {t:"Okay, solange sie Sinn ergeben. Sonst: ändern.",s:{HELD:2,MAGIER:1}},
+    {t:"Okay, solange sie Sinn ergeben. Sonst: ändern.",s:{HELD:2,MAGIER:1,SCHOEPFER:1}},
     {t:"Ehrlich gesagt egal – mich interessieren Menschen, nicht Systeme.",s:{LIEBHABER:2,LIEBENDER:1,JESTER:1}}
   ]},
   {id:3,text:"Wie kommunizierst du am liebsten mit Kunden?",hint:"Denk an dein letztes richtig gutes Gespräch – wie war dein Ton?",answers:[
     {t:"Direkt, klar, ohne Umschweife – ich sage, was ich denke.",s:{OUTLAW:2,HELD:1,WEISER:1}},
     {t:"Warm, empathisch, mit echtem Interesse für den Menschen.",s:{LIEBENDER:2,LIEBHABER:1,EVERYMAN:1}},
-    {t:"Inspirierend, visionär – ich zeige, was möglich ist.",s:{MAGIER:2,EXPLORER:1}},
+    {t:"Inspirierend, visionär – ich zeige, was möglich ist.",s:{MAGIER:2,EXPLORER:1,SCHOEPFER:1}},
     {t:"Mit Humor und Leichtigkeit – Ernsthaftigkeit muss nicht schwer sein.",s:{JESTER:2,EVERYMAN:1,EXPLORER:1}}
   ]},
   {id:4,text:"Was ist deine größte Stärke im Business?",hint:"Was sagen Kunden, die dich weiterempfehlen – wofür stehst du wirklich?",answers:[
     {t:"Ich analysiere tief und erkläre Komplexes verständlich.",s:{WEISER:2,HERRSCHER:1}},
     {t:"Ich setze um – schnell, fokussiert, ergebnisorientiert.",s:{HELD:2,HERRSCHER:1}},
-    {t:"Ich sehe Möglichkeiten, wo andere Probleme sehen.",s:{MAGIER:2,EXPLORER:1,OUTLAW:1}},
+    {t:"Ich sehe Möglichkeiten, wo andere Probleme sehen.",s:{MAGIER:2,EXPLORER:1,OUTLAW:1,SCHOEPFER:2}},
     {t:"Ich baue Vertrauen auf – Menschen fühlen sich bei mir sicher.",s:{LIEBENDER:2,UNSCHULDIGE:1,EVERYMAN:1}}
   ]},
   {id:5,text:"Ein Projekt läuft schief. Deine erste Reaktion?",hint:"Sei ehrlich – nicht wie du sein solltest, sondern wie du wirklich bist.",answers:[
     {t:"Ich analysiere, was falsch lief – dann mache ich es besser.",s:{WEISER:2,HELD:1}},
-    {t:"Ich suche sofort eine kreative Lösung – Probleme sind Chancen.",s:{MAGIER:2,EXPLORER:1,OUTLAW:1}},
+    {t:"Ich suche sofort eine kreative Lösung – Probleme sind Chancen.",s:{MAGIER:2,EXPLORER:1,OUTLAW:1,SCHOEPFER:2}},
     {t:"Ich spreche offen darüber – Fehler gehören dazu.",s:{OUTLAW:2,EVERYMAN:1}},
     {t:"Ich kümmere mich zuerst um die betroffenen Menschen.",s:{LIEBENDER:2,LIEBHABER:1}}
   ]},
   {id:6,text:"Welcher Satz beschreibt dein Business am besten?",hint:"Welcher trifft es wirklich – nicht welcher klingt am besten.",answers:[
     {t:"Wir machen es richtig – nicht einfach nur fertig.",s:{HERRSCHER:2,WEISER:1,HELD:1}},
-    {t:"Wir denken, was andere noch nicht denken.",s:{MAGIER:2,EXPLORER:1,OUTLAW:1}},
+    {t:"Wir denken, was andere noch nicht denken.",s:{MAGIER:2,EXPLORER:1,OUTLAW:1,SCHOEPFER:1}},
     {t:"Wir sind ehrlich, direkt – und sagen, was wir meinen.",s:{OUTLAW:2,HELD:1}},
     {t:"Wir sehen den Menschen hinter dem Projekt.",s:{LIEBHABER:2,LIEBENDER:1,EVERYMAN:1}}
   ]},
@@ -358,13 +554,13 @@ var QUESTIONS = [
     {t:"Ein Projekt, in dem ich meine Meinung nicht sagen darf.",s:{EVERYMAN:-2,UNSCHULDIGE:-1,OUTLAW:2}},
     {t:"Ein Auftrag ohne klares Ziel und messbare Ergebnisse.",s:{JESTER:-1,LIEBHABER:-1,HELD:2,HERRSCHER:1}},
     {t:"Eine Zusammenarbeit, die sich kalt und unpersönlich anfühlt.",s:{HERRSCHER:-2,WEISER:-1,LIEBENDER:2,LIEBHABER:1}},
-    {t:"Alles, was langweilig, vorhersehbar oder 08/15 ist.",s:{EVERYMAN:-2,UNSCHULDIGE:-1,EXPLORER:2,JESTER:1}}
+    {t:"Alles, was langweilig, vorhersehbar oder 08/15 ist.",s:{EVERYMAN:-2,UNSCHULDIGE:-1,EXPLORER:2,JESTER:1,SCHOEPFER:2}}
   ]},
   {id:9,text:"Ein neuer Kontakt fragt dich, warum er mit dir arbeiten soll. Was sagst du?",hint:"Spontan antworten – dein erster Impuls ist dein Archetyp.",answers:[
     {t:"Weil ich Dinge sage, die andere sich nicht trauen.",s:{OUTLAW:2,WEISER:1}},
     {t:"Weil ich nicht ruhe, bis es wirklich gut ist.",s:{HERRSCHER:2,HELD:1,WEISER:1}},
     {t:"Weil ich zuhöre, bevor ich antworte.",s:{LIEBENDER:2,LIEBHABER:1,EVERYMAN:1}},
-    {t:"Weil ich zeige, was möglich ist – auch wenn du es noch nicht siehst.",s:{MAGIER:2,EXPLORER:1}}
+    {t:"Weil ich zeige, was möglich ist – auch wenn du es noch nicht siehst.",s:{MAGIER:2,EXPLORER:1,SCHOEPFER:1}}
   ]}
 ];
 
@@ -379,13 +575,14 @@ var VALIDATIONS = {
   LIEBENDER:"Du sorgst für andere. Du bist da, hältst den Rücken frei. Bei dir fühlen sich Menschen sicher, gesehen und gehalten.",
   JESTER:"Du bringst Leichtigkeit. Humor ist deine Strategie. Du machst ernste Themen zugänglich – und bist dabei völlig authentisch.",
   EVERYMAN:"Du bist auf Augenhöhe. Echt, normal, ohne Fassade. Bei dir fühlt sich jeder willkommen – Zugehörigkeit ist dein Kernversprechen.",
+  SCHOEPFER:"Du erschaffst. Du gestaltest. Wo andere eine leere Seite sehen, siehst du Möglichkeiten. Dein Business ist dein Werk – und es trägt deinen unverwechselbaren Abdruck.",
   UNSCHULDIGE:"Du bringst Optimismus und Sicherheit. Du vereinfachst Komplexes. Bei dir wird alles leichter – und das ist deine echte Superkraft."
 };
 
 var CORRECTIONS = {
   OUTLAW:[{n:"EXPLORER",d:"Du erkundest Neues. Freiheit und Neugier – Faszination statt Rebellion."},{n:"MAGIER",d:"Du siehst, was andere nicht sehen. Visionen werden Realität."}],
   EXPLORER:[{n:"OUTLAW",d:"Du brichst Regeln. Sagst laut, was andere denken aber schweigen."},{n:"MAGIER",d:"Du siehst, was andere nicht sehen. Transformation ist dein Ding."}],
-  MAGIER:[{n:"OUTLAW",d:"Du brichst Regeln. Radikale Ehrlichkeit statt diplomatischem Schweigen."},{n:"EXPLORER",d:"Du erkundest Neues. Neugier als Lebenshaltung."}],
+  MAGIER:[{n:"OUTLAW",d:"Du brichst Regeln. Radikale Ehrlichkeit statt diplomatischem Schweigen."},{n:"EXPLORER",d:"Du erkundest Neues. Neugier als Lebenshaltung."},{n:"SCHOEPFER",d:"Du erschaffst. Dein Business ist dein Werk – unverwechselbar."}],
   HERRSCHER:[{n:"WEISER",d:"Du tauchst tief ein. Kompetenz ist deine echte Währung."},{n:"HELD",d:"Du packst an. Ergebnisse statt Ankündigungen."}],
   WEISER:[{n:"HERRSCHER",d:"Du führst mit Klarheit. Nur das Beste reicht – und das weißt du."},{n:"HELD",d:"Du packst an. Taten statt Theorien."}],
   HELD:[{n:"HERRSCHER",d:"Du führst mit Struktur und Exzellenz. Du gibst den Ton vor."},{n:"WEISER",d:"Du analysierst tief. Fakten sind dein Fundament."}],
@@ -393,6 +590,7 @@ var CORRECTIONS = {
   LIEBENDER:[{n:"LIEBHABER",d:"Du arbeitest aus Leidenschaft. Ästhetik und Intensität sind deine Sprache."},{n:"EVERYMAN",d:"Du bist auf Augenhöhe. Echt, normal, ohne Fassade."}],
   JESTER:[{n:"EXPLORER",d:"Du erkundest Neues. Neugier ohne Angst vor dem Unbekannten."},{n:"LIEBHABER",d:"Du arbeitest aus Leidenschaft. Intensität als Markenzeichen."}],
   EVERYMAN:[{n:"LIEBENDER",d:"Du sorgst für andere. Verlässlich und warm."},{n:"UNSCHULDIGE",d:"Du bringst Optimismus. Bei dir wird es einfacher."}],
+  SCHOEPFER:[{n:"MAGIER",d:"Du verwandelst Visionen in Realität – mit Magie statt Handwerk."},{n:"EXPLORER",d:"Du suchst Neues. Freiheit als Antrieb, nicht Ausdruck."}],
   UNSCHULDIGE:[{n:"EVERYMAN",d:"Du bist auf Augenhöhe. Kein Bullshit, keine Fassade."},{n:"LIEBENDER",d:"Du sorgst für andere. Sicherheit als echtes Versprechen."}]
 };
 
@@ -544,17 +742,26 @@ function renderCorrection(){
 
 function renderEmailCapture(){
   return '<div class="slide">' +
+    '<div class="start-bar"></div>' +
     '<div class="email-screen">' +
-      '<div class="email-icon">&#127881;</div>' +
-      '<h2 class="email-headline">Dein Ergebnis<br>ist bereit!</h2>' +
-      '<p class="email-sub">Wohin sollen wir dein<br>persönliches Brand Mirror Profil schicken?</p>' +
+      '<div class="email-icon">&#10024;</div>' +
+      '<h2 class="email-headline">Fast<br>geschafft!</h2>' +
+      '<p class="email-sub">Wohin schicken wir dein persönliches<br><span style="color:var(--orange);font-weight:500;">Brand Mirror</span> Profil?</p>' +
       '<div class="email-form">' +
         '<input class="email-input" id="emailInput" type="email" placeholder="deine@email.com">' +
-        '<div class="email-error" id="emailError">Bitte gib eine gültige Email ein.</div>' +
-        '<button class="btn-email" onclick="submitEmail()">Profil anzeigen &#8594;</button>' +
-        '<button class="email-skip" onclick="skipEmail()">Überspringen – direkt zum Ergebnis</button>' +
+        '<div class="email-error" id="emailError" style="display:none;">Bitte gib eine gültige Email ein.</div>' +
+        '<button class="btn-email" onclick="submitEmail()">Mein Profil anzeigen &#8594;</button>' +
       '</div>' +
-      '<p class="email-privacy">Kein Spam. Keine Weitergabe.<br>Nur dein Profil + gelegentlich wertvolle Tipps.</p>' +
+      '<div class="code-divider"><span>oder</span></div>' +
+      '<div class="code-section">' +
+        '<p class="code-label">Bereits Kund*in? Gib deinen Code ein:</p>' +
+        '<div class="code-row">' +
+          '<input class="code-input" id="codeInput" type="text" placeholder="Dein Code">' +
+          '<button class="btn-code" onclick="submitCode()">&#8594;</button>' +
+        '</div>' +
+        '<div class="code-error" id="codeError" style="display:none;">Ungültiger Code.</div>' +
+      '</div>' +
+      '<p class="email-privacy">Kein Spam. Keine Weitergabe.<br>Nur dein Profil + wertvolle Branding-Tipps.</p>' +
     '</div>' +
   '</div>';
 }
@@ -585,11 +792,13 @@ function renderResult(){
     '<div class="color-row">'+r.farben.map(function(f){return '<div class="sw-wrap"><div class="sw" style="background:'+f.hex+'"></div><div class="sw-name">'+f.name+'</div></div>';}).join('')+'</div>'+
     '<p style="font-size:13px;color:var(--hint);margin-top:10px;line-height:1.5;">'+(r.farbharmonie||'')+'</p>') : '';
 
+  var typoFont = th.typoFonts ? '"'+th.typoFonts[0]+'",'+th.typoFonts[1] : '"Jost",sans-serif';
+  var typoTextColor = th.text || '#FFFFFF';
   var typoAZ =
-    '<div style="font-family:inherit;font-weight:700;font-size:14px;letter-spacing:2.5px;color:#FFFFFF;margin-bottom:8px;line-height:1.6;word-break:break-all;">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</div>'+
-    '<div style="font-family:inherit;font-weight:400;font-size:13px;letter-spacing:1.5px;color:rgba(255,255,255,.65);margin-bottom:10px;word-break:break-all;">a b c d e f g h i j k l m n o p q r s t u v w x y z</div>'+
-    '<div style="font-family:monospace;font-size:22px;font-weight:700;letter-spacing:4px;color:'+th.accent+';margin-bottom:14px;">0 1 2 3 4 5 6 7 8 9</div>';
-  var typo = r.typografie ? sec('Typografie',
+    '<div style="all:unset;display:block;font-family:'+typoFont+';font-weight:700;font-size:15px;letter-spacing:2px;color:'+typoTextColor+' !important;margin-bottom:10px;line-height:1.6;word-break:break-all;opacity:1;">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</div>'+
+    '<div style="all:unset;display:block;font-family:'+typoFont+';font-weight:400;font-size:14px;letter-spacing:1px;color:'+typoTextColor+' !important;margin-bottom:10px;word-break:break-all;opacity:0.65;">a b c d e f g h i j k l m n o p q r s t u v w x y z</div>'+
+    '<div style="all:unset;display:block;font-size:24px;font-weight:700;letter-spacing:4px;color:'+th.accent+' !important;margin-bottom:14px;font-family:monospace;">0 1 2 3 4 5 6 7 8 9</div>';
+  var typo = r.typografie ? sec('Typografie – '+th.typoLabel,
     '<div class="typo-spec" style="background:'+th.bg+';border-color:rgba(255,255,255,.1);">'+
     typoAZ+
     '<div class="typo-div" style="background:rgba(255,255,255,.1);"></div>'+
@@ -649,6 +858,10 @@ function renderResult(){
       '<p class="cta-quote" style="color:'+th.text+';opacity:.8;">"Du weißt jetzt, wer du bist.<br>Die Frage ist: Was machst du damit?"</p>' +
       '<button class="btn-cta" onclick="ctaClick(this)">Mit Babs zusammenarbeiten <span class="arrow">&#8594;</span></button>' +
       '<button class="btn-ghost" onclick="restart()">Quiz nochmal machen</button>' +
+      '<button class="btn-download" onclick="window.print()">'+
+        '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'+
+        'Ergebnis als PDF speichern'+
+      '</button>' +
     '</div>' +
   '</div>';
 }
@@ -713,6 +926,12 @@ function restart(){
 function toggleDD(i){var el=document.getElementById('dd'+i);if(el)el.classList.toggle('open');}
 function toggleADD(i){var el=document.getElementById('add'+i);if(el)el.classList.toggle('open');}
 
+function prepareAndPrint(){
+  // Open all dropdowns before printing so content is visible
+  document.querySelectorAll('.dd').forEach(function(dd){ dd.classList.add('open'); });
+  setTimeout(function(){ window.print(); }, 300);
+}
+
 function ctaClick(btn){
   btn.classList.add('firing');
   btn.style.transform='scale(1.03)';
@@ -744,6 +963,18 @@ function submitEmail(){
 function skipEmail(){
   launchSparks();
   setTimeout(function(){generateResult();},400);
+}
+
+function submitCode(){
+  var code = document.getElementById('codeInput').value.trim().toLowerCase();
+  var errorEl = document.getElementById('codeError');
+  if(code === 'fun2take'){
+    errorEl.style.display='none';
+    launchSparks();
+    setTimeout(function(){generateResult();},400);
+  } else {
+    errorEl.style.display='block';
+  }
 }
 
 async function saveEmailToBrevo(email){
@@ -786,7 +1017,8 @@ async function generateResult(){
 }
 
 function getFallback(a){
-  var ns={OUTLAW:"Du bist der Archetyp, der sagt was alle denken – aber niemand ausspricht. Dein Business funktioniert, weil du radikal ehrlich bist. Kunden wählen dich nicht trotz deiner Direktheit, sondern wegen ihr.",EXPLORER:"Du bist nie wirklich angekommen – und genau das ist deine Stärke. Dein Business lebt von Bewegung, neuen Perspektiven, der Frage: Was wäre, wenn?",MAGIER:"Du denkst in Zukunft, während andere noch über die Gegenwart diskutieren. Du verkaufst nicht nur eine Lösung – du verkaufst eine neue Realität.",HERRSCHER:"Du bist nicht hier um mitzuschwimmen – du bist hier um den Ton anzugeben. Klare Strukturen, hohe Standards, kein Kompromiss.",WEISER:"Während andere an der Oberfläche bleiben, gehst du in die Tiefe. Du bist die Stimme der Vernunft in einer Branche voller Buzzwords.",HELD:"Du redest nicht lange – du machst. Dein Business ist auf Ergebnisse ausgelegt: messbar, sichtbar, spürbar.",LIEBHABER:"Für dich ist Business nie nur Business – es ist Ausdruck, Hingabe, Verbindung. Menschen spüren, wenn etwas mit Liebe gemacht wurde.",LIEBENDER:"Du bist der ruhende Punkt für deine Kunden. Dein Business basiert auf Vertrauen, das über Jahre wächst.",JESTER:"Du nimmst dich selbst nicht zu ernst – und genau das macht dich unwiderstehlich. Humor ist bei dir keine Lücke, sondern die Strategie.",EVERYMAN:"Du machst keinen auf besonders – und genau das ist deine Stärke. Bei dir muss niemand etwas vorspielen.",UNSCHULDIGE:"In einer Welt voller Überforderung bist du die Ausnahme: bei dir wird es einfach."};
+  var ns={OUTLAW:"Du bist der Archetyp, der sagt was alle denken – aber niemand ausspricht. Dein Business funktioniert, weil du radikal ehrlich bist. Kunden wählen dich nicht trotz deiner Direktheit, sondern wegen ihr.",EXPLORER:"Du bist nie wirklich angekommen – und genau das ist deine Stärke. Dein Business lebt von Bewegung, neuen Perspektiven, der Frage: Was wäre, wenn?",MAGIER:"Du denkst in Zukunft, während andere noch über die Gegenwart diskutieren. Du verkaufst nicht nur eine Lösung – du verkaufst eine neue Realität.",HERRSCHER:"Du bist nicht hier um mitzuschwimmen – du bist hier um den Ton anzugeben. Klare Strukturen, hohe Standards, kein Kompromiss.",WEISER:"Während andere an der Oberfläche bleiben, gehst du in die Tiefe. Du bist die Stimme der Vernunft in einer Branche voller Buzzwords.",HELD:"Du redest nicht lange – du machst. Dein Business ist auf Ergebnisse ausgelegt: messbar, sichtbar, spürbar.",LIEBHABER:"Für dich ist Business nie nur Business – es ist Ausdruck, Hingabe, Verbindung. Menschen spüren, wenn etwas mit Liebe gemacht wurde.",LIEBENDER:"Du bist der ruhende Punkt für deine Kunden. Dein Business basiert auf Vertrauen, das über Jahre wächst.",JESTER:"Du nimmst dich selbst nicht zu ernst – und genau das macht dich unwiderstehlich. Humor ist bei dir keine Lücke, sondern die Strategie.",EVERYMAN:"Du machst keinen auf besonders – und genau das ist deine Stärke. Bei dir muss niemand etwas vorspielen.",UNSCHULDIGE:"In einer Welt voller Überforderung bist du die Ausnahme: bei dir wird es einfach.",
+    SCHOEPFER:"Du erschaffst was andere sich nicht vorstellen können. Dein Business ist dein Werk – und jedes Detail trägt deine Handschrift. Kunden wählen dich, weil du nicht reproduzierst. Du erschaffst."};
   var fallFarben = {
     OUTLAW:[{name:"Void",hex:"#0A0A0F",rolle:"Basis"},{name:"Ember",hex:"#E63946",rolle:"Akzent"},{name:"Ash",hex:"#6B6B76",rolle:"Support"},{name:"Chalk",hex:"#F5F5F0",rolle:"Hintergrund"}],
     EXPLORER:[{name:"Deep Ocean",hex:"#0A1628",rolle:"Basis"},{name:"Teal Wave",hex:"#4ECDC4",rolle:"Akzent"},{name:"Horizon",hex:"#45B7D1",rolle:"Support"},{name:"Mist",hex:"#EEF6F8",rolle:"Hintergrund"}],
@@ -798,6 +1030,7 @@ function getFallback(a){
     LIEBENDER:[{name:"Forest",hex:"#0F1A14",rolle:"Basis"},{name:"Sage",hex:"#6EE7B7",rolle:"Akzent"},{name:"Moss",hex:"#34D399",rolle:"Support"},{name:"Dew",hex:"#ECFDF5",rolle:"Hintergrund"}],
     JESTER:[{name:"Ink",hex:"#0A0A1A",rolle:"Basis"},{name:"Saffron",hex:"#FBBF24",rolle:"Akzent"},{name:"Paprika",hex:"#F97316",rolle:"Support"},{name:"Vanilla",hex:"#FFFBEB",rolle:"Hintergrund"}],
     EVERYMAN:[{name:"Graphite",hex:"#141414",rolle:"Basis"},{name:"Slate",hex:"#94A3B8",rolle:"Akzent"},{name:"Pewter",hex:"#64748B",rolle:"Support"},{name:"Paper",hex:"#F8F9FA",rolle:"Hintergrund"}],
+    SCHOEPFER:[{name:"Warm Charcoal",hex:"#12100E",rolle:"Basis"},{name:"Vermillion",hex:"#E8531A",rolle:"Akzent"},{name:"Terracotta",hex:"#C2400F",rolle:"Support"},{name:"Ivory Cream",hex:"#F5EDD7",rolle:"Hintergrund"}],
     UNSCHULDIGE:[{name:"Deep Sky",hex:"#0F1520",rolle:"Basis"},{name:"Periwinkle",hex:"#93C5FD",rolle:"Akzent"},{name:"Cornflower",hex:"#60A5FA",rolle:"Support"},{name:"Cloud",hex:"#EEF4FF",rolle:"Hintergrund"}]
   };
   return{narrative:ns[a]||ns.OUTLAW,marken:["Patagonia","Oatly","Innocent"],farben:fallFarben[a]||fallFarben.OUTLAW,farbharmonie:"Sorgfältig abgestimmte Palette mit starkem Kontrast – Tiefe trifft Präzision.",typografie:"Für diesen Archetyp empfehlen sich Schriften mit klarer Haltung. Die Buchstabenform spiegelt Charakter wider – nicht beliebig, sondern bewusst gewählt.",bildsprache:"Authentisch und ungestellt. Kein Stockphoto-Feeling – echte Momente, echte Menschen.",quotes:["Wir machen, was wir sagen.","Keine versteckten Kosten – keine versteckten Absichten.","Du weißt immer, woran du bist."],keywords:["Authentisch","Klar","Verlässlich","Direkt","Echt","Substanz"],traumkunden:[{archetyp:"Held",beschreibung:"Zielorientiert und direkt – will Ergebnisse sehen, nicht Versprechen hören."},{archetyp:"Weiser",beschreibung:"Analytisch und gründlich – schätzt Transparenz und fundierte Antworten."},{archetyp:"Explorer",beschreibung:"Rastlos und neugierig – sucht jemanden der mithält wenn er neue Wege geht."}],antikunden:[{archetyp:"Herrscher",beschreibung:"Braucht Kontrolle und gibt sie nicht ab – das führt zu Dauerreibung."},{archetyp:"Unschuldige",beschreibung:"Erwartet reibungslosen Ablauf ohne Eigeninitiative zu zeigen."}],konditionen_ja:["Klare Briefings mit echtem Ziel","Direkte Kommunikation ohne Umwege","Vertrauen in den Prozess ohne Mikromanagement"],konditionen_nein:["Projekte ohne definierten Erfolg","Kunden die Ergebnisse ablehnen aber keine Richtung geben"],next_steps:["Überprüfe deine Kommunikation – bist du wirklich so direkt wie du glaubst?","Definiere einen Kundentyp dem du ab jetzt bewusst Nein sagst","Schreib 3 Sätze über dich, die unerwartet sind und neugierig machen, wer du bist"]};
