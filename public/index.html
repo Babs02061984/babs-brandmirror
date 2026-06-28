@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archetypen-Finder · Frischmuth. Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --midnight: #0D0B14;
+  --purple: #5B3FA0;
+  --purple-soft: #7B5BC4;
+  --orange: #FF5C00;
+  --white: #FFFFFF;
+  --off-white: #FAFAFA;
+  --text-dark: #0D0B14;
+  --text-muted: #4A4540;
+  --text-hint: #6B6560;
+  --text-on-dark: #E8E4DE;
+  --text-muted-dark: #B8B0A8;
+  --border: #E0D8D0;
+}
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.app {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  background: var(--off-white);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── TRANSITIONS ── */
+.slide {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.slide.back {
+  animation: slideInBack 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+@keyframes slideInBack {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── SHAKE ANIMATION ── */
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-4px); }
+  40%      { transform: translateX(4px); }
+  60%      { transform: translateX(-3px); }
+  80%      { transform: translateX(3px); }
+}
+.shake { animation: shake 0.35s ease; }
+
+/* ── TYPEWRITER ── */
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1em;
+  background: var(--orange);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 0.8s step-end infinite;
+}
+
+/* ── PROGRESS ── */
+.progress-wrap {
+  background: var(--midnight);
+  padding: 0;
+}
+.progress-bar {
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+}
+.progress-fill {
+  height: 100%;
+  background: var(--orange);
+  transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.progress-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted-dark);
+  padding: 10px 24px 14px;
+}
+
+/* ── CHIP ── */
+.chip {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--orange);
+  color: var(--orange);
+  background: transparent;
+}
+
+/* ── START SCREEN ── */
+.start-screen {
+  background: var(--midnight);
+}
+.start-top-bar {
+  height: 4px;
+  background: var(--orange);
+}
+.start-content {
+  padding: 40px 28px 52px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.start-logo {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted-dark);
+  margin-bottom: 56px;
+}
+.start-eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+}
+.start-headline {
+  font-size: 54px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.0;
+  letter-spacing: -1.5px;
+  color: var(--white);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.start-headline span { color: var(--orange); display: block; }
+.start-divider {
+  width: 40px;
+  height: 3px;
+  background: var(--orange);
+  margin: 32px 0 20px;
+}
+.start-sub {
+  font-size: 16px;
+  color: var(--text-muted-dark);
+  line-height: 1.65;
+  margin-bottom: 6px;
+  font-weight: 300;
+}
+.start-dry {
+  font-size: 13px;
+  color: var(--text-hint-dark, #9E9890);
+  font-style: italic;
+  margin-bottom: 40px;
+}
+.btn-primary {
+  width: 100%;
+  padding: 18px;
+  background: var(--orange);
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: transform 0.15s, opacity 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
+.btn-primary:active { transform: scale(0.98); }
+.start-footnote {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  margin-top: 16px;
+  letter-spacing: 1px;
+}
+
+/* ── QUESTION SCREEN ── */
+.question-screen { background: var(--off-white); }
+.question-content {
+  padding: 20px 24px 28px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.question-quip {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-hint);
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  background: rgba(255,92,0,0.06);
+  border-left: 2px solid var(--orange);
+  border-radius: 0 8px 8px 0;
+}
+.question-headline {
+  font-size: 25px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  color: var(--text-dark);
+  margin: 14px 0 8px;
+}
+.question-hint {
+  font-size: 13px;
+  color: var(--text-hint);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+.answers {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.answer-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  font-family: 'Jost', sans-serif;
+  width: 100%;
+}
+.answer-btn:hover {
+  border-color: var(--orange);
+  background: rgba(255,92,0,0.03);
+  transform: translateX(2px);
+}
+.answer-btn.selected {
+  background: var(--midnight);
+  border-color: var(--midnight);
+  animation: shake 0.35s ease;
+}
+.answer-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #EEE8E0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dark);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.answer-btn.selected .answer-badge {
+  background: var(--orange);
+  color: var(--white);
+}
+.answer-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  padding-top: 6px;
+  transition: color 0.2s;
+}
+.answer-btn.selected .answer-text { color: var(--white); }
+.back-link {
+  background: none;
+  border: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: var(--text-hint);
+  cursor: pointer;
+  padding: 16px 24px;
+  text-align: left;
+  transition: color 0.15s;
+}
+.back-link:hover { color: var(--text-dark); }
+
+/* ── VALIDATION SCREEN ── */
+.validation-screen { background: var(--off-white); }
+.validation-content {
+  padding: 20px 24px 32px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.reveal-card {
+  background: var(--midnight);
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.reveal-card::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 120px; height: 120px;
+  background: radial-gradient(circle, rgba(91,63,160,0.3) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.reveal-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted-dark);
+  margin-bottom: 14px;
+}
+.reveal-name {
+  font-size: 44px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1.0;
+  margin-bottom: 14px;
+  letter-spacing: -1px;
+}
+.reveal-accent {
+  width: 44px;
+  height: 3px;
+  background: var(--purple);
+  border-radius: 2px;
+  margin-bottom: 16px;
+}
+.reveal-text {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-muted-dark);
+  font-weight: 300;
+  position: relative;
+  z-index: 1;
+}
+.validation-question {
+  font-size: 22px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+}
+.val-btns { display: flex; flex-direction: column; gap: 10px; }
+.val-btn {
+  padding: 17px 20px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  font-family: 'Jost', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-dark);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+.val-btn:first-child {
+  background: var(--midnight);
+  border-color: var(--midnight);
+  color: var(--white);
+}
+.val-btn:hover:not(:first-child) {
+  border-color: var(--orange);
+}
+.val-btn:hover:first-child { opacity: 0.9; }
+
+/* ── CORRECTION SCREEN ── */
+.correction-screen { background: var(--off-white); }
+.correction-content {
+  padding: 20px 24px 32px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.correction-headline {
+  font-size: 26px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--text-dark);
+  margin: 14px 0 8px;
+  letter-spacing: -0.5px;
+}
+.correction-dry {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-hint);
+  margin-bottom: 24px;
+}
+.archetype-cards { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.archetype-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-left: 4px solid var(--orange);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Jost', sans-serif;
+  text-align: left;
+  width: 100%;
+}
+.archetype-card:nth-child(even) { border-left-color: var(--midnight); }
+.archetype-card:hover { transform: translateX(3px); border-color: var(--orange); }
+.card-emoji { font-size: 28px; flex-shrink: 0; }
+.card-name {
+  font-size: 16px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+  letter-spacing: 0.3px;
+}
+.card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+.restart-link {
+  background: none;
+  border: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: var(--text-hint);
+  cursor: pointer;
+  padding: 20px 0 0;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  width: 100%;
+  transition: color 0.15s;
+}
+.restart-link:hover { color: var(--text-dark); }
+
+/* ── LOADING SCREEN ── */
+.loading-screen {
+  background: var(--midnight);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 48px 32px;
+  flex: 1;
+}
+.loading-record {
+  width: 100px;
+  height: 100px;
+  position: relative;
+}
+.record-outer {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--midnight);
+  border: 3px solid var(--orange);
+  animation: spin 2s linear infinite;
+  position: absolute;
+}
+.record-groove {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255,92,0,0.2);
+}
+.record-groove:nth-child(2) { width: 80px; height: 80px; top: 7px; left: 7px; }
+.record-groove:nth-child(3) { width: 60px; height: 60px; top: 17px; left: 17px; }
+.record-center {
+  position: absolute;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--orange);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.loading-texts {
+  text-align: center;
+}
+.loading-main {
+  font-size: 20px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+.loading-dry {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-muted-dark);
+  line-height: 1.6;
+}
+.loading-dots { display: flex; gap: 8px; }
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--orange);
+  animation: dotPulse 1.4s ease-in-out infinite;
+}
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotPulse {
+  0%,80%,100% { opacity: 0.3; transform: scale(0.8); }
+  40%          { opacity: 1;   transform: scale(1.2); }
+}
+
+/* ── RESULT SCREEN ── */
+.result-screen { background: var(--off-white); }
+.result-hero {
+  background: var(--midnight);
+  padding: 44px 28px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.result-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(91,63,160,0.4) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.result-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; left: -20px;
+  width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(255,92,0,0.2) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.result-top-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--orange);
+}
+.result-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted-dark);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+.result-name {
+  font-size: 60px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1.0;
+  letter-spacing: -2px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.result-orange-bar {
+  width: 52px; height: 4px;
+  background: var(--orange);
+  border-radius: 2px;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+}
+.result-tagline {
+  font-size: 16px;
+  color: var(--text-muted-dark);
+  line-height: 1.7;
+  font-weight: 300;
+  position: relative;
+  z-index: 1;
+}
+.result-body {
+  padding: 28px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text-hint);
+  margin-bottom: 12px;
+}
+.result-box {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid var(--border);
+}
+.color-row { display: flex; gap: 10px; }
+.color-swatch-wrap { flex: 1; text-align: center; }
+.color-swatch {
+  height: 56px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.swatch-name { font-size: 10px; font-weight: 600; color: var(--text-dark); margin-bottom: 2px; }
+.swatch-hex { font-size: 9px; color: var(--text-hint); letter-spacing: 0.5px; }
+.quote-list { display: flex; flex-direction: column; gap: 10px; }
+.quote-item {
+  padding: 12px 16px;
+  border-left: 3px solid var(--orange);
+  background: rgba(255,92,0,0.04);
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.keyword-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.keyword {
+  padding: 6px 14px;
+  background: var(--midnight);
+  color: var(--white);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.client-list { display: flex; flex-direction: column; gap: 10px; }
+.client-item {
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--orange);
+  background: var(--white);
+}
+.client-item.anti {
+  border-left-color: #C04040;
+  background: #FFF8F8;
+}
+.client-name { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; font-style: italic; }
+.client-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+.contract-list { display: flex; flex-direction: column; gap: 10px; }
+.contract-item {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  padding-left: 20px;
+  position: relative;
+}
+.contract-item::before {
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+.contract-item.yes::before { content: "✓"; color: var(--orange); }
+.contract-item.no::before  { content: "✗"; color: #C04040; }
+.contract-item.no { color: #C04040; }
+.steps-list { display: flex; flex-direction: column; gap: 12px; }
+.step-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.step-text { font-size: 14px; color: var(--text-muted); line-height: 1.5; padding-top: 4px; }
+.result-cta {
+  background: var(--midnight);
+  padding: 28px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cta-dry {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-muted-dark);
+  text-align: center;
+  margin-bottom: 4px;
+}
+.btn-cta {
+  width: 100%;
+  padding: 18px;
+  background: var(--orange);
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.btn-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-cta-ghost {
+  width: 100%;
+  padding: 16px;
+  background: transparent;
+  color: var(--text-muted-dark);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-cta-ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
+
+@media (min-width: 500px) {
+  .app {
+    margin: 24px auto;
+    min-height: auto;
+    border-radius: 24px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+  }
+}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+
+// ── DRY WIT COPY ──────────────────────────────────────────
+const QUIPS = {
+  q1: "Keine falsche Bescheidenheit. Was ist es wirklich?",
+  q2a: "Change-Maker. Okay. Aber wie genau?",
+  q2b: "Leader. Gut. Was unterscheidet dich von jedem anderen, der das auch sagt?",
+  q2c: "Connector. Klingt nach LinkedIn-Bio. Aber okay – was davon?",
+  q3a: "Fast da. Noch eine Frage. Wir versprechen, es ist die letzte.",
+  q3b: "Letzte Frage. Ernsthaft diesmal."
+};
+
+const LOADING_TEXTS = [
+  "Dein Profil wird analysiert...",
+  "Archetypische Muster werden abgeglichen...",
+  "Fast fertig. Wir lügen nicht."
+];
+
+// ── DECISION TREE ──────────────────────────────────────────
+const DECISION_TREE = {
+  q1: {
+    text: "Was treibt dich in deinem Business wirklich an?",
+    hint: "Antworte spontan – das erste Gefühl zählt.",
+    chip: "Grundorientierung",
+    step: 1, total: 3,
+    answers: [
+      { label: "A", text: "Ich will VERÄNDERN – Branchen, Konventionen, das System." },
+      { label: "B", text: "Ich will FÜHREN – Strukturen schaffen, Expertise zeigen." },
+      { label: "C", text: "Ich will VERBINDEN – Menschen erreichen, echte Beziehungen." }
+    ],
+    next: ["q2a", "q2b", "q2c"]
+  },
+  q2a: {
+    text: "Was ist deine tiefste Motivation, wenn du etwas veränderst?",
+    hint: "Antworte intuitiv – kein langes Nachdenken.",
+    chip: "Change-Maker",
+    step: 2, total: 3,
+    answers: [
+      { label: "A", text: "Mich ärgert, was nicht funktioniert. Ich sage laut, was andere denken aber nicht aussprechen." },
+      { label: "B", text: "Mich fasziniert, was noch möglich ist. Ich entdecke Neues und gehe unbekannte Wege." },
+      { label: "C", text: "Ich sehe, was andere nicht sehen. Ich verwandle Visionen in echte Ergebnisse." }
+    ],
+    next: ["OUTLAW", "EXPLORER", "MAGIER"]
+  },
+  q2b: {
+    text: "Was ist deine Führungsstärke?",
+    hint: "Antworte intuitiv – kein langes Nachdenken.",
+    chip: "Leader",
+    step: 2, total: 3,
+    answers: [
+      { label: "A", text: "Ich schaffe Exzellenz & Struktur. Mittelmaß ist keine Option – nur das Beste reicht." },
+      { label: "B", text: "Ich analysiere tief & teile Wissen. Kompetenz und Wahrheit sind meine Währung." },
+      { label: "C", text: "Ich packe an & liefere Ergebnisse. Probleme sind Trainingseinheiten für mich." }
+    ],
+    next: ["HERSCHER", "WEISER", "HELD"]
+  },
+  q2c: {
+    text: "Wie verbindest du dich am liebsten mit Menschen?",
+    hint: "Antworte intuitiv – kein langes Nachdenken.",
+    chip: "Connector",
+    step: 2, total: 3,
+    answers: [
+      { label: "A", text: "Mit Tiefe & Leidenschaft – echte, intensive Beziehungen die etwas bedeuten." },
+      { label: "B", text: "Mit Leichtigkeit & Humor – ich bringe Freude und mache Schweres leicht." },
+      { label: "C", text: "Mit Einfachheit & Zugehörigkeit – bei mir fühlt sich jeder willkommen." }
+    ],
+    next: ["q3a", "JESTER", "q3b"]
+  },
+  q3a: {
+    text: "Was treibt dich in Beziehungen wirklich an?",
+    hint: "Beide klingen ähnlich – schau genau hin.",
+    chip: "Letzte Frage",
+    step: 3, total: 3,
+    answers: [
+      { label: "A", text: "Ich begeistere & inspiriere. Leidenschaft, Ästhetik und Energie sind meine Sprache." },
+      { label: "B", text: "Ich unterstütze & sorge. Ich bin da, halte den Rücken frei – verlässlich und warm." }
+    ],
+    next: ["LIEBHABER", "LIEBENDER"]
+  },
+  q3b: {
+    text: "Was ist deine Botschaft an deine Kunden?",
+    hint: "Antworte spontan – das erste Gefühl zählt.",
+    chip: "Letzte Frage",
+    step: 3, total: 3,
+    answers: [
+      { label: "A", text: "Ich bin wie du – echt, normal, auf Augenhöhe. Kein Bullshit, keine Fassade." },
+      { label: "B", text: "Es wird gut – vertrau dem Prozess. Ich mache es einfach und sicher für dich." }
+    ],
+    next: ["EVERYMAN", "UNSCHULDIGE"]
+  }
+};
+
+const VALIDATIONS = {
+  OUTLAW:     { emoji: "⚡", text: "Du sagst laut, was andere denken aber nicht aussprechen. Radikale Ehrlichkeit ist deine einzige Option. Provokation ist für dich keine Strategie – sie ist Haltung." },
+  EXPLORER:   { emoji: "🗺️", text: "Du erkundest Neues. Du gehst Wege, die andere nicht sehen. Freiheit und Neugier sind dein Antrieb – nicht Rebellion, sondern Faszination." },
+  MAGIER:     { emoji: "✨", text: "Du siehst, was andere nicht sehen. Du verwandelst Visionen in Realität. Transformation ist nicht was du tust – es ist wer du bist." },
+  HERSCHER:   { emoji: "👑", text: "Du führst mit Klarheit und Exzellenz. Struktur ist deine Stärke. Mittelmaß ist für dich keine Option – nur das Beste zählt." },
+  WEISER:     { emoji: "🧠", text: "Du tauchst tief ein. Du analysierst, verstehst und erklärst. Kompetenz und Wahrheit sind deine Währung – Fakten statt Fassade." },
+  HELD:       { emoji: "⚔️", text: "Du packst an. Du lieferst Ergebnisse. Probleme sind für dich Trainingseinheiten – du gewinnst durch Taten, nicht durch Worte." },
+  LIEBHABER:  { emoji: "❤️", text: "Du arbeitest aus Leidenschaft. Du baust echte, tiefe Beziehungen. Ästhetik, Energie und Intensität sind deine Sprache." },
+  LIEBENDER:  { emoji: "🫂", text: "Du sorgst für andere. Du bist da, hältst den Rücken frei. Bei dir fühlen sich Menschen sicher, gesehen und gehalten." },
+  JESTER:     { emoji: "🎉", text: "Du bringst Leichtigkeit. Humor ist deine Strategie. Du machst ernste Themen zugänglich – und bist dabei völlig authentisch." },
+  EVERYMAN:   { emoji: "🤝", text: "Du bist auf Augenhöhe. Echt, normal, ohne Fassade. Bei dir fühlt sich jeder willkommen – Zugehörigkeit ist dein Kernversprechen." },
+  UNSCHULDIGE:{ emoji: "🕊️", text: "Du bringst Optimismus und Sicherheit. Du vereinfachst Komplexes. Bei dir wird alles leichter – und das ist deine echte Superkraft." }
+};
+
+const CORRECTIONS = {
+  OUTLAW:  [
+    { name: "EXPLORER", emoji: "🗺️", desc: "Du erkundest Neues. Freiheit & Neugier – Faszination statt Rebellion." },
+    { name: "MAGIER", emoji: "✨", desc: "Du siehst, was andere nicht sehen. Visionen werden Realität." }
+  ],
+  EXPLORER: [
+    { name: "OUTLAW", emoji: "⚡", desc: "Du brichst Regeln. Sagst laut, was andere denken aber schweigen." },
+    { name: "MAGIER", emoji: "✨", desc: "Du siehst, was andere nicht sehen. Transformation ist dein Ding." }
+  ],
+  MAGIER: [
+    { name: "OUTLAW", emoji: "⚡", desc: "Du brichst Regeln. Radikale Ehrlichkeit statt diplomatischem Schweigen." },
+    { name: "EXPLORER", emoji: "🗺️", desc: "Du erkundest Neues. Neugier als Lebenshaltung." }
+  ],
+  HERSCHER: [
+    { name: "WEISER", emoji: "🧠", desc: "Du tauchst tief ein. Kompetenz ist deine echte Währung." },
+    { name: "HELD", emoji: "⚔️", desc: "Du packst an. Ergebnisse statt Ankündigungen." }
+  ],
+  WEISER: [
+    { name: "HERSCHER", emoji: "👑", desc: "Du führst mit Klarheit. Nur das Beste reicht – und das weißt du." },
+    { name: "HELD", emoji: "⚔️", desc: "Du packst an. Taten statt Theorien." }
+  ],
+  HELD: [
+    { name: "HERSCHER", emoji: "👑", desc: "Du führst mit Struktur & Exzellenz. Der Ton gibt's vor." },
+    { name: "WEISER", emoji: "🧠", desc: "Du analysierst tief. Fakten sind dein Fundament." }
+  ],
+  LIEBHABER: [
+    { name: "LIEBENDER", emoji: "🫂", desc: "Du sorgst für andere. Verlässlich, warm, rückenfreihaltend." },
+    { name: "JESTER", emoji: "🎉", desc: "Du bringst Leichtigkeit. Humor als echte Strategie." }
+  ],
+  LIEBENDER: [
+    { name: "LIEBHABER", emoji: "❤️", desc: "Du arbeitest aus Leidenschaft. Ästhetik & Intensität sind deine Sprache." },
+    { name: "EVERYMAN", emoji: "🤝", desc: "Du bist auf Augenhöhe. Echt, normal, ohne Fassade." }
+  ],
+  JESTER: [
+    { name: "EXPLORER", emoji: "🗺️", desc: "Du erkundest Neues. Neugier ohne Angst vor dem Unbekannten." },
+    { name: "LIEBHABER", emoji: "❤️", desc: "Du arbeitest aus Leidenschaft. Intensität als Markenzeichen." }
+  ],
+  EVERYMAN: [
+    { name: "LIEBENDER", emoji: "🫂", desc: "Du sorgst für andere. Verlässlich und warm." },
+    { name: "UNSCHULDIGE", emoji: "🕊️", desc: "Du bringst Optimismus. Bei dir wird's einfacher." }
+  ],
+  UNSCHULDIGE: [
+    { name: "EVERYMAN", emoji: "🤝", desc: "Du bist auf Augenhöhe. Kein Bullshit, keine Fassade." },
+    { name: "LIEBENDER", emoji: "🫂", desc: "Du sorgst für andere. Sicherheit als echtes Versprechen." }
+  ]
+};
+
+// ── STATE ──────────────────────────────────────────────────
+const state = {
+  screen: 'start',
+  history: [],
+  currentQuestion: null,
+  answers: [],
+  archetype: null,
+  result: null,
+  loadingTextIndex: 0
+};
+
+// ── PROMPT ────────────────────────────────────────────────
+function buildPrompt(archetype, answers) {
+  return `Du bist ein Experte für Brand-Archetypen nach C.G. Jung im Business-Kontext.
+Der Archetyp dieser Person ist: ${archetype}
+Quiz-Antworten: ${answers.map((a,i) => `Frage ${i+1}: ${a}`).join(' | ')}
+
+Antworte NUR mit validem JSON, kein Markdown, keine Backticks, kein Preamble:
+{"narrative":"3-4 Sätze, direkte Du-Ansprache, konkret & inspirierend","marken":["Marke1","Marke2","Marke3"],"farben":[{"name":"Name","hex":"#XXXXXX","rolle":"Basis/Akzent/Support"},{"name":"Name","hex":"#XXXXXX","rolle":"Basis/Akzent/Support"},{"name":"Name","hex":"#XXXXXX","rolle":"Basis/Akzent/Support"},{"name":"Name","hex":"#XXXXXX","rolle":"Basis/Akzent/Support"}],"farbharmonie":"1 Satz Farbharmonie","typografie":"1-2 Sätze Typografie","bildsprache":"1-2 Sätze Bildsprache","quotes":["Satz1","Satz2","Satz3"],"keywords":["K1","K2","K3","K4","K5","K6"],"traumkunden":[{"archetyp":"Name","beschreibung":"Warum passend"},{"archetyp":"Name","beschreibung":"Warum passend"},{"archetyp":"Name","beschreibung":"Warum passend"}],"antikunden":[{"archetyp":"Name","beschreibung":"Warum nicht passend"},{"archetyp":"Name","beschreibung":"Warum nicht passend"}],"konditionen_ja":["Punkt1","Punkt2","Punkt3"],"konditionen_nein":["Punkt1","Punkt2"],"next_steps":["Schritt1","Schritt2","Schritt3"]}`;
+}
+
+// ── RENDER ─────────────────────────────────────────────────
+function render() {
+  const app = document.getElementById('app');
+  switch(state.screen) {
+    case 'start':      app.innerHTML = renderStart(); break;
+    case 'question':   app.innerHTML = renderQuestion(); break;
+    case 'validation': app.innerHTML = renderValidation(); break;
+    case 'correction': app.innerHTML = renderCorrection(); break;
+    case 'loading':    app.innerHTML = renderLoading(); break;
+    case 'result':     app.innerHTML = renderResult(); break;
+  }
+}
+
+function renderStart() {
+  return `<div class="slide start-screen">
+    <div class="start-top-bar"></div>
+    <div class="start-content">
+      <div class="start-logo">Frischmuth. Design</div>
+      <div class="start-eyebrow">Brand Archetypen-Finder</div>
+      <div class="start-headline">
+        Finde<br>deinen<br>
+        <span>Archetypen.</span>
+      </div>
+      <div class="start-divider"></div>
+      <p class="start-sub">Wer du wirklich bist, entscheidet wen du anziehst – und wen nicht.</p>
+      <p class="start-dry">"Das ist kein Persönlichkeitstest. Das ist ein Spiegel."</p>
+      <button class="btn-primary" onclick="startQuiz()">Jetzt herausfinden →</button>
+      <p class="start-footnote">3 Fragen · 3 Minuten · Kein Bullshit</p>
+    </div>
+  </div>`;
+}
+
+function renderQuestion() {
+  const q = DECISION_TREE[state.currentQuestion];
+  const pct = (q.step / q.total) * 100;
+  return `<div class="slide question-screen">
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="progress-label">Schritt ${q.step} von ${q.total}</div>
+    </div>
+    <div class="question-content">
+      <span class="chip">${q.chip}</span>
+      <div class="question-quip">${QUIPS[state.currentQuestion] || ''}</div>
+      <h2 class="question-headline">${q.text}</h2>
+      <p class="question-hint">${q.hint}</p>
+      <div class="answers">
+        ${q.answers.map((a,i) => `
+          <button class="answer-btn" onclick="selectAnswer(${i})">
+            <div class="answer-badge">${a.label}</div>
+            <div class="answer-text">${a.text}</div>
+          </button>`).join('')}
+      </div>
+    </div>
+    ${state.history.length > 0 ? `<button class="back-link" onclick="goBack()">← Zurück</button>` : ''}
+  </div>`;
+}
+
+function renderValidation() {
+  const v = VALIDATIONS[state.archetype];
+  return `<div class="slide validation-screen">
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      <div class="progress-label">Fast geschafft.</div>
+    </div>
+    <div class="validation-content">
+      <div class="reveal-card">
+        <div class="reveal-label">Wir denken, du bist ein...</div>
+        <div class="reveal-name">${v.emoji} ${state.archetype}</div>
+        <div class="reveal-accent"></div>
+        <div class="reveal-text">${v.text}</div>
+      </div>
+      <h3 class="validation-question">Stimmt das?</h3>
+      <div class="val-btns">
+        <button class="val-btn" onclick="validateYes()">✅ Ja. Genau das.</button>
+        <button class="val-btn" onclick="validatePartly()">🤔 Teilweise – aber nicht ganz</button>
+        <button class="val-btn" onclick="validateNo()">❌ Nein. Daneben.</button>
+      </div>
+    </div>
+    <button class="back-link" onclick="goBack()">← Zurück</button>
+  </div>`;
+}
+
+function renderCorrection() {
+  const alts = CORRECTIONS[state.archetype] || [];
+  return `<div class="slide correction-screen">
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      <div class="progress-label">Kein Problem.</div>
+    </div>
+    <div class="correction-content">
+      <span class="chip">Alternativ-Check</span>
+      <h2 class="correction-headline">Welcher passt besser?</h2>
+      <p class="correction-dry">"Einer davon trifft's. Garantiert."</p>
+      <div class="archetype-cards">
+        ${alts.map(a => `
+          <button class="archetype-card" onclick="selectAlternative('${a.name}')">
+            <div class="card-emoji">${a.emoji}</div>
+            <div>
+              <div class="card-name">${a.name}</div>
+              <div class="card-desc">${a.desc}</div>
+            </div>
+          </button>`).join('')}
+      </div>
+      <button class="restart-link" onclick="restart()">Keiner davon? Von vorne starten.</button>
+    </div>
+  </div>`;
+}
+
+function renderLoading() {
+  return `<div class="slide loading-screen">
+    <div class="loading-record">
+      <div class="record-outer"></div>
+      <div class="record-groove"></div>
+      <div class="record-groove"></div>
+      <div class="record-center"></div>
+    </div>
+    <div class="loading-texts">
+      <div class="loading-main">Dein Profil<br>wird erstellt.</div>
+      <div class="loading-dry">"Kurz gedulden.<br>Gutes braucht eine Minute."</div>
+    </div>
+    <div class="loading-dots">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+  </div>`;
+}
+
+function renderResult() {
+  const r = state.result;
+  const v = VALIDATIONS[state.archetype];
+  if (!r) return '';
+  return `<div class="slide result-screen">
+    <div class="result-hero">
+      <div class="result-top-bar"></div>
+      <div class="result-label">Dein Archetyp</div>
+      <div class="result-name">${v.emoji} ${state.archetype}</div>
+      <div class="result-orange-bar"></div>
+      <p class="result-tagline">${r.narrative}</p>
+    </div>
+    <div class="result-body">
+
+      ${r.marken?.length ? `<div>
+        <div class="section-label">Marken die so ticken wie du</div>
+        <div class="keyword-row">${r.marken.map(m=>`<span class="keyword">${m}</span>`).join('')}</div>
+      </div>` : ''}
+
+      ${r.farben?.length ? `<div>
+        <div class="section-label">Deine Farbpalette</div>
+        <div class="color-row">${r.farben.map(f=>`
+          <div class="color-swatch-wrap">
+            <div class="color-swatch" style="background:${f.hex}"></div>
+            <div class="swatch-name">${f.name}</div>
+            <div class="swatch-hex">${f.hex}</div>
+          </div>`).join('')}</div>
+        <p style="font-size:13px;color:var(--text-hint);margin-top:10px;line-height:1.5;">${r.farbharmonie}</p>
+      </div>` : ''}
+
+      ${r.typografie ? `<div>
+        <div class="section-label">Typografie & Bildsprache</div>
+        <div class="result-box">
+          <p style="font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:10px;">${r.typografie}</p>
+          <p style="font-size:13px;color:var(--text-hint);line-height:1.6;">${r.bildsprache}</p>
+        </div>
+      </div>` : ''}
+
+      ${r.quotes?.length ? `<div>
+        <div class="section-label">Dein Wording</div>
+        <div class="quote-list">${r.quotes.map(q=>`<div class="quote-item">"${q}"</div>`).join('')}</div>
+      </div>` : ''}
+
+      ${r.keywords?.length ? `<div>
+        <div class="section-label">Schlüsselwörter</div>
+        <div class="keyword-row">${r.keywords.map(k=>`<span class="keyword">${k}</span>`).join('')}</div>
+      </div>` : ''}
+
+      ${r.traumkunden?.length ? `<div>
+        <div class="section-label">Deine Traumkunden</div>
+        <div class="client-list">${r.traumkunden.map(c=>`
+          <div class="client-item">
+            <div class="client-name">${c.archetyp}</div>
+            <div class="client-desc">${c.beschreibung}</div>
+          </div>`).join('')}</div>
+      </div>` : ''}
+
+      ${r.antikunden?.length ? `<div>
+        <div class="section-label">Anti-Kunden – vermeide diese.</div>
+        <div class="client-list">${r.antikunden.map(c=>`
+          <div class="client-item anti">
+            <div class="client-name">${c.archetyp}</div>
+            <div class="client-desc">${c.beschreibung}</div>
+          </div>`).join('')}</div>
+      </div>` : ''}
+
+      ${r.konditionen_ja?.length ? `<div>
+        <div class="section-label">Passende Projekte & Konditionen</div>
+        <div class="result-box">
+          <div class="contract-list">
+            ${r.konditionen_ja.map(k=>`<div class="contract-item yes">${k}</div>`).join('')}
+            ${r.konditionen_nein?.map(k=>`<div class="contract-item no">${k}</div>`).join('') || ''}
+          </div>
+        </div>
+      </div>` : ''}
+
+      ${r.next_steps?.length ? `<div>
+        <div class="section-label">Deine nächsten 3 Schritte</div>
+        <div class="steps-list">${r.next_steps.map((s,i)=>`
+          <div class="step-item">
+            <div class="step-num">${i+1}</div>
+            <div class="step-text">${s}</div>
+          </div>`).join('')}</div>
+      </div>` : ''}
+
+    </div>
+    <div class="result-cta">
+      <p class="cta-dry">"Du weißt jetzt, wer du bist. Die Frage ist: was machst du damit?"</p>
+      <button class="btn-cta" onclick="window.open('mailto:hallo@frischmuth.design?subject=Branding%20–%20${state.archetype}','_blank')">
+        Mit Babs zusammenarbeiten →
+      </button>
+      <button class="btn-cta-ghost" onclick="restart()">Quiz wiederholen</button>
+    </div>
+  </div>`;
+}
+
+// ── ACTIONS ────────────────────────────────────────────────
+function startQuiz() {
+  state.screen = 'question';
+  state.currentQuestion = 'q1';
+  state.history = [];
+  state.answers = [];
+  render();
+}
+
+function selectAnswer(index) {
+  const q = DECISION_TREE[state.currentQuestion];
+  const next = q.next[index];
+  state.history.push({ question: state.currentQuestion, answers: [...state.answers] });
+  state.answers.push(q.answers[index].text);
+  if (DECISION_TREE[next]) {
+    state.currentQuestion = next;
+    state.screen = 'question';
+  } else {
+    state.archetype = next;
+    state.screen = 'validation';
+  }
+  render();
+}
+
+function validateYes() { generateResult(); }
+function validatePartly() { state.screen = 'correction'; render(); }
+function validateNo() { state.screen = 'correction'; render(); }
+function selectAlternative(a) { state.archetype = a; generateResult(); }
+
+function goBack() {
+  if (state.history.length > 0) {
+    const prev = state.history.pop();
+    state.currentQuestion = prev.question;
+    state.answers = prev.answers;
+    state.screen = 'question';
+    render();
+    document.querySelector('.slide')?.classList.add('back');
+  }
+}
+
+function restart() {
+  Object.assign(state, { screen:'start', history:[], answers:[], archetype:null, result:null });
+  render();
+}
+
+// ── API ────────────────────────────────────────────────────
+async function generateResult() {
+  state.screen = 'loading';
+  render();
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: buildPrompt(state.archetype, state.answers) }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+    state.result = JSON.parse(text.replace(/```json|```/g,"").trim());
+  } catch(e) {
+    state.result = getFallback(state.archetype);
+  }
+  state.screen = 'result';
+  render();
+}
+
+function getFallback(a) {
+  const base = {
+    marken: ["Harley-Davidson","Patagonia","Oatly"],
+    farben: [
+      {name:"Midnight",hex:"#0D0B14",rolle:"Basis"},
+      {name:"Electric Orange",hex:"#FF5C00",rolle:"Akzent"},
+      {name:"Royal Purple",hex:"#5B3FA0",rolle:"Support"},
+      {name:"Off-White",hex:"#FAFAFA",rolle:"Hintergrund"}
+    ],
+    farbharmonie: "Komplementär mit hohem Kontrast – Energie durch Spannung.",
+    typografie: "Geometric Sans-Serif, bold und direkt. Keine Schnörkel.",
+    bildsprache: "Ungefiltert, real, High-Contrast. Menschen die provozieren, nicht posieren.",
+    keywords: ["Authentisch","Direkt","Mutig","Anders","Klar","Echt"],
+    traumkunden: [
+      {archetyp:"Outlaw",beschreibung:"Rebels – anti-konformistisch und authentisch"},
+      {archetyp:"Liebhaber",beschreibung:"Leidenschaftlich, tiefe Connection"},
+      {archetyp:"Magier",beschreibung:"Visionär und transformativ"}
+    ],
+    antikunden: [
+      {archetyp:"Everyman",beschreibung:"Zu konformistisch – will Sicherheit statt Disruption"},
+      {archetyp:"Herscher",beschreibung:"Zu kontrollierend – gibt keine kreative Freiheit"}
+    ],
+    konditionen_ja: ["Volle kreative Freiheit","Flache Hierarchien & schnelle Entscheidungen","Raum für Experimente"],
+    konditionen_nein: ["Mikromanagement-Projekte","Kunden die alles absegnen müssen"],
+    next_steps: [
+      "Überprüfe deine Website – sagst du klar was du NICHT machst?",
+      "Definiere 3 Kernaussagen die dich wirklich abheben",
+      "Wähle bewusst einen Kunden-Typ dem du ab jetzt Nein sagst"
+    ]
+  };
+  const narratives = {
+    OUTLAW: "Du bist der Archetyp, der sagt was alle denken – aber niemand ausspricht. Dein Business funktioniert, weil du radikal ehrlich bist. Kunden wählen dich nicht trotz deiner Direktheit, sondern wegen ihr.",
+    EXPLORER: "Du bist nie wirklich angekommen – und genau das ist deine Stärke. Dein Business lebt von Bewegung, neuen Perspektiven, der Frage 'Was wäre, wenn?'. Kunden kommen zu dir, weil du ihnen zeigst was jenseits des Bekannten liegt.",
+    MAGIER: "Du denkst in Zukunft, während andere noch über die Gegenwart diskutieren. Dein Business hat eine Vision die größer ist als das Produkt selbst. Du verkaufst nicht nur eine Lösung – du verkaufst eine neue Realität.",
+    HERSCHER: "Du bist nicht hier um mitzuschwimmen – du bist hier um den Ton anzugeben. Dein Business strahlt Souveränität aus: klare Strukturen, hohe Standards, kein Kompromiss. Kunden wählen dich, weil sie das Beste wollen.",
+    WEISER: "Während andere an der Oberfläche bleiben, gehst du in die Tiefe. Dein Business basiert auf echtem Verständnis, nicht auf Trends. Du bist die Stimme der Vernunft in einer Branche voller Buzzwords.",
+    HELD: "Du redest nicht lange – du machst. Dein Business ist auf Ergebnisse ausgelegt: messbar, sichtbar, spürbar. Während andere noch planen, hast du schon geliefert.",
+    LIEBHABER: "Für dich ist Business nie nur Business – es ist Ausdruck, Hingabe, Verbindung. Du investierst Herzblut in jedes Detail, weil du weißt: Menschen spüren, wenn etwas mit Liebe gemacht wurde.",
+    LIEBENDER: "Du bist der ruhende Punkt für deine Kunden. Während andere nur liefern, bist du da – auch wenn's mal nicht läuft. Dein Business basiert auf Vertrauen das über Jahre wächst.",
+    JESTER: "Du nimmst dich selbst nicht zu ernst – und genau das macht dich unwiderstehlich. Dein Business bricht mit der drögen Norm deiner Branche. Humor ist bei dir keine Lücke, sondern die Strategie.",
+    EVERYMAN: "Du machst keinen auf besonders – und genau das ist deine Stärke. Menschen vertrauen dir, weil du nicht 'von oben' sprichst, sondern als einer von ihnen. Bei dir muss niemand etwas vorspielen.",
+    UNSCHULDIGE: "In einer Welt voller Überforderung bist du die Ausnahme: bei dir wird's einfach. Du versprichst nicht das Unmögliche – du sorgst dafür, dass sich Menschen sicher fühlen."
+  };
+  return { ...base, narrative: narratives[a] || narratives.OUTLAW };
+}
+
+render();
+</script>
+</body>
+</html>
