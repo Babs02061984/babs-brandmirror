@@ -434,6 +434,7 @@ function render(){
   if(!app) return;
   var html = '';
   if(state.screen==='start') html = renderStart();
+  else if(state.screen==='email') html = renderEmailCapture();
   else if(state.screen==='question') html = renderQuestion();
   else if(state.screen==='validation') html = renderValidation();
   else if(state.screen==='correction') html = renderCorrection();
@@ -457,14 +458,14 @@ function renderStart(){
     '<div class="start-bar"></div>' +
     '<div class="start-body">' +
       '<div class="logo-w"><img src="'+LOGO+'" alt="Frischmuth Design" style="height:28px;"></div>' +
-      '<div class="eyebrow">Brand Brand Mirror</div>' +
-      '<div class="h1">Dein<br>Brand<br><span>Mirror.</span></div>' +
+      '<div class="eyebrow">Babs Brand Mirror</div>' +
+      '<div class="h1">Dein<br>Archetyp.<br><span>Deine Position.</span></div>' +
       '<div class="divider"></div>' +
       '<p class="start-p">Die stärksten Marken der Welt haben eines gemeinsam: sie wissen, wer sie sind.</p>' +
-      '<p class="start-p" style="margin-top:8px;">Dein Archetyp ist der Kern deiner Marke.</p>' +
-      '<p class="start-p accent" style="margin-top:8px;">Finde heraus, wie du kommunizieren darfst, damit du ein Magnet für deine Traumkunden wirst.</p>' +
+      '<p class="start-p" style="margin-top:4px;">Dein Archetyp ist der Kern deiner Marke.</p>' +
+      '<p class="start-p accent" style="margin-top:4px;">Finde heraus, wie du kommunizieren darfst, damit du ein Magnet für deine Traumkunden wirst.</p>' +
       '<button class="btn-start" onclick="startQuiz()">Jetzt herausfinden &#8594;</button>' +
-      '<p class="footnote">4 Fragen &nbsp;&middot;&nbsp; 210 Sekunden &nbsp;&middot;&nbsp; Eine Gewissheit mehr</p>' +
+      '<p class="footnote">9 Fragen &nbsp;&middot;&nbsp; 270 Sekunden &nbsp;&middot;&nbsp; Eine Gewissheit mehr</p>' +
     '</div>' +
   '</div>';
 }
@@ -537,6 +538,23 @@ function renderCorrection(){
       '<p class="corr-sub">"Einer davon trifft es. Garantiert."</p>' +
       '<div class="alt-cards">'+cards+'</div>' +
       '<button class="restart-link" onclick="restart()">Keiner davon trifft es? Von vorne starten.</button>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderEmailCapture(){
+  return '<div class="slide">' +
+    '<div class="email-screen">' +
+      '<div class="email-icon">&#127881;</div>' +
+      '<h2 class="email-headline">Dein Ergebnis<br>ist bereit!</h2>' +
+      '<p class="email-sub">Wohin sollen wir dein<br>persönliches Brand Mirror Profil schicken?</p>' +
+      '<div class="email-form">' +
+        '<input class="email-input" id="emailInput" type="email" placeholder="deine@email.com">' +
+        '<div class="email-error" id="emailError">Bitte gib eine gültige Email ein.</div>' +
+        '<button class="btn-email" onclick="submitEmail()">Profil anzeigen &#8594;</button>' +
+        '<button class="email-skip" onclick="skipEmail()">Überspringen – direkt zum Ergebnis</button>' +
+      '</div>' +
+      '<p class="email-privacy">Kein Spam. Keine Weitergabe.<br>Nur dein Profil + gelegentlich wertvolle Tipps.</p>' +
     '</div>' +
   '</div>';
 }
@@ -656,10 +674,10 @@ function pickAnswer(i){
   render();
 }
 
-function validateYes(){launchSparks();setTimeout(function(){generateResult();},400);}
+function validateYes(){state.screen='email';render();}
 function validatePartly(){state.screen='correction';render();}
 function validateNo(){state.screen='correction';render();}
-function pickAlt(name){state.archetype=name;launchSparks();setTimeout(function(){generateResult();},400);}
+function pickAlt(name){state.archetype=name;state.screen='email';render();}
 
 function goBack(){
   if(state.screen==='validation'||state.screen==='correction'){
@@ -705,6 +723,50 @@ function ctaClick(btn){
     btn.classList.remove('firing');
     window.open('mailto:hallo@frischmuth.design?subject=Brand Mirror Anfrage','_blank');
   },500);
+}
+
+function submitEmail(){
+  var email = document.getElementById('emailInput').value.trim();
+  var errorEl = document.getElementById('emailError');
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!emailRegex.test(email)){
+    errorEl.style.display='block';
+    return;
+  }
+  errorEl.style.display='none';
+  // Save to Brevo
+  saveEmailToBrevo(email);
+  // Launch sparks and proceed
+  launchSparks();
+  setTimeout(function(){generateResult();},400);
+}
+
+function skipEmail(){
+  launchSparks();
+  setTimeout(function(){generateResult();},400);
+}
+
+async function saveEmailToBrevo(email){
+  try{
+    await fetch('https://api.brevo.com/v3/contacts',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'api-key':'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'
+      },
+      body:JSON.stringify({
+        email:email,
+        listIds:[2],
+        updateEnabled:true,
+        attributes:{
+          ARCHETYP: state.archetype,
+          SOURCE: 'Brand Mirror'
+        }
+      })
+    });
+  }catch(e){
+    console.log('Brevo error:',e);
+  }
 }
 
 async function generateResult(){
