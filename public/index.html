@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Brand Mirror v3.1 - typo fix -->
+<!-- Brand Mirror v3.3 - image download + typo fix -->
 <html lang="de">
 <head>
 <meta charset="UTF-8">
@@ -14,7 +14,11 @@
   --muted:#4A4540;--hint:#6B6560;--border:#E0D8D0;
   --on-dark:#E8E4DE;--muted-dark:#B8B0A8;--green:#2D8A4E;
 }
-body{font-family:'Jost',sans-serif;background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh}
+body{font-family:'Jost',sans-serif;background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh;
+  -webkit-tap-highlight-color:transparent;
+}
+button{-webkit-tap-highlight-color:transparent;outline:none;}
+button:focus{outline:none;}
 .app{width:100%;max-width:430px;min-height:100vh;background:var(--off);display:flex;flex-direction:column;position:relative;overflow:hidden}
 
 /* SLIDE */
@@ -92,7 +96,15 @@ body{font-family:'Jost',sans-serif;background:#111;display:flex;align-items:cent
 .answers{display:flex;flex-direction:column;gap:10px;flex:1}
 
 /* ANSWER BUTTONS */
-.ans-btn{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:var(--white);border:1.5px solid var(--border);border-radius:12px;cursor:pointer;text-align:left;width:100%;font-family:'Jost',sans-serif;transition:border-color .15s,background .15s,transform .1s;opacity:0;animation:ansIn .4s ease forwards}
+.ans-btn{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:var(--white);border:1.5px solid var(--border);border-radius:12px;cursor:pointer;text-align:left;width:100%;font-family:'Jost',sans-serif;transition:border-color .15s,background .15s,transform .1s;opacity:0;animation:ansIn .4s ease forwards;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-touch-callout:none;
+  outline:none;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.ans-btn:focus{outline:none;box-shadow:none;}
+.ans-btn:focus:not(.picked){background:var(--white);border-color:var(--border);}
 .ans-btn:nth-child(1){animation-delay:.06s}
 .ans-btn:nth-child(2){animation-delay:.12s}
 .ans-btn:nth-child(3){animation-delay:.18s}
@@ -403,6 +415,7 @@ body{font-family:'Jost',sans-serif;background:#111;display:flex;align-items:cent
   stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 <div id="spark-overlay"></div>
@@ -645,6 +658,10 @@ function launchSparks(){
 function render(){
   var app = document.getElementById('app');
   if(!app) return;
+  // Blur any focused element to prevent iOS sticky focus
+  if(document.activeElement && document.activeElement.blur){
+    document.activeElement.blur();
+  }
   var html = '';
   if(state.screen==='start') html = renderStart();
   else if(state.screen==='email') html = renderEmailCapture();
@@ -892,6 +909,7 @@ function startQuiz(){
 }
 
 function pickAnswer(i){
+  if(document.activeElement) document.activeElement.blur();
   var q = QUESTIONS[state.qi];
   var a = q.answers[i];
   Object.keys(a.s).forEach(function(arch){state.scores[arch]=(state.scores[arch]||0)+a.s[arch];});
@@ -943,10 +961,39 @@ function restart(){
 function toggleDD(i){var el=document.getElementById('dd'+i);if(el)el.classList.toggle('open');}
 function toggleADD(i){var el=document.getElementById('add'+i);if(el)el.classList.toggle('open');}
 
-function prepareAndPrint(){
-  // Open all dropdowns before printing so content is visible
+function downloadAsImage(){
+  var btn = document.querySelector('.btn-download');
+  if(btn){
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path d="M12 6v6l4 2"/></svg> Wird erstellt…';
+    btn.disabled = true;
+  }
+  // Open all dropdowns
   document.querySelectorAll('.dd').forEach(function(dd){ dd.classList.add('open'); });
-  setTimeout(function(){ window.print(); }, 300);
+  var el = document.querySelector('.res-screen');
+  if(!el){ alert('Kein Ergebnis gefunden.'); return; }
+  setTimeout(function(){
+    html2canvas(el, {
+      backgroundColor: null,
+      scale: 2,
+      useCORS: true,
+      logging: false
+    }).then(function(canvas){
+      var link = document.createElement('a');
+      link.download = 'BrandMirror-' + (state.archetype||'Ergebnis') + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      if(btn){
+        btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Ergebnis als Bild speichern';
+        btn.disabled = false;
+      }
+    }).catch(function(e){
+      console.error(e);
+      if(btn){
+        btn.innerHTML = 'Fehler – bitte nochmal versuchen';
+        btn.disabled = false;
+      }
+    });
+  }, 400);
 }
 
 function ctaClick(btn){
