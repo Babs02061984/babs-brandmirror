@@ -537,58 +537,58 @@ var ARCHETYPES = ['OUTLAW','EXPLORER','MAGIER','HERRSCHER','WEISER','HELD','LIEB
 
 var QUESTIONS = [
   {id:1,text:"Was treibt dich in deinem Business wirklich an?",hint:"Dein erstes Gefühl ist meistens richtig – keine falsche Bescheidenheit.",answers:[
-    {t:"Ich will etwas verändern – das System, die Branche, die Norm.",s:{OUTLAW:2,EXPLORER:1,MAGIER:1}},
-    {t:"Ich will führen, Strukturen schaffen und Exzellenz beweisen.",s:{HERRSCHER:2,HELD:1,WEISER:1}},
-    {t:"Ich will echte Verbindungen schaffen und Menschen wirklich helfen.",s:{LIEBENDER:2,LIEBHABER:1,EVERYMAN:1}},
-    {t:"Ich will Visionen in Realität verwandeln – Dinge möglich machen.",s:{MAGIER:2,EXPLORER:1,HELD:1,SCHOEPFER:1}}
+    {t:"Ich will aufbrechen – Normen hinterfragen, Altes ersetzen, unbequem sein.",s:{OUTLAW:3,MAGIER:1}},
+    {t:"Ich will führen und zeigen, dass echter Standard sich lohnt.",s:{HERRSCHER:3,HELD:1}},
+    {t:"Ich will echte, tiefe Verbindungen schaffen – für Menschen da sein.",s:{LIEBENDER:3,UNSCHULDIGE:1}},
+    {t:"Ich will erschaffen – etwas in die Welt bringen, das vorher nicht da war.",s:{SCHOEPFER:3,EXPLORER:1}}
   ]},
-  {id:2,text:"Regeln sind für dich …",hint:"Antworte ohne lange nachzudenken – wie verhältst du dich wirklich?",answers:[
-    {t:"Da zum Brechen. Wer nicht riskiert, gewinnt nicht.",s:{OUTLAW:2,EXPLORER:1}},
-    {t:"Wichtig – sie geben Struktur und schaffen Verlässlichkeit.",s:{HERRSCHER:2,WEISER:1,EVERYMAN:1}},
-    {t:"Okay, solange sie Sinn ergeben. Sonst: ändern.",s:{HELD:2,MAGIER:1,SCHOEPFER:1}},
-    {t:"Ehrlich gesagt egal – mich interessieren Menschen, nicht Systeme.",s:{LIEBHABER:2,LIEBENDER:1,JESTER:1}}
+  {id:2,text:"Wenn du mit Kunden kommunizierst – wie klingst du dabei?",hint:"Denk an dein letztes wirklich gutes Gespräch – wie war dein Ton?",answers:[
+    {t:"Direkt, klar, ohne Schönreden – ich sage, was ich wirklich denke.",s:{OUTLAW:3,HELD:1}},
+    {t:"Neugierig, offen, inspirierend – ich zeige, was alles möglich ist.",s:{EXPLORER:3,MAGIER:1}},
+    {t:"Tief, bedeutungsvoll – mit Magie und Verwandlung im Gepäck.",s:{MAGIER:3,SCHOEPFER:1}},
+    {t:"Herzlich und nahbar – mit echter Begeisterung für den Menschen vor mir.",s:{LIEBHABER:3,LIEBENDER:1}}
   ]},
-  {id:3,text:"Wie kommunizierst du am liebsten mit Kunden?",hint:"Denk an dein letztes richtig gutes Gespräch – wie war dein Ton?",answers:[
-    {t:"Direkt, klar, ohne Umschweife – ich sage, was ich denke.",s:{OUTLAW:2,HELD:1,WEISER:1}},
-    {t:"Warm, empathisch, mit echtem Interesse für den Menschen.",s:{LIEBENDER:2,LIEBHABER:1,EVERYMAN:1}},
-    {t:"Inspirierend, visionär – ich zeige, was möglich ist.",s:{MAGIER:2,EXPLORER:1,SCHOEPFER:1}},
-    {t:"Mit Humor und Leichtigkeit – Ernsthaftigkeit muss nicht schwer sein.",s:{JESTER:2,EVERYMAN:1,EXPLORER:1}}
+  {id:3,text:"Wo fühlst du dich in deiner Arbeit am lebendigsten?",hint:"Welcher Moment gibt dir am meisten Energie?",answers:[
+    {t:"Wenn ich neue Wege gehe – beim Entdecken, Ausprobieren, Weitergehen.",s:{EXPLORER:3,JESTER:1}},
+    {t:"Wenn ich Komplexes begreifbar mache und echte Orientierung gebe.",s:{MAGIER:3,WEISER:1}},
+    {t:"Wenn jemand sagt: Du bist der erste Mensch, der mich wirklich versteht.",s:{LIEBENDER:3,EVERYMAN:1}},
+    {t:"Wenn ich Dinge locker nehme – und trotzdem echte Wirkung entsteht.",s:{JESTER:3,LIEBHABER:1}}
   ]},
-  {id:4,text:"Was ist deine größte Stärke im Business?",hint:"Was sagen Kunden, die dich weiterempfehlen – wofür stehst du wirklich?",answers:[
-    {t:"Ich analysiere tief und erkläre Komplexes verständlich.",s:{WEISER:2,HERRSCHER:1}},
-    {t:"Ich setze um – schnell, fokussiert, ergebnisorientiert.",s:{HELD:2,HERRSCHER:1}},
-    {t:"Ich sehe Möglichkeiten, wo andere Probleme sehen.",s:{MAGIER:2,EXPLORER:1,OUTLAW:1,SCHOEPFER:2}},
-    {t:"Ich baue Vertrauen auf – Menschen fühlen sich bei mir sicher.",s:{LIEBENDER:2,UNSCHULDIGE:1,EVERYMAN:1}}
+  {id:4,text:"Was ist deine größte Stärke im Business?",hint:"Was sagen Kunden, die dich wirklich weiterempfehlen?",answers:[
+    {t:"Ich gebe Orientierung – ich sehe, was Sache ist, und erkläre es klar.",s:{EXPLORER:3,WEISER:1}},
+    {t:"Ich sorge für Ergebnisse – fokussiert, zuverlässig, ohne Ausreden.",s:{WEISER:3,HELD:1}},
+    {t:"Ich setze um und liefere – klar, direkt, konsequent.",s:{JESTER:3,EXPLORER:1}},
+    {t:"Ich bin der Anker – Menschen fühlen sich bei mir sicher und gesehen.",s:{HELD:3,HERRSCHER:1}}
   ]},
-  {id:5,text:"Ein Projekt läuft schief. Deine erste Reaktion?",hint:"Sei ehrlich – nicht wie du sein solltest, sondern wie du wirklich bist.",answers:[
-    {t:"Ich analysiere, was falsch lief – dann mache ich es besser.",s:{WEISER:2,HELD:1}},
-    {t:"Ich suche sofort eine kreative Lösung – Probleme sind Chancen.",s:{MAGIER:2,EXPLORER:1,OUTLAW:1,SCHOEPFER:2}},
-    {t:"Ich spreche offen darüber – Fehler gehören dazu.",s:{OUTLAW:2,EVERYMAN:1}},
-    {t:"Ich kümmere mich zuerst um die betroffenen Menschen.",s:{LIEBENDER:2,LIEBHABER:1}}
+  {id:5,text:"Wofür stehst du in deinem Business – was ist dein echtes Versprechen?",hint:"Was unterscheidet dich wirklich von allen anderen?",answers:[
+    {t:"Dafür, dass ich führe und Maßstäbe setze – Qualität, die sich zeigt.",s:{HERRSCHER:3,HELD:1}},
+    {t:"Dafür, dass ich echte Verbindung schaffe – du bist mehr als ein Auftrag.",s:{WEISER:3,LIEBENDER:1}},
+    {t:"Dafür, dass sich alles richtig anfühlt – warm, willkommen, ohne Stress.",s:{LIEBENDER:3,UNSCHULDIGE:1}},
+    {t:"Dafür, dass es einfach gut wird – keine langen Erklärungen nötig.",s:{UNSCHULDIGE:3,EVERYMAN:1}}
   ]},
-  {id:6,text:"Welcher Satz beschreibt dein Business am besten?",hint:"Welcher trifft es wirklich – nicht welcher klingt am besten.",answers:[
-    {t:"Wir machen es richtig – nicht einfach nur fertig.",s:{HERRSCHER:2,WEISER:1,HELD:1}},
-    {t:"Wir denken, was andere noch nicht denken.",s:{MAGIER:2,EXPLORER:1,OUTLAW:1,SCHOEPFER:1}},
-    {t:"Wir sind ehrlich, direkt – und sagen, was wir meinen.",s:{OUTLAW:2,HELD:1}},
-    {t:"Wir sehen den Menschen hinter dem Projekt.",s:{LIEBHABER:2,LIEBENDER:1,EVERYMAN:1}}
+  {id:6,text:"Welcher Satz trifft dein Business am besten?",hint:"Welcher trifft es wirklich – nicht welcher klingt am cleversten.",answers:[
+    {t:"Wir sagen, was wir meinen – auch wenn es unbequem ist.",s:{OUTLAW:3,HERRSCHER:1}},
+    {t:"Wir setzen Standards und liefern – konsequent und ohne Kompromisse.",s:{HERRSCHER:3,WEISER:1}},
+    {t:"Wir erschaffen Erlebnisse, die in Erinnerung bleiben.",s:{LIEBHABER:3,MAGIER:1}},
+    {t:"Wir sind für jeden da – unkompliziert, ehrlich, menschlich.",s:{EVERYMAN:3,LIEBENDER:1}}
   ]},
-  {id:7,text:"Welcher Kundentyp geht dir wirklich auf die Nerven?",hint:"Das ist eine Ausschluss-Frage – wer bringt dich wirklich aus dem Gleichgewicht?",answers:[
-    {t:"Jemand, der alles kontrolliert und mir keinen Freiraum lässt.",s:{HERRSCHER:-2,OUTLAW:2,EXPLORER:1}},
-    {t:"Jemand, der keine Entscheidungen trifft und ständig schwankt.",s:{UNSCHULDIGE:-1,HELD:2,HERRSCHER:1}},
-    {t:"Jemand, der nur auf den Preis schaut und Qualität nicht versteht.",s:{EVERYMAN:-1,HERRSCHER:2,LIEBHABER:1}},
-    {t:"Jemand, der keine echte Verbindung will – rein transaktional.",s:{HERRSCHER:-2,LIEBHABER:2,LIEBENDER:1}}
+  {id:7,text:"Was würdest du in einem Projekt niemals akzeptieren?",hint:"Kein Zögern – was ist ein klares, sofortiges Nein?",answers:[
+    {t:"Dass ich meine Meinung nicht sagen darf – Schönreden ist nichts für mich.",s:{MAGIER:3,OUTLAW:1}},
+    {t:"Dass Qualität und Sorgfalt verhandelbar sind – das ist mein Standard.",s:{LIEBHABER:3,HERRSCHER:1}},
+    {t:"Dass sich alles kalt und transaktional anfühlt – kein Mensch dahinter.",s:{UNSCHULDIGE:3,LIEBENDER:1}},
+    {t:"Dass es langweilig und generisch wird – Mittelmäßigkeit ist keine Option.",s:{EVERYMAN:3,JESTER:1}}
   ]},
-  {id:8,text:"Was würdest du sofort ablehnen?",hint:"Kein Zögern – was ist ein klares Nein, das du klar und deutlich spürst?",answers:[
-    {t:"Ein Projekt, in dem ich meine Meinung nicht sagen darf.",s:{EVERYMAN:-2,UNSCHULDIGE:-1,OUTLAW:2}},
-    {t:"Ein Auftrag ohne klares Ziel und messbare Ergebnisse.",s:{JESTER:-1,LIEBHABER:-1,HELD:2,HERRSCHER:1}},
-    {t:"Eine Zusammenarbeit, die sich kalt und unpersönlich anfühlt.",s:{HERRSCHER:-2,WEISER:-1,LIEBENDER:2,LIEBHABER:1}},
-    {t:"Alles, was langweilig, vorhersehbar oder 08/15 ist.",s:{EVERYMAN:-2,UNSCHULDIGE:-1,EXPLORER:2,JESTER:1,SCHOEPFER:2}}
+  {id:8,text:"Wie reagierst du, wenn ein Projekt schiefläuft?",hint:"Nicht wie du sein solltest – wie bist du wirklich?",answers:[
+    {t:"Ich sage klar, was schiefgelaufen ist – Klarheit vor Komfort.",s:{SCHOEPFER:3,OUTLAW:1}},
+    {t:"Ich suche die beste Lösung, auch wenn das bedeutet, alles neu zu denken.",s:{HELD:3,SCHOEPFER:1}},
+    {t:"Ich sorge erst für die Menschen – dann kommt die Sache.",s:{JESTER:3,LIEBENDER:1}},
+    {t:"Ich sorge dafür, dass alle ruhig bleiben – und finde einen Weg.",s:{EVERYMAN:3,UNSCHULDIGE:1}}
   ]},
-  {id:9,text:"Ein neuer Kontakt fragt dich, warum er mit dir arbeiten soll. Was sagst du?",hint:"Spontan antworten – dein erster Impuls ist dein Archetyp.",answers:[
-    {t:"Weil ich Dinge sage, die andere sich nicht trauen.",s:{OUTLAW:2,WEISER:1}},
-    {t:"Weil ich nicht ruhe, bis es wirklich gut ist.",s:{HERRSCHER:2,HELD:1,WEISER:1}},
-    {t:"Weil ich zuhöre, bevor ich antworte.",s:{LIEBENDER:2,LIEBHABER:1,EVERYMAN:1}},
-    {t:"Weil ich zeige, was möglich ist – auch wenn du es noch nicht siehst.",s:{MAGIER:2,EXPLORER:1,SCHOEPFER:1}}
+  {id:9,text:"Warum sollte jemand mit dir arbeiten – nicht mit einem anderen?",hint:"Spontan antworten – dein erster Impuls zeigt deinen Archetyp.",answers:[
+    {t:"Weil ich klar sage, was ich denke – und nicht sage, was jemand hören will.",s:{WEISER:3,OUTLAW:1}},
+    {t:"Weil ich etwas erschaffe, das vorher nicht existiert hat – jedes Mal.",s:{SCHOEPFER:3,MAGIER:1}},
+    {t:"Weil ich nicht aufhöre, bis es wirklich brillant ist.",s:{HELD:3,HERRSCHER:1}},
+    {t:"Weil sich Arbeit mit mir anders anfühlt – leichter, echter, menschlicher.",s:{UNSCHULDIGE:3,EVERYMAN:1}}
   ]}
 ];
 
@@ -627,7 +627,13 @@ var LOGO = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAnQAAACyCAYAAADLR1JPAA
 // ── STATE ─────────────────────────────────────
 var state = {screen:'start',qi:0,scores:{},answers:[],archetype:null,result:null};
 function initScores(){var s={};ARCHETYPES.forEach(function(a){s[a]=0;});return s;}
-function topArchetype(sc){return ARCHETYPES.reduce(function(b,a){return sc[a]>(sc[b]||0)?a:b;},ARCHETYPES[0]);}
+function topArchetype(sc){
+  var best=ARCHETYPES.reduce(function(b,a){return sc[a]>(sc[b]||0)?a:b;},ARCHETYPES[0]);
+  var topScore=sc[best];
+  var tied=ARCHETYPES.filter(function(a){return sc[a]===topScore;});
+  if(tied.length===1) return tied[0];
+  return tied[Math.floor(Math.random()*tied.length)];
+}
 
 // ── SPARK EFFECT ─────────────────────────────
 function launchSparks(){
@@ -1043,26 +1049,16 @@ function submitCode(){
 
 async function saveEmailToBrevo(email){
   try{
-    await fetch('https://api.brevo.com/v3/contacts',{
+    await fetch('/api/subscribe',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'api-key':'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'
-      },
-      body:JSON.stringify({
-        email:email,
-        listIds:[2],
-        updateEnabled:true,
-        attributes:{
-          ARCHETYP: state.archetype,
-          SOURCE: 'Brand Mirror'
-        }
-      })
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,archetype:state.archetype})
     });
   }catch(e){
     console.log('Brevo error:',e);
   }
 }
+
 
 async function generateResult(){
   state.screen='loading';render();
