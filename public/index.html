@@ -1,1050 +1,629 @@
 <!DOCTYPE html>
-<!-- Brand Mirror v3.3 - image download + typo fix -->
+<!-- Brand Mirror v4.0 – 12 Fragen, Zusatzfrage, Haupt-/Nebentyp, Figma-Design (Jost) -->
 <html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brand Mirror · Frischmuth.Design</title>
-<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,700;1,700&family=Playfair+Display:ital,wght@0,700;1,700&family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,700&family=Archivo+Black&family=Outfit:wght@700&family=Cinzel:wght@700&family=Libre+Baskerville:wght@700&family=Source+Serif+4:wght@700&family=Oswald:wght@700&family=Playfair+Display:ital@1&family=Nunito:wght@600&family=Unbounded:wght@700&family=Inter:wght@500&family=Quicksand:wght@500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --night:#0D0B14;--orange:#FF5C00;--orange-light:#FFF0E8;
-  --purple:#5B3FA0;--white:#FFFFFF;--off:#FAFAFA;
-  --muted:#4A4540;--hint:#6B6560;--border:#E0D8D0;
-  --on-dark:#E8E4DE;--muted-dark:#B8B0A8;--green:#2D8A4E;
+  --night:#0D0B14;--orange:#FF5C00;--cream:#F8F4EE;--white:#FFFFFF;
+  --text:#0D0B14;--muted:#5A5550;--soft:#8A837B;--line:#D0D0D0;--line2:#D8D0C4;
+  --on-dark:#F8F4EE;--on-dark-muted:#C8C2BA;
 }
-body{font-family:'Jost',sans-serif;background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh;
-  -webkit-tap-highlight-color:transparent;
-}
-button{-webkit-tap-highlight-color:transparent;outline:none;}
-button:focus{outline:none;}
-.app{width:100%;max-width:430px;min-height:100vh;background:var(--off);display:flex;flex-direction:column;position:relative;overflow:hidden}
+body{font-family:'Jost',sans-serif;background:#111;min-height:100vh;color:var(--text);-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;outline:none;border:none;background:none;color:inherit}
+input{font-family:inherit}
+.app{width:100%;max-width:430px;margin:0 auto;min-height:100vh;background:var(--cream);position:relative;overflow-x:hidden}
+.slide{min-height:100vh;display:flex;flex-direction:column;padding:0 24px 24px;animation:sIn .3s ease}
+.slide.dark{background:var(--night);color:var(--on-dark)}
+@keyframes sIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.topbar{height:5px;margin:0 -24px;background:var(--night)}
+.topbar.orange{background:var(--orange)}
+.spacer{flex:1}
 
-/* SLIDE */
-.slide{width:100%;flex:1;display:flex;flex-direction:column;animation:sIn .35s ease}
-@keyframes sIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
-.slide.back{animation:sBk .35s ease}
-@keyframes sBk{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+/* Fortschritt */
+.progress{margin-top:18px;height:3px;border-radius:2px;background:#E8E8E8;overflow:hidden}
+.progress span{display:block;height:100%;background:var(--orange);border-radius:2px;transition:width .3s ease}
+.step{font-size:11px;color:var(--muted);margin-top:7px}
 
-/* ── SPARK OVERLAY ── */
-#spark-overlay{position:fixed;inset:0;z-index:9999;pointer-events:none;display:none;overflow:hidden}
-.spark{position:absolute;border-radius:50%;animation:sparkFly var(--dur) ease-out forwards}
-@keyframes sparkFly{
-  0%{transform:translate(0,0) scale(1);opacity:1}
-  100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}
-}
+/* Typo */
+.h-q{font-weight:700;font-size:26px;line-height:1.18;letter-spacing:-.5px;margin-top:30px}
+.sub{font-size:14px;color:var(--muted);margin-top:14px;line-height:1.45}
+.h-italic{font-weight:700;font-style:italic;text-transform:uppercase;letter-spacing:-.5px;line-height:1.08}
+.label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#737373}
+.accent-line{width:48px;height:3px;border-radius:2px;background:var(--orange)}
 
-/* ── LOADING ANIMATION ── */
-.load-screen{background:var(--night);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;padding:48px 32px;flex:1;position:relative;overflow:hidden}
-.load-screen::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(91,63,160,.3) 0%,transparent 70%);border-radius:50%}
-.load-screen::after{content:'';position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(255,92,0,.2) 0%,transparent 70%);border-radius:50%}
+/* Start */
+.logo{height:31px;margin-top:32px;align-self:flex-start}
+.start-h{font-size:44px;margin-top:40px;color:var(--on-dark)}
+.start-meta{font-size:16px;color:#C8C2BA;margin-top:18px}
+.start-p{font-size:15px;color:#B8B0A8;margin-top:10px;line-height:1.45}
+.btn-primary{display:flex;align-items:center;justify-content:center;width:100%;height:62px;border-radius:14px;background:var(--orange);color:var(--cream);font-size:17px;font-weight:600;transition:transform .15s ease,box-shadow .15s ease;text-decoration:none}
+.btn-primary:active{transform:scale(.98)}
+.btn-primary:hover{box-shadow:0 10px 30px rgba(255,92,0,.35)}
+.start-foot{font-size:12px;color:#77706A;margin-top:18px}
 
-.orbit-loader{position:relative;width:120px;height:120px;z-index:1}
-.orbit-ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;animation:orbitSpin var(--spd) linear infinite}
-.orbit-ring:nth-child(1){border-top-color:var(--orange);border-right-color:rgba(255,92,0,.3);--spd:1.8s;inset:0}
-.orbit-ring:nth-child(2){border-top-color:var(--purple);border-left-color:rgba(91,63,160,.3);--spd:2.8s;inset:16px;animation-direction:reverse}
-.orbit-ring:nth-child(3){border-bottom-color:rgba(255,255,255,.2);--spd:4s;inset:32px}
-.orbit-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--orange);top:50%;left:50%;transform:translate(-50%,-50%);animation:orbitPulse 1.2s ease-in-out infinite}
-@keyframes orbitSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes orbitPulse{0%,100%{transform:translate(-50%,-50%) scale(1);box-shadow:0 0 0 0 rgba(255,92,0,.4)}50%{transform:translate(-50%,-50%) scale(1.5);box-shadow:0 0 0 8px rgba(255,92,0,0)}}
+/* Antworten */
+.answers{display:flex;flex-direction:column;gap:12px;margin-top:26px}
+.answer{display:flex;align-items:center;gap:12px;width:100%;min-height:74px;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--cream);text-align:left;transition:background .15s ease,border-color .15s ease,color .15s ease}
+.answer .letter{flex:0 0 32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text)}
+.answer .txt{font-size:14px;font-weight:600;line-height:1.4;color:#444}
+.answer:hover{border-color:#B8B0A8}
+.answer.selected{background:var(--night);border-color:var(--night)}
+.answer.selected .letter{color:#fff}
+.answer.selected .txt{color:var(--cream)}
 
-.load-label{font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--muted-dark);z-index:1;text-align:center}
-.dots{display:flex;gap:8px;z-index:1}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:dp 1.4s ease-in-out infinite}
-.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
-@keyframes dp{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1.2)}}
+/* Zurück */
+.back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);padding:8px 0;margin-top:24px;align-self:flex-start}
+.back svg{width:14px;height:12px;stroke:var(--muted);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.slide.dark .back{color:#B8B0A8}
+.slide.dark .back svg{stroke:#B8B0A8}
 
-/* ── TOP NAV (back button) ── */
-.top-nav{display:flex;align-items:center;padding:14px 20px 0;min-height:48px}
-.back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;font-family:'Jost',sans-serif;font-size:15px;font-weight:400;color:var(--hint);cursor:pointer;padding:6px 8px;border-radius:8px;transition:color .15s,background .15s}
-.back-btn:hover{color:var(--night);background:rgba(0,0,0,.04)}
-.back-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2}
-.top-nav-dark{background:var(--night)}
-.top-nav-dark .back-btn{color:var(--muted-dark)}
-.top-nav-dark .back-btn:hover{color:var(--white);background:rgba(255,255,255,.08)}
+/* E-Mail */
+.email-h{font-size:40px;margin-top:56px}
+.field{width:100%;height:56px;border-radius:14px;border:1.5px solid var(--line2);background:#fff;padding:0 16px;font-size:15px;color:var(--text)}
+.field::placeholder{color:#B8B0A8}
+.field:focus{outline:none;border-color:var(--orange)}
+.err{font-size:12px;color:#B21A1A;margin-top:6px;display:none}
+.privacy{font-size:12px;color:var(--soft);margin-top:12px;line-height:1.45;text-align:center}
+.code-row{display:flex;gap:8px;margin-top:10px}
+.code-row .field{height:48px;background:#EFEAE2;border-color:#EFEAE2;font-size:14px}
+.btn-code{flex:0 0 48px;height:48px;border-radius:14px;background:var(--night);color:#fff;font-size:18px}
 
-/* PROGRESS */
-.prog-wrap{background:var(--night)}
-.prog-bar{height:3px;background:rgba(255,255,255,.1)}
-.prog-fill{height:100%;background:var(--orange);transition:width .5s ease}
-.prog-label{font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted-dark);padding:10px 20px 14px}
+/* Validierung */
+.reveal{background:var(--night);border-radius:18px;padding:24px;margin-top:20px;color:var(--on-dark)}
+.reveal .rl{font-size:10px;font-weight:500;letter-spacing:1px;color:var(--on-dark-muted)}
+.reveal .big{font-size:40px;color:#fff;margin-top:10px}
+.reveal .bar{width:56px;height:3px;border-radius:2px;background:var(--orange);margin-top:10px}
+.reveal p{font-size:13px;line-height:1.48;color:var(--on-dark-muted);margin-top:16px}
+.val-q{font-size:22px;margin-top:32px}
+.vbtns{display:flex;flex-direction:column;gap:16px;margin-top:20px}
+.vbtn{display:flex;align-items:center;justify-content:center;gap:8px;height:56px;border-radius:14px;border:1.5px solid var(--line2);background:#fff;font-size:15px;font-weight:500;color:var(--text);transition:background .15s ease,color .15s ease}
+.vbtn .ic{font-weight:700}
+.vbtn.selected{background:var(--night);border-color:var(--night);color:var(--cream)}
+.link{font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;margin-top:20px;align-self:flex-start}
 
-/* START */
-.start-bar{height:4px;background:var(--orange)}
-.start-body{background:var(--night);color:var(--white);flex:1;display:flex;flex-direction:column;padding:32px 28px 52px;position:relative;overflow:hidden}
-.start-body::before{content:'';position:absolute;top:-60px;right:-60px;width:280px;height:280px;background:radial-gradient(circle,rgba(91,63,160,.45) 0%,transparent 70%);border-radius:50%}
-.start-body::after{content:'';position:absolute;bottom:-40px;left:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(255,92,0,.25) 0%,transparent 70%);border-radius:50%}
-.logo-w{position:relative;z-index:2;margin-bottom:44px}
-.logo-w img{height:28px}
-.eyebrow{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--orange);margin-bottom:12px;position:relative;z-index:2}
-.h1{font-size:52px;font-weight:700;font-style:italic;text-transform:uppercase;line-height:1.1;letter-spacing:-1.5px;color:var(--white);flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
-.h1 span{color:var(--orange)}
-.divider{width:40px;height:3px;background:var(--orange);margin:24px 0 18px;position:relative;z-index:2}
-.start-p{font-size:15px;color:var(--on-dark);line-height:1.55;margin-bottom:8px;position:relative;z-index:2}
-.start-p.accent{color:var(--orange);font-weight:500;margin-bottom:28px}
-.btn-start{width:100%;padding:18px;background:var(--orange);color:var(--white);border:none;border-radius:12px;font-family:'Jost',sans-serif;font-size:16px;font-weight:700;cursor:pointer;position:relative;z-index:2;transition:opacity .2s,transform .15s;box-shadow:0 4px 20px rgba(255,92,0,.35)}
-.btn-start:hover{opacity:.92;transform:translateY(-1px)}
-.btn-start:active{transform:scale(.98)}
-.footnote{text-align:center;font-size:11px;color:rgba(255,255,255,.2);margin-top:14px;letter-spacing:1px;position:relative;z-index:2}
+/* Ergebnis R1 */
+.res-card{border-radius:18px;padding:24px;margin-top:16px;color:#fff}
+.res-card .rl{font-size:10px;font-weight:600;letter-spacing:1px;color:#999}
+.res-card .name{font-size:44px;margin-top:10px}
+.res-card.second{background:#2E2E36}
+.res-card.second .name{font-size:28px;color:#F2F2F5}
+.res-card.second .rl{color:#9A9AA3}
+.res-card .pct{font-size:28px;font-weight:700;margin-top:8px}
+.res-card.second .pct{font-size:20px}
+.track{height:8px;border-radius:4px;background:#404047;margin-top:10px;overflow:hidden}
+.res-card.second .track{height:6px;background:#4A4A55}
+.track span{display:block;height:100%;border-radius:4px}
+.res-card .note{font-size:11px;color:#BFBFC6;margin-top:10px}
+.how-h{font-size:13px;font-weight:600;margin-top:28px}
+.how-p{font-size:12px;color:#737373;line-height:1.5;margin-top:8px}
 
-/* QUESTION */
-.q-screen{background:var(--off);display:flex;flex-direction:column}
-.q-content{padding:4px 20px 24px;flex:1;display:flex;flex-direction:column}
-.q-headline{font-size:23px;font-weight:700;font-style:italic;text-transform:uppercase;line-height:1.35;letter-spacing:-.5px;color:var(--night);margin-bottom:6px}
-.q-hint{font-size:13px;color:var(--hint);margin-bottom:20px;line-height:1.5;font-style:italic}
-.answers{display:flex;flex-direction:column;gap:10px;flex:1}
+/* Typ-Karte */
+.tc-name{font-size:44px;margin-top:6px}
+.tc-narr{font-size:16px;line-height:1.5;margin-top:12px}
+.sec{margin-top:22px}
+.sec .label{margin-bottom:10px}
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sw .chip{height:62px;border-radius:10px;border:1px solid rgba(0,0,0,.08)}
+.sw b{display:block;font-size:11px;font-weight:600;margin-top:8px}
+.sw span{display:block;font-size:10px;color:#737373;line-height:1.45}
+.preview{border-radius:14px;padding:16px 20px}
+.preview .aa{font-size:30px;line-height:1.15}
+.preview .pbar{width:48px;height:3px;border-radius:2px;margin-top:10px}
+.preview .plab{font-size:11px;margin-top:10px}
+.body13{font-size:13px;line-height:1.5}
+.kunden{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.k-item{border-left:2px solid var(--night);padding-left:8px;margin-top:8px}
+.k-item.anti{border-left-color:#B91C1C}
+.k-item b{display:block;font-size:11px;font-weight:700;text-transform:uppercase}
+.k-item span{display:block;font-size:11px;color:#555;line-height:1.4;margin-top:2px}
+.anti-label{color:#B91C1C}
+.cta-h{font-size:18px;margin-top:30px}
+.small-links{display:flex;justify-content:center;gap:18px;margin-top:16px}
+.small-links button{font-size:12px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
 
-/* ANSWER BUTTONS */
-.ans-btn{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:var(--white);border:1.5px solid var(--border);border-radius:12px;cursor:pointer;text-align:left;width:100%;font-family:'Jost',sans-serif;transition:border-color .15s,background .15s,transform .1s;opacity:0;animation:ansIn .4s ease forwards;
-  -webkit-tap-highlight-color:transparent;
-  -webkit-touch-callout:none;
-  outline:none;
-  user-select:none;
-  -webkit-user-select:none;
-}
-.ans-btn:focus{outline:none;box-shadow:none;}
-.ans-btn:focus:not(.picked){background:var(--white);border-color:var(--border);}
-.ans-btn:nth-child(1){animation-delay:.06s}
-.ans-btn:nth-child(2){animation-delay:.12s}
-.ans-btn:nth-child(3){animation-delay:.18s}
-.ans-btn:nth-child(4){animation-delay:.24s}
-@keyframes ansIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.ans-btn:hover{border-color:var(--orange);background:rgba(255,92,0,.03);transform:translateX(2px)}
-.ans-btn.picked{background:var(--night);border-color:var(--night)}
-
-/* CIRCLE LETTER BADGE */
-.ans-badge{width:32px;height:32px;border-radius:50%;background:var(--orange-light);border:1.5px solid rgba(255,92,0,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;font-weight:700;color:var(--orange);transition:all .2s;margin-top:2px}
-.ans-btn.picked .ans-badge{background:var(--orange);border-color:var(--orange);color:var(--white)}
-
-.ans-text{font-size:14px;line-height:1.55;color:var(--muted);padding-top:4px;flex:1;transition:color .2s}
-.ans-btn.picked .ans-text{color:var(--white)}
-.ans-bold{font-weight:700;color:var(--night)}
-.ans-btn.picked .ans-bold{color:var(--white)}
-
-/* VALIDATION */
-.val-screen{background:var(--off);display:flex;flex-direction:column}
-.val-content{padding:4px 20px 32px;flex:1;display:flex;flex-direction:column}
-.reveal-card{background:var(--night);border-radius:16px;padding:28px 24px;margin-bottom:22px;position:relative;overflow:hidden}
-.reveal-card::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(91,63,160,.4) 0%,transparent 70%);border-radius:50%}
-.reveal-card::after{content:'';position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(255,92,0,.2) 0%,transparent 70%);border-radius:50%}
-.reveal-label{font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--muted-dark);margin-bottom:14px;position:relative;z-index:1}
-.reveal-name{font-size:44px;font-weight:700;font-style:italic;text-transform:uppercase;color:var(--white);line-height:1.1;margin-bottom:12px;letter-spacing:-1px;position:relative;z-index:1}
-.reveal-bar{width:44px;height:3px;background:var(--purple);border-radius:2px;margin-bottom:14px;position:relative;z-index:1}
-.reveal-text{font-size:15px;line-height:1.7;color:var(--white);font-weight:500;position:relative;z-index:1}
-.val-q{font-size:22px;font-weight:700;font-style:italic;text-transform:uppercase;color:var(--night);margin-bottom:16px;line-height:1.35;letter-spacing:-.5px}
-.val-btns{display:flex;flex-direction:column;gap:10px}
-.val-btn{padding:17px 20px;border-radius:12px;border:1.5px solid var(--border);background:var(--white);font-family:'Jost',sans-serif;font-size:15px;font-weight:500;color:var(--night);cursor:pointer;text-align:left;transition:all .15s}
-.val-btn.primary{background:var(--night);border-color:var(--night);color:var(--white)}
-.val-btn:hover:not(.primary){border-color:var(--orange)}
-
-/* CORRECTION */
-.corr-screen{background:var(--off);display:flex;flex-direction:column}
-.corr-content{padding:4px 20px 32px;flex:1;display:flex;flex-direction:column}
-.corr-h{font-size:26px;font-weight:700;font-style:italic;text-transform:uppercase;line-height:1.35;color:var(--night);margin-bottom:8px;letter-spacing:-.5px}
-.corr-sub{font-size:13px;font-style:italic;color:var(--hint);margin-bottom:22px}
-.alt-cards{display:flex;flex-direction:column;gap:12px;flex:1}
-.alt-card{display:flex;align-items:flex-start;gap:16px;padding:18px 20px;background:var(--white);border:1.5px solid var(--border);border-left:4px solid var(--orange);border-radius:12px;cursor:pointer;font-family:'Jost',sans-serif;text-align:left;width:100%;transition:all .15s}
-.alt-card:nth-child(even){border-left-color:var(--night)}
-.alt-card:hover{transform:translateX(3px);border-color:var(--orange)}
-.alt-name{font-size:15px;font-weight:700;font-style:italic;text-transform:uppercase;color:var(--night);margin-bottom:4px}
-.alt-desc{font-size:13px;color:var(--muted);line-height:1.5}
-.restart-link{background:none;border:none;font-family:'Jost',sans-serif;font-size:14px;color:var(--hint);cursor:pointer;padding:18px 0 0;text-align:center;text-decoration:underline;text-underline-offset:3px;width:100%}
-
-/* RESULT */
-.res-screen{background:var(--off)}
-.res-hero{padding:44px 28px 36px;position:relative;overflow:hidden}
-.res-topbar{position:absolute;top:0;left:0;right:0;height:4px}
-.res-label{font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;position:relative;z-index:1;opacity:.7}
-.res-name{font-size:58px;font-weight:700;line-height:1.05;letter-spacing:-2px;margin-bottom:14px;position:relative;z-index:1}
-.res-bar{width:52px;height:4px;border-radius:2px;margin-bottom:16px;position:relative;z-index:1}
-.res-tagline{font-size:15px;line-height:1.75;font-weight:400;position:relative;z-index:1;opacity:.85}
-.res-body{padding:28px 20px 48px;display:flex;flex-direction:column;gap:26px}
-.sec-label{font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--hint);margin-bottom:12px}
-.res-box{background:var(--white);border-radius:14px;padding:20px;border:1px solid var(--border)}
-.color-row{display:flex;gap:10px}
-.sw-wrap{flex:1;text-align:center}
-.sw{height:60px;border-radius:10px;margin-bottom:6px;border:1px solid rgba(0,0,0,.06)}
-.sw-name{font-size:11px;font-weight:600;color:var(--night)}
-.kw-row{display:flex;flex-wrap:wrap;gap:8px}
-.kw{font-size:13px;font-weight:500;color:var(--orange)}.kw::before{content:"#"}
-.quote-list{display:flex;flex-direction:column;gap:10px}
-.quote-item{padding:12px 16px;border-left:3px solid var(--orange);background:rgba(255,92,0,.04);border-radius:0 8px 8px 0;font-size:14px;font-style:italic;color:var(--muted);line-height:1.5}
-.client-list{display:flex;flex-direction:column;gap:8px}
-.dd{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;background:var(--white)}
-.dd-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;background:var(--white);border:none;width:100%;font-family:'Jost',sans-serif;text-align:left;transition:background .15s}
-.dd-hdr:hover{background:rgba(255,92,0,.04)}
-.dd.open .dd-hdr{background:var(--night)}
-.dd-name{font-size:14px;font-weight:700;font-style:italic;text-transform:uppercase;color:var(--night);letter-spacing:.3px}
-.dd.open .dd-name{color:var(--white)}
-.dd-arrow{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;transition:transform .3s,background .2s,border-color .2s;flex-shrink:0}
-.dd.open .dd-arrow{transform:rotate(180deg);background:var(--orange);border-color:var(--orange)}
-.dd-arrow svg{width:10px;height:10px;stroke:var(--hint);fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5;transition:stroke .2s}
-.dd.open .dd-arrow svg{stroke:var(--white)}
-.dd-body{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;padding:0 18px;font-size:13px;color:var(--muted);line-height:1.65}
-.dd.open .dd-body{max-height:200px;padding:14px 18px;border-top:1px solid rgba(0,0,0,.06)}
-.anti-card{padding:14px 16px;border-radius:10px;border:1px solid #FFE0E0;border-left:4px solid #C04040;background:#FFF8F8}
-.anti-name{font-size:14px;font-weight:700;font-style:italic;color:var(--night);margin-bottom:4px}
-.anti-desc{font-size:13px;color:#C04040;line-height:1.4}
-.contract-list{display:flex;flex-direction:column;gap:10px}
-.ci{font-size:14px;color:var(--muted);line-height:1.5;padding-left:22px;position:relative}
-.ci::before{position:absolute;left:0;font-weight:700}
-.ci.yes::before{content:"\2713";color:#2D8A4E}
-.ci.no::before{content:"\2717";color:#C04040}.ci.no{color:#C04040}
-.steps-list{display:flex;flex-direction:column;gap:12px}
-.step{display:flex;gap:14px;align-items:flex-start}
-.step-n{width:28px;height:28px;border-radius:50%;background:var(--orange);color:var(--white);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.step-t{font-size:14px;color:var(--muted);line-height:1.5;padding-top:4px}
-.typo-spec{background:var(--white);border-radius:14px;padding:24px 20px;border:1px solid var(--border)}
-.typo-div{height:1px;background:var(--border);margin:14px 0}
-.typo-desc{font-size:13px;color:var(--muted);line-height:1.7}
-.marke-pill{font-size:13px;font-weight:600;color:var(--night);padding:6px 14px;background:var(--white);border:1px solid var(--border);border-radius:8px}
-.res-cta{padding:28px 20px 40px;display:flex;flex-direction:column;gap:12px}
-.cta-quote{font-size:18px;font-weight:500;font-style:italic;text-align:center;margin-bottom:4px;line-height:1.5}
-.btn-cta{width:100%;padding:18px;color:#FFFFFF;border:none;border-radius:12px;font-family:'Jost',sans-serif;font-size:16px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;background:linear-gradient(135deg,#FF5C00 0%,#FF8C00 50%,#5B3FA0 100%);background-size:200% auto;box-shadow:0 4px 24px rgba(255,92,0,.45);transition:transform .2s,box-shadow .2s,background-position .4s}
-.btn-cta .arrow{display:inline-block;transition:transform .35s cubic-bezier(0.34,1.56,0.64,1),opacity .25s}
-.btn-cta:hover .arrow{transform:translateX(5px)}
-.btn-cta.firing .arrow{animation:arrowFly .5s cubic-bezier(0.25,0.46,0.45,0.94) forwards}
-@keyframes arrowFly{0%{transform:translateX(0);opacity:1}60%{transform:translateX(24px);opacity:0}61%{transform:translateX(-20px);opacity:0}100%{transform:translateX(0);opacity:1}}
-.btn-cta::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);transition:left .55s ease}
-.btn-cta:hover::before{left:100%}
-.btn-cta:hover{transform:translateY(-2px);background-position:right center;box-shadow:0 10px 36px rgba(255,92,0,.55),0 0 0 3px rgba(91,63,160,.3)}
-.btn-cta:active{transform:scale(.98)}
-.btn-ghost{width:100%;padding:16px;background:transparent;border:1.5px solid rgba(255,255,255,.25);border-radius:12px;font-family:'Jost',sans-serif;font-size:14px;cursor:pointer;transition:all .15s;color:rgba(255,255,255,.65);letter-spacing:.3px}
-.btn-ghost:hover{border-color:rgba(255,92,0,.6);color:#FF5C00}
-@media(min-width:500px){.app{margin:24px auto;min-height:auto;border-radius:24px;box-shadow:0 32px 80px rgba(0,0,0,.5)}}
-
-/* TYPO SPECIMEN - FORCE WHITE TEXT */
-.typo-wrap { color: #FFFFFF; }
-.typo-wrap .tz-upper { 
-  font-weight: 700; font-size: 15px; letter-spacing: 2px;
-  line-height: 1.6; word-break: break-all; margin-bottom: 10px;
-  opacity: 1;
-}
-.typo-wrap .tz-lower { 
-  font-weight: 400; font-size: 14px; letter-spacing: 1px;
-  word-break: break-all; margin-bottom: 10px; opacity: 0.65;
-}
-.typo-wrap .tz-num { 
-  font-size: 24px; font-weight: 700; letter-spacing: 4px; margin-bottom: 14px;
-}
-/* EMAIL CAPTURE SCREEN */
-.email-screen{
-  background:var(--night);
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:48px 28px;flex:1;
-  position:relative;overflow:hidden;
-}
-.email-screen::before{
-  content:'';position:absolute;
-  top:-60px;right:-60px;
-  width:280px;height:280px;
-  background:radial-gradient(circle,rgba(91,63,160,.45) 0%,transparent 70%);
-  border-radius:50%;pointer-events:none;
-}
-.email-screen::after{
-  content:'';position:absolute;
-  bottom:-40px;left:-40px;
-  width:200px;height:200px;
-  background:radial-gradient(circle,rgba(255,92,0,.25) 0%,transparent 70%);
-  border-radius:50%;pointer-events:none;
-}
-.email-icon{font-size:44px;margin-bottom:20px;position:relative;z-index:1;}
-.email-headline{
-  font-size:32px;font-weight:700;font-style:italic;
-  text-transform:uppercase;color:var(--white);
-  text-align:center;line-height:1.15;
-  margin-bottom:12px;letter-spacing:-1px;
-  position:relative;z-index:1;
-}
-.email-headline span{color:var(--orange);}
-.email-sub{
-  font-size:15px;color:var(--muted-dark);
-  text-align:center;line-height:1.65;
-  margin-bottom:32px;font-weight:300;
-  position:relative;z-index:1;
-}
-.email-form{width:100%;position:relative;z-index:1;}
-.email-input{
-  width:100%;padding:18px 20px;
-  background:rgba(255,255,255,.08);
-  border:1.5px solid rgba(255,255,255,.15);
-  border-radius:12px;font-family:'Jost',sans-serif;
-  font-size:16px;color:var(--white);
-  outline:none;transition:border-color .2s;
-  margin-bottom:12px;
-}
-.email-input::placeholder{color:rgba(255,255,255,.3);}
-.email-input:focus{border-color:var(--orange);}
-.email-error{
-  font-size:13px;color:#FF6B6B;
-  margin-bottom:12px;text-align:center;
-  display:none;position:relative;z-index:1;
-}
-.btn-email{
-  width:100%;padding:18px;
-  background:linear-gradient(135deg,#FF5C00 0%,#FF8C00 50%,#5B3FA0 100%);
-  color:var(--white);border:none;border-radius:12px;
-  font-family:'Jost',sans-serif;font-size:16px;font-weight:700;
-  cursor:pointer;transition:opacity .2s,transform .15s;
-  box-shadow:0 4px 20px rgba(255,92,0,.35);
-  position:relative;overflow:hidden;
-}
-.btn-email::before{
-  content:'';position:absolute;top:0;left:-100%;
-  width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
-  transition:left .5s ease;
-}
-.btn-email:hover::before{left:100%;}
-.btn-email:hover{opacity:.92;transform:translateY(-1px);}
-.email-skip{
-  background:none;border:none;
-  font-family:'Jost',sans-serif;font-size:13px;
-  color:rgba(255,255,255,.3);cursor:pointer;
-  margin-top:14px;text-decoration:underline;
-  text-underline-offset:3px;width:100%;
-  text-align:center;transition:color .2s;
-  display:block;
-}
-.email-skip:hover{color:rgba(255,255,255,.6);}
-.code-divider{
-  display:flex;align-items:center;gap:12px;
-  margin:20px 0 16px;position:relative;z-index:1;
-}
-.code-divider::before,.code-divider::after{
-  content:'';flex:1;height:1px;
-  background:rgba(255,255,255,.1);
-}
-.code-divider span{
-  font-size:12px;color:rgba(255,255,255,.3);
-  font-weight:400;letter-spacing:1px;text-transform:uppercase;
-}
-.code-section{width:100%;position:relative;z-index:1;}
-.code-label{
-  font-size:13px;color:rgba(255,255,255,.4);
-  margin-bottom:10px;text-align:center;
-}
-.code-row{display:flex;gap:8px;}
-.code-input{
-  flex:1;padding:14px 16px;
-  background:rgba(255,255,255,.06);
-  border:1.5px solid rgba(255,255,255,.1);
-  border-radius:10px;font-family:'Jost',sans-serif;
-  font-size:14px;color:var(--white);outline:none;
-  transition:border-color .2s;letter-spacing:1px;
-}
-.code-input::placeholder{color:rgba(255,255,255,.2);}
-.code-input:focus{border-color:var(--purple);}
-.btn-code{
-  width:48px;height:48px;
-  background:rgba(91,63,160,.4);
-  border:1.5px solid rgba(91,63,160,.5);
-  border-radius:10px;color:var(--white);
-  font-size:18px;cursor:pointer;
-  transition:all .2s;flex-shrink:0;
-}
-.btn-code:hover{background:var(--purple);border-color:var(--purple);}
-.code-error{
-  font-size:12px;color:#FF6B6B;
-  margin-top:8px;text-align:center;
-}
-.email-privacy{
-  font-size:11px;color:rgba(255,255,255,.2);
-  text-align:center;margin-top:20px;
-  line-height:1.6;position:relative;z-index:1;
-}
-
-/* PRINT / PDF STYLES */
-@media print {
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  body { background: white !important; margin: 0 !important; }
-  #spark-overlay { display: none !important; }
-  .res-cta { display: none !important; }
-  .prog-wrap { display: none !important; }
-  .top-nav { display: none !important; }
-  .start-bar { display: none !important; }
-  .app {
-    max-width: 100% !important;
-    width: 100% !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    min-height: auto !important;
-  }
-  .res-hero {
-    padding: 32px 28px !important;
-    -webkit-print-color-adjust: exact !important;
-  }
-  .res-body { padding: 24px 28px 32px !important; }
-  .res-name { font-size: 48px !important; }
-  .btn-download { display: none !important; }
-  .btn-ghost { display: none !important; }
-  .dd-body { max-height: 200px !important; padding: 14px 18px !important; }
-  .dd.open .dd-body, .dd-body { max-height: none !important; }
-  .kw { page-break-inside: avoid; }
-  .result-section { page-break-inside: avoid; }
-  @page { margin: 0; size: A4; }
-}
-/* DOWNLOAD BUTTON */
-.btn-download {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 14px;
-  background: transparent;
-  border: 1.5px solid rgba(255,255,255,.2);
-  border-radius: 12px;
-  font-family: 'Jost', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(255,255,255,.6);
-  cursor: pointer;
-  transition: all .2s;
-  letter-spacing: .3px;
-}
-.btn-download:hover {
-  border-color: var(--orange);
-  color: var(--orange);
-}
-.btn-download svg {
-  width: 16px; height: 16px;
-  stroke: currentColor; fill: none;
-  stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;
-}
+@media (min-width:431px){.app{box-shadow:0 0 60px rgba(0,0,0,.4)}}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-<div id="spark-overlay"></div>
 <div class="app" id="app"></div>
 <script>
-// ── ARCHETYPE THEMES (unique per archetype) ──────────────
-var THEMES = {
-  OUTLAW:{
-    bg:'#0D0B14',text:'#FAFAFA',accent:'#FF5C00',bar:'#FF5C00',
-    ctaBg:'#FF5C00',ctaText:'white',ghostColor:'rgba(255,255,255,.15)',ghostText:'rgba(255,255,255,.6)',
-    quoteColor:'rgba(255,255,255,.8)',
-    font:"font-family:'Space Grotesk',sans-serif;font-style:normal;text-transform:uppercase;",
-    heroGrad:'radial-gradient(circle at 80% 20%,rgba(255,92,0,.35) 0%,transparent 60%),radial-gradient(circle at 20% 80%,rgba(91,63,160,.3) 0%,transparent 60%)',
-    typoFonts:['Space Grotesk','sans-serif'],typoLabel:'Space Grotesk Bold',
-    typoStyle:'font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:20px;letter-spacing:-0.5px;'
-  },
-  EXPLORER:{
-    bg:'#0A1628',text:'#EEF2F7',accent:'#4ECDC4',bar:'#4ECDC4',
-    ctaBg:'linear-gradient(135deg,#4ECDC4,#45B7D1)',ctaText:'white',ghostColor:'rgba(78,205,196,.15)',ghostText:'rgba(255,255,255,.6)',
-    quoteColor:'rgba(255,255,255,.85)',
-    font:"font-family:'Space Grotesk',sans-serif;font-style:normal;",
-    heroGrad:'radial-gradient(circle at 70% 30%,rgba(78,205,196,.3) 0%,transparent 60%),radial-gradient(circle at 30% 70%,rgba(69,183,209,.2) 0%,transparent 60%)',
-    typoFonts:['Space Grotesk','sans-serif'],typoLabel:'Space Grotesk',
-    typoStyle:'font-family:"Space Grotesk",sans-serif;font-weight:500;font-size:20px;letter-spacing:0.5px;'
-  },
-  MAGIER:{
-    bg:'#0F0A1E',text:'#EDE8FF',accent:'#A78BFA',bar:'#A78BFA',
-    ctaBg:'linear-gradient(135deg,#7C3AED,#A78BFA)',ctaText:'white',ghostColor:'rgba(167,139,250,.15)',ghostText:'rgba(255,255,255,.6)',
-    quoteColor:'rgba(255,255,255,.85)',
-    font:"font-family:'Cormorant Garamond',serif;font-style:italic;",
-    heroGrad:'radial-gradient(circle at 60% 20%,rgba(167,139,250,.4) 0%,transparent 60%),radial-gradient(circle at 40% 80%,rgba(124,58,237,.3) 0%,transparent 60%)',
-    typoFonts:['Cormorant Garamond','serif'],typoLabel:'Cormorant Garamond',
-    typoStyle:'font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:24px;'
-  },
-  HERRSCHER:{
-    bg:'#0C0C0C',text:'#F5F0E8',accent:'#C9A84C',bar:'#C9A84C',
-    ctaBg:'linear-gradient(135deg,#1A1A1A,#2D2D2D)',ctaText:'#C9A84C',ghostColor:'rgba(201,168,76,.15)',ghostText:'rgba(255,255,255,.5)',
-    quoteColor:'rgba(255,255,255,.8)',
-    font:"font-family:'Playfair Display',serif;font-style:normal;text-transform:uppercase;",
-    heroGrad:'radial-gradient(circle at 75% 25%,rgba(201,168,76,.25) 0%,transparent 60%),radial-gradient(circle at 25% 75%,rgba(201,168,76,.1) 0%,transparent 60%)',
-    typoFonts:['Playfair Display','serif'],typoLabel:'Playfair Display',
-    typoStyle:'font-family:"Playfair Display",serif;font-weight:700;font-size:22px;letter-spacing:1px;'
-  },
-  WEISER:{
-    bg:'#0E1620',text:'#E8EDF5',accent:'#60A5FA',bar:'#60A5FA',
-    ctaBg:'linear-gradient(135deg,#1E3A5F,#2E5090)',ctaText:'white',ghostColor:'rgba(96,165,250,.15)',ghostText:'rgba(255,255,255,.6)',
-    quoteColor:'rgba(255,255,255,.85)',
-    font:"font-family:'Space Grotesk',sans-serif;font-style:normal;",
-    heroGrad:'radial-gradient(circle at 65% 35%,rgba(96,165,250,.3) 0%,transparent 60%),radial-gradient(circle at 35% 65%,rgba(30,58,95,.5) 0%,transparent 60%)',
-    typoFonts:['Space Grotesk','sans-serif'],typoLabel:'Space Grotesk',
-    typoStyle:'font-family:"Space Grotesk",sans-serif;font-weight:400;font-size:18px;line-height:1.6;'
-  },
-  HELD:{
-    bg:'#0D0B14',text:'#FAFAFA',accent:'#F59E0B',bar:'#F59E0B',
-    ctaBg:'linear-gradient(135deg,#D97706,#F59E0B)',ctaText:'white',ghostColor:'rgba(245,158,11,.15)',ghostText:'rgba(255,255,255,.6)',
-    quoteColor:'rgba(255,255,255,.85)',
-    font:"font-family:'Space Grotesk',sans-serif;font-style:normal;font-weight:700;text-transform:uppercase;",
-    heroGrad:'radial-gradient(circle at 80% 20%,rgba(245,158,11,.4) 0%,transparent 60%),radial-gradient(circle at 20% 80%,rgba(217,119,6,.2) 0%,transparent 60%)',
-    typoFonts:['Space Grotesk','sans-serif'],typoLabel:'Space Grotesk Bold',
-    typoStyle:'font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:1px;'
-  },
-  LIEBHABER:{
-    bg:'#1A0A0F',text:'#FAF0F0',accent:'#F472B6',bar:'#F472B6',
-    ctaBg:'linear-gradient(135deg,#9D174D,#F472B6)',ctaText:'white',ghostColor:'rgba(244,114,182,.15)',ghostText:'rgba(255,255,255,.6)',
-    quoteColor:'rgba(255,255,255,.85)',
-    font:"font-family:'Cormorant Garamond',serif;font-style:italic;",
-    heroGrad:'radial-gradient(circle at 70% 30%,rgba(244,114,182,.35) 0%,transparent 60%),radial-gradient(circle at 30% 70%,rgba(157,23,77,.3) 0%,transparent 60%)',
-    typoFonts:['Cormorant Garamond','serif'],typoLabel:'Cormorant Garamond Italic',
-    typoStyle:'font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:26px;'
-  },
-  LIEBENDER:{
-    bg:'#0F1A14',text:'#F0FAF4',accent:'#6EE7B7',bar:'#6EE7B7',
-    ctaBg:'linear-gradient(135deg,#065F46,#6EE7B7)',ctaText:'white',ghostColor:'rgba(110,231,183,.15)',ghostText:'rgba(255,255,255,.6)',
-    quoteColor:'rgba(255,255,255,.85)',
-    font:"font-family:'Jost',sans-serif;font-style:normal;font-weight:300;",
-    heroGrad:'radial-gradient(circle at 60% 40%,rgba(110,231,183,.3) 0%,transparent 60%),radial-gradient(circle at 40% 60%,rgba(6,95,70,.4) 0%,transparent 60%)',
-    typoFonts:['Jost','sans-serif'],typoLabel:'Jost Light',
-    typoStyle:'font-family:"Jost",sans-serif;font-weight:300;font-size:20px;letter-spacing:0.5px;'
-  },
-  JESTER:{
-    bg:'#0A0A1A',text:'#FAFFFE',accent:'#FBBF24',bar:'#FBBF24',
-    ctaBg:'linear-gradient(135deg,#7C2D12,#FBBF24)',ctaText:'white',ghostColor:'rgba(251,191,36,.15)',ghostText:'rgba(255,255,255,.6)',
-    quoteColor:'rgba(255,255,255,.85)',
-    font:"font-family:'Space Grotesk',sans-serif;font-style:normal;",
-    heroGrad:'radial-gradient(circle at 80% 20%,rgba(251,191,36,.3) 0%,transparent 60%),radial-gradient(circle at 20% 80%,rgba(124,45,18,.4) 0%,transparent 60%)',
-    typoFonts:['Space Grotesk','sans-serif'],typoLabel:'Space Grotesk',
-    typoStyle:'font-family:"Space Grotesk",sans-serif;font-weight:500;font-size:20px;letter-spacing:0.3px;'
-  },
-  EVERYMAN:{
-    bg:'#141414',text:'#F5F5F5',accent:'#94A3B8',bar:'#94A3B8',
-    ctaBg:'linear-gradient(135deg,#334155,#64748B)',ctaText:'white',ghostColor:'rgba(148,163,184,.15)',ghostText:'rgba(255,255,255,.6)',
-    quoteColor:'rgba(255,255,255,.8)',
-    font:"font-family:'Jost',sans-serif;font-style:normal;font-weight:400;",
-    heroGrad:'radial-gradient(circle at 60% 40%,rgba(148,163,184,.2) 0%,transparent 60%),radial-gradient(circle at 40% 60%,rgba(51,65,85,.5) 0%,transparent 60%)',
-    typoFonts:['Jost','sans-serif'],typoLabel:'Jost Regular',
-    typoStyle:'font-family:"Jost",sans-serif;font-weight:400;font-size:18px;'
-  },
-  SCHOEPFER:{
-    bg:'#12100E',text:'#F5EDD7',accent:'#E8531A',bar:'#E8531A',
-    ctaBg:'linear-gradient(135deg,#E8531A,#C2400F)',ctaText:'white',ghostColor:'rgba(232,83,26,.15)',ghostText:'rgba(255,255,255,.6)',
-    quoteColor:'rgba(255,255,255,.85)',
-    font:"font-family:'DM Serif Display',serif;font-style:italic;",
-    heroGrad:'radial-gradient(circle at 70% 30%,rgba(232,83,26,.35) 0%,transparent 60%),radial-gradient(circle at 30% 70%,rgba(194,64,15,.25) 0%,transparent 60%)',
-    typoFonts:['DM Serif Display','serif'],typoLabel:'DM Serif Display',
-    typoStyle:"font-family:'DM Serif Display',serif;font-style:italic;font-weight:400;font-size:24px;"
-  },
-  UNSCHULDIGE:{
-    bg:'#0F1520',text:'#EEF4FF',accent:'#93C5FD',bar:'#93C5FD',
-    ctaBg:'linear-gradient(135deg,#1E3A8A,#93C5FD)',ctaText:'white',ghostColor:'rgba(147,197,253,.15)',ghostText:'rgba(255,255,255,.6)',
-    quoteColor:'rgba(255,255,255,.85)',
-    font:"font-family:'Cormorant Garamond',serif;font-style:normal;font-weight:600;",
-    heroGrad:'radial-gradient(circle at 65% 35%,rgba(147,197,253,.3) 0%,transparent 60%),radial-gradient(circle at 35% 65%,rgba(30,58,138,.4) 0%,transparent 60%)',
-    typoFonts:['Cormorant Garamond','serif'],typoLabel:'Cormorant Garamond',
-    typoStyle:'font-family:"Cormorant Garamond",serif;font-weight:600;font-size:24px;letter-spacing:0.5px;'
-  }
-};
+var LOGO = 'data:image/png;base64,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';
+var CAL_LINK = 'https://calendar.app.google/ezg5gACH7ykY5QX7A';
 
-var ARCHETYPES = ['OUTLAW','EXPLORER','MAGIER','HERRSCHER','WEISER','HELD','LIEBHABER','LIEBENDER','JESTER','EVERYMAN','UNSCHULDIGE','SCHOEPFER'];
+var TYPES = ['OUTLAW','EXPLORER','MAGICIAN','RULER','SAGE','HERO','LOVER','CAREGIVER','JESTER','EVERYMAN','INNOCENT','CREATOR'];
+
+var HINT_A = 'Wähle die Antwort, die zu dir am besten passt.';
+var HINT_B = 'Antworte spontan – das erste Gefühl zählt.';
 
 var QUESTIONS = [
-  {id:1,text:"Was treibt dich in deinem Business wirklich an?",hint:"Dein erstes Gefühl ist meistens richtig – keine falsche Bescheidenheit.",answers:[
-    {t:"Ich will aufbrechen – Normen hinterfragen, Altes ersetzen, unbequem sein.",s:{OUTLAW:3,MAGIER:1}},
-    {t:"Ich will führen und zeigen, dass echter Standard sich lohnt.",s:{HERRSCHER:3,HELD:1}},
-    {t:"Ich will echte, tiefe Verbindungen schaffen – für Menschen da sein.",s:{LIEBENDER:3,UNSCHULDIGE:1}},
-    {t:"Ich will erschaffen – etwas in die Welt bringen, das vorher nicht da war.",s:{SCHOEPFER:3,EXPLORER:1}}
-  ]},
-  {id:2,text:"Wenn du mit Kunden kommunizierst – wie klingst du dabei?",hint:"Denk an dein letztes wirklich gutes Gespräch – wie war dein Ton?",answers:[
-    {t:"Direkt, klar, ohne Schönreden – ich sage, was ich wirklich denke.",s:{OUTLAW:3,HELD:1}},
-    {t:"Neugierig, offen, inspirierend – ich zeige, was alles möglich ist.",s:{EXPLORER:3,MAGIER:1}},
-    {t:"Tief, bedeutungsvoll – mit Magie und Verwandlung im Gepäck.",s:{MAGIER:3,SCHOEPFER:1}},
-    {t:"Herzlich und nahbar – mit echter Begeisterung für den Menschen vor mir.",s:{LIEBHABER:3,LIEBENDER:1}}
-  ]},
-  {id:3,text:"Wo fühlst du dich in deiner Arbeit am lebendigsten?",hint:"Welcher Moment gibt dir am meisten Energie?",answers:[
-    {t:"Wenn ich neue Wege gehe – beim Entdecken, Ausprobieren, Weitergehen.",s:{EXPLORER:3,JESTER:1}},
-    {t:"Wenn ich Komplexes begreifbar mache und echte Orientierung gebe.",s:{MAGIER:3,WEISER:1}},
-    {t:"Wenn jemand sagt: Du bist der erste Mensch, der mich wirklich versteht.",s:{LIEBENDER:3,EVERYMAN:1}},
-    {t:"Wenn ich Dinge locker nehme – und trotzdem echte Wirkung entsteht.",s:{JESTER:3,LIEBHABER:1}}
-  ]},
-  {id:4,text:"Was ist deine größte Stärke im Business?",hint:"Was sagen Kunden, die dich wirklich weiterempfehlen?",answers:[
-    {t:"Ich gebe Orientierung – ich sehe, was Sache ist, und erkläre es klar.",s:{EXPLORER:3,WEISER:1}},
-    {t:"Ich sorge für Ergebnisse – fokussiert, zuverlässig, ohne Ausreden.",s:{WEISER:3,HELD:1}},
-    {t:"Ich setze um und liefere – klar, direkt, konsequent.",s:{JESTER:3,EXPLORER:1}},
-    {t:"Ich bin der Anker – Menschen fühlen sich bei mir sicher und gesehen.",s:{HELD:3,HERRSCHER:1}}
-  ]},
-  {id:5,text:"Wofür stehst du in deinem Business – was ist dein echtes Versprechen?",hint:"Was unterscheidet dich wirklich von allen anderen?",answers:[
-    {t:"Dafür, dass ich führe und Maßstäbe setze – Qualität, die sich zeigt.",s:{HERRSCHER:3,HELD:1}},
-    {t:"Dafür, dass ich echte Verbindung schaffe – du bist mehr als ein Auftrag.",s:{WEISER:3,LIEBENDER:1}},
-    {t:"Dafür, dass sich alles richtig anfühlt – warm, willkommen, ohne Stress.",s:{LIEBENDER:3,UNSCHULDIGE:1}},
-    {t:"Dafür, dass es einfach gut wird – keine langen Erklärungen nötig.",s:{UNSCHULDIGE:3,EVERYMAN:1}}
-  ]},
-  {id:6,text:"Welcher Satz trifft dein Business am besten?",hint:"Welcher trifft es wirklich – nicht welcher klingt am cleversten.",answers:[
-    {t:"Wir sagen, was wir meinen – auch wenn es unbequem ist.",s:{OUTLAW:3,HERRSCHER:1}},
-    {t:"Wir setzen Standards und liefern – konsequent und ohne Kompromisse.",s:{HERRSCHER:3,WEISER:1}},
-    {t:"Wir erschaffen Erlebnisse, die in Erinnerung bleiben.",s:{LIEBHABER:3,MAGIER:1}},
-    {t:"Wir sind für jeden da – unkompliziert, ehrlich, menschlich.",s:{EVERYMAN:3,LIEBENDER:1}}
-  ]},
-  {id:7,text:"Was würdest du in einem Projekt niemals akzeptieren?",hint:"Kein Zögern – was ist ein klares, sofortiges Nein?",answers:[
-    {t:"Dass ich meine Meinung nicht sagen darf – Schönreden ist nichts für mich.",s:{MAGIER:3,OUTLAW:1}},
-    {t:"Dass Qualität und Sorgfalt verhandelbar sind – das ist mein Standard.",s:{LIEBHABER:3,HERRSCHER:1}},
-    {t:"Dass sich alles kalt und transaktional anfühlt – kein Mensch dahinter.",s:{UNSCHULDIGE:3,LIEBENDER:1}},
-    {t:"Dass es langweilig und generisch wird – Mittelmäßigkeit ist keine Option.",s:{EVERYMAN:3,JESTER:1}}
-  ]},
-  {id:8,text:"Wie reagierst du, wenn ein Projekt schiefläuft?",hint:"Nicht wie du sein solltest – wie bist du wirklich?",answers:[
-    {t:"Ich sage klar, was schiefgelaufen ist – Klarheit vor Komfort.",s:{SCHOEPFER:3,OUTLAW:1}},
-    {t:"Ich suche die beste Lösung, auch wenn das bedeutet, alles neu zu denken.",s:{HELD:3,SCHOEPFER:1}},
-    {t:"Ich sorge erst für die Menschen – dann kommt die Sache.",s:{JESTER:3,LIEBENDER:1}},
-    {t:"Ich sorge dafür, dass alle ruhig bleiben – und finde einen Weg.",s:{EVERYMAN:3,UNSCHULDIGE:1}}
-  ]},
-  {id:9,text:"Warum sollte jemand mit dir arbeiten – nicht mit einem anderen?",hint:"Spontan antworten – dein erster Impuls zeigt deinen Archetyp.",answers:[
-    {t:"Weil ich klar sage, was ich denke – und nicht sage, was jemand hören will.",s:{WEISER:3,OUTLAW:1}},
-    {t:"Weil ich etwas erschaffe, das vorher nicht existiert hat – jedes Mal.",s:{SCHOEPFER:3,MAGIER:1}},
-    {t:"Weil ich nicht aufhöre, bis es wirklich brillant ist.",s:{HELD:3,HERRSCHER:1}},
-    {t:"Weil sich Arbeit mit mir anders anfühlt – leichter, echter, menschlicher.",s:{UNSCHULDIGE:3,EVERYMAN:1}}
-  ]}
+  {t:'Was treibt dich in deinem Business an?', h:HINT_A, a:[
+    ['Ich will bestehende Regeln hinterfragen und dort etwas verändern, wo es nicht mehr funktioniert.','OUTLAW'],
+    ['Ich will Klarheit und Ordnung schaffen, damit alles zuverlässig läuft und andere sich darauf verlassen können.','RULER'],
+    ['Ich will Nähe und Intensität: Mich interessieren Menschen und Dinge, die mich wirklich berühren.','LOVER'],
+    ['Ich will es einfach und ehrlich halten – ohne Umwege und ohne unnötige Komplikationen.','INNOCENT']]},
+  {t:'Wenn du ein neues Projekt startest: Was reizt dich daran am meisten?', h:HINT_B, a:[
+    ['Dass ich etwas Neues entdecke und Wege gehe, die ich vorher nicht kannte.','EXPLORER'],
+    ['Dass ich eine schwierige Aufgabe anpacke und am Ende ein sichtbares Ergebnis liefere.','HERO'],
+    ['Dass ich andere unterstütze und ihnen etwas Gutes tun kann.','CAREGIVER'],
+    ['Dass wir dabei Spaß haben und die Sache nicht zu ernst nehmen.','JESTER']]},
+  {t:'Woran erkennen andere am ehesten, dass du richtig gut in deiner Arbeit bist?', h:'Wähle die Antwort, die am besten zu dir passt.', a:[
+    ['Daran, dass ich Dinge tief durchdringe und fundiert erklären kann.','SAGE'],
+    ['Daran, dass ich Situationen verwandle und Menschen am Ende etwas ganz anderes sehen als zu Beginn.','MAGICIAN'],
+    ['Daran, dass ich greifbar und auf Augenhöhe bin – ohne Show, ohne Fassade.','EVERYMAN'],
+    ['Daran, dass ich etwas erschaffe, das es vorher so nicht gab.','CREATOR']]},
+  {t:'Was würdest du in deiner Branche am liebsten ändern?', h:HINT_B, a:[
+    ['Dass sich alle an dieselben Regeln halten, obwohl sie niemandem mehr nützen.','OUTLAW'],
+    ['Dass so wenig Neues ausprobiert wird und viele im Altbekannten bleiben.','EXPLORER'],
+    ['Dass es so unpersönlich zugeht – es fehlen Leidenschaft und echte Verbindung.','LOVER'],
+    ['Dass es an klarer Führung und verbindlichen Standards fehlt.','RULER']]},
+  {t:'Ein wichtiges Projekt läuft schlechter als gedacht. Was ist dein erster Impuls?', h:HINT_A, a:[
+    ['Ich nutze die Gelegenheit, um einen ganz neuen Ansatz zu entwickeln.','CREATOR'],
+    ['Ich bleibe zuversichtlich und suche die einfachste Lösung, damit alles wieder rund läuft.','INNOCENT'],
+    ['Ich packe an und arbeite so lange nach, bis das Ergebnis wirklich sitzt.','HERO'],
+    ['Ich nehme mit etwas Humor den Druck raus, damit alle wieder entspannt nach einer Lösung suchen können.','JESTER']]},
+  {t:'Wie triffst du wichtige Entscheidungen in deinem Business?', h:HINT_B, a:[
+    ['Ich frage Menschen aus meinem Umfeld, was sie an meiner Stelle tun würden.','EVERYMAN'],
+    ['Ich recherchiere gründlich und wäge ab, bis ich die Fakten wirklich kenne.','SAGE'],
+    ['Ich überlege, was für die Menschen, die von der Entscheidung betroffen sind, am besten ist.','CAREGIVER'],
+    ['Ich folge meinem Instinkt, auch wenn er gegen das spricht, was alle anderen tun.','OUTLAW']]},
+  {t:'Mit welchen Kundinnen und Kunden arbeitest du am liebsten?', h:HINT_A, a:[
+    ['Mit Menschen, mit denen ich eine enge, persönliche Zusammenarbeit aufbauen kann.','LOVER'],
+    ['Mit Menschen, die Qualität schätzen und klare Erwartungen mitbringen.','RULER'],
+    ['Mit Menschen, die offen für Neues sind und gerne ungewöhnliche Wege ausprobieren.','EXPLORER'],
+    ['Mit Menschen, die bereit sind, sich grundlegend zu verändern, und mir dafür vertrauen.','MAGICIAN']]},
+  {t:'Wie gibst du dein Wissen und deine Arbeit an andere weiter?', h:HINT_B, a:[
+    ['Ich zeige an konkreten Ergebnissen, was möglich ist, und motiviere andere, es selbst anzupacken.','HERO'],
+    ['Ich entwickle eigene Formate, Bilder oder Konzepte, die meine Ideen anschaulich machen.','CREATOR'],
+    ['Ich erkläre Zusammenhänge ausführlich und belege sie mit Hintergrundwissen.','SAGE'],
+    ['Ich erzähle es wie im Gespräch unter Freunden: verständlich und ohne Fachchinesisch.','EVERYMAN']]},
+  {t:'Was darf in der Zusammenarbeit mit anderen auf keinen Fall fehlen?', h:HINT_A, a:[
+    ['Klare Rollen und Absprachen, damit alle wissen, wofür sie verantwortlich sind.','RULER'],
+    ['Humor. Wenn wir gemeinsam lachen können, läuft vieles leichter.','JESTER'],
+    ['Vertrauen und Ehrlichkeit. Ich gehe davon aus, dass am Ende alles gut wird.','INNOCENT'],
+    ['Ein gemeinsames Bild davon, was durch unsere Zusammenarbeit entstehen kann.','MAGICIAN']]},
+  {t:'Wie entwickelst du dich in deinem Business weiter?', h:HINT_B, a:[
+    ['Ich lerne dort dazu, wo ich die Menschen, mit denen ich arbeite, noch besser unterstützen kann.','CAREGIVER'],
+    ['Ich probiere regelmäßig etwas völlig Neues aus, auch wenn ich nicht weiß, wohin es führt.','EXPLORER'],
+    ['Ich folge dem, was mich begeistert, und gehe dort in die Tiefe, wo es mir wirklich nahegeht.','LOVER'],
+    ['Ich breche bewusst mit Gewohnheiten, die mich ausbremsen, auch wenn das Unruhe auslöst.','OUTLAW']]},
+  {t:'Was sollen Menschen nach der Zusammenarbeit mit dir am ehesten sagen?', h:HINT_A, a:[
+    ['Das hat richtig Spaß gemacht und war angenehm unkompliziert.','JESTER'],
+    ['Du hast etwas geschaffen, das einzigartig ist und genau zu mir passt.','CREATOR'],
+    ['Ich habe richtig viel verstanden und dazugelernt.','SAGE'],
+    ['Durch dich hat sich für mich etwas Grundlegendes verändert.','MAGICIAN']]},
+  {t:'Wie gehst du mit Rückschlägen in deinem Business um?', h:HINT_B, a:[
+    ['Ich spreche offen darüber und hole mir Rat bei anderen, denen es ähnlich geht.','EVERYMAN'],
+    ['Ich sehe es als Prüfung, beiße mich durch und mache danach stärker weiter.','HERO'],
+    ['Ich sorge zuerst dafür, dass es den Menschen um mich herum gut geht, und kümmere mich dann um den Rest.','CAREGIVER'],
+    ['Ich bleibe optimistisch und vertraue darauf, dass sich ein Weg zeigt.','INNOCENT']]}
 ];
 
+var CORE = {
+  OUTLAW:'Mir geht es im Kern darum, Regeln zu hinterfragen und dort etwas zu verändern, wo es nicht mehr funktioniert.',
+  EXPLORER:'Mir geht es im Kern darum, Neues zu entdecken und meinen eigenen Weg zu gehen.',
+  MAGICIAN:'Mir geht es im Kern darum, Dinge grundlegend zu verwandeln und Menschen neue Möglichkeiten zu zeigen.',
+  RULER:'Mir geht es im Kern darum, Ordnung und Klarheit zu schaffen, damit alles verlässlich funktioniert.',
+  SAGE:'Mir geht es im Kern darum, Dinge zu verstehen und mein Wissen sinnvoll weiterzugeben.',
+  HERO:'Mir geht es im Kern darum, Herausforderungen anzupacken und sichtbare Ergebnisse zu liefern.',
+  LOVER:'Mir geht es im Kern darum, Nähe und Leidenschaft zu erleben und tiefe Verbindungen aufzubauen.',
+  CAREGIVER:'Mir geht es im Kern darum, andere zu unterstützen und dafür zu sorgen, dass es ihnen gut geht.',
+  JESTER:'Mir geht es im Kern darum, Leichtigkeit und Freude zu bringen und nichts zu ernst zu nehmen.',
+  EVERYMAN:'Mir geht es im Kern darum, dazuzugehören und auf Augenhöhe mit anderen zu arbeiten.',
+  INNOCENT:'Mir geht es im Kern darum, die Dinge einfach und ehrlich zu halten und auf das Gute zu vertrauen.',
+  CREATOR:'Mir geht es im Kern darum, etwas Eigenes zu erschaffen, das es so noch nicht gab.'
+};
+
 var VALIDATIONS = {
-  OUTLAW:"Du sagst laut, was andere denken aber nicht aussprechen. Radikale Ehrlichkeit ist deine einzige Option. Provokation ist für dich keine Strategie – sie ist Haltung.",
-  EXPLORER:"Du erkundest Neues. Du gehst Wege, die andere nicht sehen. Freiheit und Neugier sind dein Antrieb – nicht Rebellion, sondern Faszination.",
-  MAGIER:"Du siehst, was andere nicht sehen. Du verwandelst Visionen in Realität. Transformation ist nicht was du tust – es ist wer du bist.",
-  HERRSCHER:"Du führst mit Klarheit und Exzellenz. Struktur ist deine Stärke. Mittelmaß ist für dich keine Option – nur das Beste zählt.",
-  WEISER:"Du tauchst tief ein. Du analysierst, verstehst und erklärst. Kompetenz und Wahrheit sind deine Währung – Fakten statt Fassade.",
-  HELD:"Du packst an. Du lieferst Ergebnisse. Probleme sind für dich Trainingseinheiten – du gewinnst durch Taten, nicht durch Worte.",
-  LIEBHABER:"Du arbeitest aus Leidenschaft. Du baust echte, tiefe Beziehungen. Ästhetik, Energie und Intensität sind deine Sprache.",
-  LIEBENDER:"Du sorgst für andere. Du bist da, hältst den Rücken frei. Bei dir fühlen sich Menschen sicher, gesehen und gehalten.",
-  JESTER:"Du bringst Leichtigkeit. Humor ist deine Strategie. Du machst ernste Themen zugänglich – und bist dabei völlig authentisch.",
-  EVERYMAN:"Du bist auf Augenhöhe. Echt, normal, ohne Fassade. Bei dir fühlt sich jeder willkommen – Zugehörigkeit ist dein Kernversprechen.",
-  SCHOEPFER:"Du erschaffst. Du gestaltest. Wo andere eine leere Seite sehen, siehst du Möglichkeiten. Dein Business ist dein Werk – und es trägt deinen unverwechselbaren Abdruck.",
-  UNSCHULDIGE:"Du bringst Optimismus und Sicherheit. Du vereinfachst Komplexes. Bei dir wird alles leichter – und das ist deine echte Superkraft."
+  OUTLAW:'Du sagst laut, was andere denken, aber nicht aussprechen. Radikale Ehrlichkeit ist deine einzige Option.',
+  EXPLORER:'Du erkundest Neues. Du gehst Wege, die andere nicht sehen. Freiheit und Neugier sind dein Antrieb.',
+  MAGICIAN:'Du siehst, was andere nicht sehen. Du verwandelst Visionen in Realität. Transformation ist, wer du bist.',
+  RULER:'Du führst mit Klarheit und Exzellenz. Struktur ist deine Stärke. Nur das Beste zählt.',
+  SAGE:'Du tauchst tief ein. Du analysierst, verstehst und erklärst. Kompetenz und Wahrheit sind deine Währung.',
+  HERO:'Du packst an. Du lieferst Ergebnisse. Probleme sind Trainingseinheiten – du gewinnst durch Taten.',
+  LOVER:'Du arbeitest aus Leidenschaft. Du baust echte, tiefe Beziehungen. Ästhetik und Intensität sind deine Sprache.',
+  CAREGIVER:'Du sorgst für andere. Du bist da, hältst den Rücken frei. Bei dir fühlen sich Menschen sicher und gehalten.',
+  JESTER:'Du bringst Leichtigkeit. Humor ist deine Strategie. Du machst ernste Themen zugänglich – ganz authentisch.',
+  EVERYMAN:'Du bist auf Augenhöhe. Echt, normal, ohne Fassade. Bei dir fühlt sich jeder willkommen.',
+  INNOCENT:'Du bringst Optimismus und Sicherheit. Du vereinfachst Komplexes. Bei dir wird alles leichter.',
+  CREATOR:'Du erschaffst Neues. Kreativität und Innovation sind dein Kern. Du baust Dinge, die vorher nicht existierten.'
 };
 
-var CORRECTIONS = {
-  OUTLAW:[{n:"EXPLORER",d:"Du erkundest Neues. Freiheit und Neugier – Faszination statt Rebellion."},{n:"MAGIER",d:"Du siehst, was andere nicht sehen. Visionen werden Realität."}],
-  EXPLORER:[{n:"OUTLAW",d:"Du brichst Regeln. Sagst laut, was andere denken aber schweigen."},{n:"MAGIER",d:"Du siehst, was andere nicht sehen. Transformation ist dein Ding."}],
-  MAGIER:[{n:"OUTLAW",d:"Du brichst Regeln. Radikale Ehrlichkeit statt diplomatischem Schweigen."},{n:"EXPLORER",d:"Du erkundest Neues. Neugier als Lebenshaltung."},{n:"SCHOEPFER",d:"Du erschaffst. Dein Business ist dein Werk – unverwechselbar."}],
-  HERRSCHER:[{n:"WEISER",d:"Du tauchst tief ein. Kompetenz ist deine echte Währung."},{n:"HELD",d:"Du packst an. Ergebnisse statt Ankündigungen."}],
-  WEISER:[{n:"HERRSCHER",d:"Du führst mit Klarheit. Nur das Beste reicht – und das weißt du."},{n:"HELD",d:"Du packst an. Taten statt Theorien."}],
-  HELD:[{n:"HERRSCHER",d:"Du führst mit Struktur und Exzellenz. Du gibst den Ton vor."},{n:"WEISER",d:"Du analysierst tief. Fakten sind dein Fundament."}],
-  LIEBHABER:[{n:"LIEBENDER",d:"Du sorgst für andere. Verlässlich, warm, rückenfreihaltend."},{n:"JESTER",d:"Du bringst Leichtigkeit. Humor als echte Strategie."}],
-  LIEBENDER:[{n:"LIEBHABER",d:"Du arbeitest aus Leidenschaft. Ästhetik und Intensität sind deine Sprache."},{n:"EVERYMAN",d:"Du bist auf Augenhöhe. Echt, normal, ohne Fassade."}],
-  JESTER:[{n:"EXPLORER",d:"Du erkundest Neues. Neugier ohne Angst vor dem Unbekannten."},{n:"LIEBHABER",d:"Du arbeitest aus Leidenschaft. Intensität als Markenzeichen."}],
-  EVERYMAN:[{n:"LIEBENDER",d:"Du sorgst für andere. Verlässlich und warm."},{n:"UNSCHULDIGE",d:"Du bringst Optimismus. Bei dir wird es einfacher."}],
-  SCHOEPFER:[{n:"MAGIER",d:"Du verwandelst Visionen in Realität – mit Magie statt Handwerk."},{n:"EXPLORER",d:"Du suchst Neues. Freiheit als Antrieb, nicht Ausdruck."}],
-  UNSCHULDIGE:[{n:"EVERYMAN",d:"Du bist auf Augenhöhe. Kein Bullshit, keine Fassade."},{n:"LIEBENDER",d:"Du sorgst für andere. Sicherheit als echtes Versprechen."}]
+// Profil je Typ: Profiltext, Farben [Name, Hex, Rolle], Vorschau [Hintergrund, Text, Akzent], Schrift [CSS-Familie, Gewicht, Stil, Name]
+var PROFILE = {
+  OUTLAW:{narr:'Du bist der Archetyp, der sagt was alle denken – aber niemand ausspricht. Dein Business funktioniert, weil du radikal ehrlich bist. Kunden wählen dich nicht trotz deiner Direktheit, sondern wegen ihr.',
+    pal:[['Void','#0A0A0F','Basis'],['Ember','#FF6A00','Akzent'],['Ash','#6B6B76','Support'],['Chalk','#F5F5F0','Hintergrund']],
+    th:['#0D0B14','#FAFAFA','#FF6A00'], font:["'Archivo Black',sans-serif",400,'normal','Archivo Black'],
+    bild:'Kontrastreich und roh: harte Schatten, Körnung, echte Momente statt Hochglanz. Gerne ungewöhnliche Perspektiven.',
+    ton:'Direkt, frech, ehrlich. Kurze Sätze, klare Kante – lieber anecken als langweilen.',
+    tk:[['Explorer','will raus aus dem Standard und traut sich Neues.'],['Creator','geht eigene Wege und schätzt mutige Ideen.']],
+    ak:[['Ruler','will Kontrolle und Regeln – du willst sie brechen.'],['Innocent','sucht Harmonie – deine Direktheit überfordert.']]},
+  EXPLORER:{narr:'Du bist nie wirklich angekommen – und genau das ist deine Stärke. Dein Business lebt von Bewegung, neuen Perspektiven, der Frage: Was wäre, wenn?',
+    pal:[['Deep Ocean','#0A1628','Basis'],['Teal Wave','#4ECDC4','Akzent'],['Slate','#5E6E77','Support'],['Mist','#EEF6F8','Hintergrund']],
+    th:['#0A1628','#EEF2F7','#4ECDC4'], font:["'Outfit',sans-serif",700,'normal','Outfit Bold'],
+    bild:'Weite, Natur, unterwegs sein: Horizonte, Wege, Licht von draußen. Bewegung statt gestellter Studio-Shots.',
+    ton:'Neugierig, offen, ermutigend. Lädt ein, statt zu belehren – „Lass uns schauen, was möglich ist.“',
+    tk:[['Creator','sucht neue Wege und kreative Freiheit.'],['Outlaw','will raus aus dem Gewohnten.']],
+    ak:[['Ruler','braucht feste Abläufe und wenig Spielraum.'],['Everyman','will das Bewährte – Experimente machen nervös.']]},
+  MAGICIAN:{narr:'Du denkst in Zukunft, während andere noch über die Gegenwart diskutieren. Du verkaufst nicht nur eine Lösung – du verkaufst eine neue Realität.',
+    pal:[['Abyss','#0F0A1E','Basis'],['Amethyst','#A78BFA','Akzent'],['Mauve','#7C3AED','Support'],['Lavender','#F0EAFF','Hintergrund']],
+    th:['#0F0A1E','#EDE8FF','#A78BFA'], font:["'Cinzel',serif",700,'normal','Cinzel Bold'],
+    bild:'Licht, Spiegelungen, Verwandlung: Vorher-nachher, geheimnisvolle Stimmungen, gezielt gesetzte Details.',
+    ton:'Visionär, ruhig, bildhaft. Spricht über Möglichkeiten und Wirkung, nicht über Features.',
+    tk:[['Creator','will Ideen Wirklichkeit werden lassen.'],['Hero','will echten Wandel und geht dafür los.']],
+    ak:[['Everyman','will Bewährtes ohne große Versprechen.'],['Sage','will für jeden Schritt einen Beweis.']]},
+  RULER:{narr:'Du bist nicht hier um mitzuschwimmen – du bist hier um den Ton anzugeben. Klare Strukturen, hohe Standards, kein Kompromiss.',
+    pal:[['Obsidian','#0C0C0C','Basis'],['Royal Gold','#E0A526','Akzent'],['Pewter','#3D3D3D','Support'],['Ivory','#F5F0E8','Hintergrund']],
+    th:['#0C0C0C','#F5F0E8','#E0A526'], font:["'Libre Baskerville',serif",700,'normal','Libre Baskerville Bold'],
+    bild:'Aufgeräumt, hochwertig, symmetrisch: klare Linien, edle Materialien, Menschen in souveräner Haltung.',
+    ton:'Souverän, klar, verbindlich. Wenig Worte, hohe Präzision – Qualität spricht für sich.',
+    tk:[['Hero','schätzt klare Strukturen auf dem Weg zum Ziel.'],['Sage','legt Wert auf Qualität und Verlässlichkeit.']],
+    ak:[['Outlaw','stellt jede Regel infrage.'],['Jester','nimmt Absprachen zu locker.']]},
+  SAGE:{narr:'Während andere an der Oberfläche bleiben, gehst du in die Tiefe. Du bist die Stimme der Vernunft in einer Branche voller Buzzwords.',
+    pal:[['Midnight Indigo','#0F1A2A','Basis'],['Dusty Blue','#7D9CC4','Akzent'],['Slate Blue','#3B5273','Support'],['Mist','#EDF1F7','Hintergrund']],
+    th:['#0F1A2A','#E8EDF5','#7D9CC4'], font:["'Source Serif 4',serif",700,'normal','Source Serif 4 Bold'],
+    bild:'Ruhig und fokussiert: Bücher, Arbeitsplätze, Details, natürliches Licht und viel Weißraum.',
+    ton:'Klar, fundiert, sachlich. Erklärt verständlich und belegt Aussagen – ohne Buzzwords.',
+    tk:[['Ruler','will fundierte Entscheidungen treffen.'],['Creator','will Hintergründe verstehen und schätzt Substanz.']],
+    ak:[['Jester','will schnelle Lacher statt Tiefe.'],['Outlaw','will sofort umwerfen, statt erst zu verstehen.']]},
+  HERO:{narr:'Du redest nicht lange – du machst. Dein Business ist auf Ergebnisse ausgelegt: messbar, sichtbar, spürbar.',
+    pal:[['Carbon','#0D0B14','Basis'],['Crimson','#D1293D','Akzent'],['Gunmetal','#3A3F4B','Support'],['Bone','#F6F4F0','Hintergrund']],
+    th:['#0D0B14','#FAFAFA','#D1293D'], font:["'Oswald',sans-serif",700,'normal','Oswald Bold'],
+    bild:'Dynamisch und kraftvoll: Bewegung, Anstrengung, Ziellinien, Menschen in Aktion.',
+    ton:'Motivierend, direkt, zielorientiert. Aktive Verben, klare Aufforderungen – „Pack es an.“',
+    tk:[['Ruler','will messbare Ergebnisse.'],['Explorer','gibt für neue Ziele Gas.']],
+    ak:[['Innocent','scheut Druck und Herausforderung.'],['Everyman','will es entspannt, ohne große Ziele.']]},
+  LOVER:{narr:'Für dich ist Business nie nur Business – es ist Ausdruck, Hingabe, Verbindung. Menschen spüren, wenn etwas mit Liebe gemacht wurde.',
+    pal:[['Burgundy Night','#1A0A0F','Basis'],['Dusty Rose','#E56B8F','Akzent'],['Wine','#8C2447','Support'],['Petal','#FFF0F4','Hintergrund']],
+    th:['#1A0A0F','#FAF0F0','#E56B8F'], font:["'Playfair Display',serif",400,'italic','Playfair Display Italic'],
+    bild:'Nah, sinnlich, warm: weiches Licht, Texturen, Hände, Blicke und liebevolle Details.',
+    ton:'Warm, persönlich, emotional. Spricht Gefühle an und schafft Nähe – „für dich gemacht“.',
+    tk:[['Creator','liebt Ästhetik und Hingabe.'],['Caregiver','schätzt Beziehung und Wertschätzung.']],
+    ak:[['Sage','will Fakten statt Gefühl.'],['Ruler','sieht nur Zahlen und Effizienz.']]},
+  CAREGIVER:{narr:'Du bist der ruhende Punkt für deine Kunden. Dein Business basiert auf Vertrauen, das über Jahre wächst.',
+    pal:[['Forest','#11201A','Basis'],['Eucalyptus','#86B89A','Akzent'],['Moss','#4F7A5E','Support'],['Linen','#F3F1E8','Hintergrund']],
+    th:['#11201A','#F0FAF4','#86B89A'], font:["'Nunito',sans-serif",600,'normal','Nunito SemiBold'],
+    bild:'Herzlich und geborgen: echte Begegnungen, helle Räume, Menschen, die sich einander zuwenden.',
+    ton:'Einfühlsam, ruhig, unterstützend. Gibt Sicherheit – „Du bist hier gut aufgehoben.“',
+    tk:[['Innocent','sucht Vertrauen und Begleitung.'],['Everyman','schätzt Verlässlichkeit auf Augenhöhe.']],
+    ak:[['Outlaw','will Tempo und Provokation statt Fürsorge.'],['Ruler','erwartet Unterordnung statt Zusammenarbeit.']]},
+  JESTER:{narr:'Du nimmst dich selbst nicht zu ernst – und genau das macht dich unwiderstehlich. Humor ist bei dir keine Lücke, sondern die Strategie.',
+    pal:[['Ink','#0A0A1A','Basis'],['Saffron','#FBBF24','Akzent'],['Paprika','#F97316','Support'],['Vanilla','#FFFBEB','Hintergrund']],
+    th:['#0A0A1A','#FAFFFE','#FBBF24'], font:["'Unbounded',sans-serif",700,'normal','Unbounded Bold'],
+    bild:'Bunt, überraschend, verspielt: ungewöhnliche Perspektiven, echte Lacher, ein Augenzwinkern.',
+    ton:'Locker, witzig, schlagfertig. Humor mit Haltung – leicht, aber nie auf Kosten anderer.',
+    tk:[['Everyman','mag es unkompliziert und nahbar.'],['Explorer','ist offen für Neues und Experimente.']],
+    ak:[['Ruler','erwartet Ernst und Etikette.'],['Sage','will Tiefe statt Leichtigkeit.']]},
+  EVERYMAN:{narr:'Du machst keinen auf besonders – und genau das ist deine Stärke. Bei dir muss niemand etwas vorspielen.',
+    pal:[['Graphite','#141414','Basis'],['Cognac','#C27C4E','Akzent'],['Sand','#D9C7A6','Support'],['Paper','#F8F6F1','Hintergrund']],
+    th:['#141414','#F5F5F5','#C27C4E'], font:["'Inter',sans-serif",500,'normal','Inter Medium'],
+    bild:'Alltag ohne Filter: echte Menschen, echte Orte, natürliche Situationen – kein Hochglanz.',
+    ton:'Bodenständig, freundlich, auf Augenhöhe. Einfache Worte, ehrlich gemeint.',
+    tk:[['Caregiver','schätzt Nähe und Verlässlichkeit.'],['Jester','mag es locker und unkompliziert.']],
+    ak:[['Ruler','sucht Exklusivität und Status.'],['Magician','erwartet große Visionen statt ehrlicher Arbeit.']]},
+  INNOCENT:{narr:'In einer Welt voller Überforderung bist du die Ausnahme: bei dir wird es einfach.',
+    pal:[['Deep Sky','#0F1520','Basis'],['Periwinkle','#93C5FD','Akzent'],['Cornflower','#60A5FA','Support'],['Cloud','#EEF4FF','Hintergrund']],
+    th:['#0F1520','#EEF4FF','#93C5FD'], font:["'Quicksand',sans-serif",500,'normal','Quicksand Medium'],
+    bild:'Hell und leicht: viel Licht, klare Flächen, Natur und ehrliches Lächeln.',
+    ton:'Positiv, einfach, zuversichtlich. Kurze, klare Sätze ohne Fachchinesisch.',
+    tk:[['Caregiver','schätzt Fürsorge und Vertrauen.'],['Everyman','will es unkompliziert.']],
+    ak:[['Outlaw','bringt Konflikt statt Harmonie.'],['Hero','will Druck und Wettbewerb.']]},
+  CREATOR:{narr:'Du erschaffst was andere sich nicht vorstellen können. Dein Business ist dein Werk – und jedes Detail trägt deine Handschrift. Kunden wählen dich, weil du nicht reproduzierst. Du erschaffst.',
+    pal:[['Warm Charcoal','#12100E','Basis'],['Vermillion','#E8531A','Akzent'],['Terracotta','#C2400F','Support'],['Ivory Cream','#F5EDD7','Hintergrund']],
+    th:['#12100E','#F5EDD7','#E8531A'], font:["'DM Serif Display',serif",400,'normal','DM Serif Display'],
+    bild:'Prozess und Handwerk: Skizzen, Werkstatt, Materialien, Details im Entstehen.',
+    ton:'Inspirierend, präzise, eigenständig. Zeigt Ideen und Haltung, statt nur Ergebnisse zu verkaufen.',
+    tk:[['Lover','liebt Ästhetik und Hingabe.'],['Magician','will etwas Neues entstehen lassen.']],
+    ak:[['Everyman','will Standardlösungen von der Stange.'],['Ruler','will jeden Schritt vorgeben.']]}
 };
 
-var LOGO = 'data:image/png;base64,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';
-
-// ── STATE ─────────────────────────────────────
-var state = {screen:'start',qi:0,scores:{},answers:[],archetype:null,result:null};
-function initScores(){var s={};ARCHETYPES.forEach(function(a){s[a]=0;});return s;}
-function topArchetype(sc){
-  var best=ARCHETYPES.reduce(function(b,a){return sc[a]>(sc[b]||0)?a:b;},ARCHETYPES[0]);
-  var topScore=sc[best];
-  var tied=ARCHETYPES.filter(function(a){return sc[a]===topScore;});
-  if(tied.length===1) return tied[0];
-  return tied[Math.floor(Math.random()*tied.length)];
+/* ───────── Zustand ───────── */
+var state;
+function resetState(){
+  state = {screen:'start', qi:0, answers:[], scores:null, tie:null, tieChoice:null,
+           main:null, second:null, pctMain:0, pctSecond:0, override:false, email:null, valChoice:null};
 }
+resetState();
 
-// ── SPARK EFFECT ─────────────────────────────
-function launchSparks(){
-  var overlay = document.getElementById('spark-overlay');
-  overlay.style.display = 'block';
-  overlay.innerHTML = '';
-  var colors = ['#FF5C00','#FFB347','#FFD700','#FF6B6B','#A78BFA','#60A5FA','#FBBF24','#34D399'];
-  var app = document.getElementById('app');
-  var rect = app ? app.getBoundingClientRect() : {left:0,top:0,width:window.innerWidth,height:window.innerHeight};
-  var cx = rect.left + rect.width/2;
-  var cy = rect.top + rect.height/2;
-  for(var i=0;i<80;i++){
-    var el = document.createElement('div');
-    el.className = 'spark';
-    var angle = Math.random()*Math.PI*2;
-    var dist = 80 + Math.random()*300;
-    var tx = Math.cos(angle)*dist;
-    var ty = Math.sin(angle)*dist;
-    var size = 4 + Math.random()*10;
-    var dur = 0.6 + Math.random()*0.8;
-    el.style.cssText = 'left:'+(cx+Math.random()*60-30)+'px;top:'+(cy+Math.random()*60-30)+'px;width:'+size+'px;height:'+size+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';--tx:'+tx+'px;--ty:'+ty+'px;--dur:'+dur+'s;animation-delay:'+(Math.random()*0.3)+'s';
-    overlay.appendChild(el);
+function emptyScores(){ var s={}; TYPES.forEach(function(t){s[t]=0;}); return s; }
+function baseScores(){ var s=emptyScores(); state.answers.forEach(function(t){ s[t]+=1; }); return s; }
+function ranked(s){
+  // stabil: bei Gleichstand gilt die Reihenfolge in TYPES
+  return TYPES.slice().sort(function(a,b){ return (s[b]-s[a]) || (TYPES.indexOf(a)-TYPES.indexOf(b)); });
+}
+function shuffle(arr){ var a=arr.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var x=a[i];a[i]=a[j];a[j]=x;} return a; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function cap(t){ return t.charAt(0)+t.slice(1).toLowerCase(); }
+
+/* Nach Frage 12: knapp? → Zusatzfrage, sonst Ergebnis berechnen */
+function afterQuestions(){
+  var s = baseScores();
+  var r = ranked(s);
+  var top = s[r[0]];
+  var close = r.filter(function(t){ return s[t] >= top-1; });
+  // Mehr als 4 Typen dicht vorn: nur die punktgleichen Spitzenreiter kommen in die Zusatzfrage.
+  // Liegt ein Typ allein vorn, gewinnt er ohne Zusatzfrage.
+  if(close.length > 4){
+    close = r.filter(function(t){ return s[t] === top; });
   }
-  setTimeout(function(){overlay.style.display='none';overlay.innerHTML='';},1500);
+  state.scores = s;
+  if(close.length >= 2){
+    state.tie = shuffle(close);
+    state.screen = 'tie';
+  } else {
+    state.tie = null;
+    finalize();
+    state.screen = 'email';
+  }
+  render();
+}
+function finalize(){
+  var s = baseScores();
+  if(state.tie && state.tieChoice){ s[state.tieChoice] += 2; }
+  state.scores = s;
+  var r = ranked(s);
+  state.main = r[0];
+  state.second = r[1];
+  var a = s[r[0]], b = s[r[1]];
+  state.pctMain = (a+b) > 0 ? Math.round(100*a/(a+b)) : 100;
+  state.pctSecond = 100 - state.pctMain;
+  state.override = false;
 }
 
-// ── RENDER ─────────────────────────────────────
+/* ───────── Render ───────── */
 function render(){
+  if(document.activeElement && document.activeElement.blur){ document.activeElement.blur(); }
   var app = document.getElementById('app');
-  if(!app) return;
-  // Blur any focused element to prevent iOS sticky focus
-  if(document.activeElement && document.activeElement.blur){
-    document.activeElement.blur();
-  }
-  var html = '';
-  if(state.screen==='start') html = renderStart();
-  else if(state.screen==='email') html = renderEmailCapture();
-  else if(state.screen==='question') html = renderQuestion();
-  else if(state.screen==='validation') html = renderValidation();
-  else if(state.screen==='correction') html = renderCorrection();
-  else if(state.screen==='loading') html = renderLoading();
-  else if(state.screen==='result') html = renderResult();
-  app.innerHTML = html;
+  var map = {start:renderStart, question:renderQuestion, tie:renderTie, email:renderEmail,
+             validation:renderValidation, alt:renderAlt, result:renderResult, card:renderCard};
+  app.innerHTML = map[state.screen]();
+  window.scrollTo(0,0);
 }
 
-function backBtn(dark){
-  var cls = dark ? 'top-nav top-nav-dark' : 'top-nav';
-  return '<div class="'+cls+'">' +
-    '<button class="back-btn" onclick="goBack()">' +
-      '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>' +
-      'Zurück' +
-    '</button>' +
-  '</div>';
+function backBtn(fn){
+  return '<button class="back" onclick="'+fn+'()"><svg viewBox="0 0 14 12"><path d="M6 1 L1 6 L6 11 M1 6 L13 6"/></svg>Zurück</button>';
+}
+function answerList(items, handler){
+  var L = 'ABCDEFGH';
+  return '<div class="answers">' + items.map(function(it,i){
+    return '<button class="answer" onclick="'+handler+'('+i+',this)"><span class="letter">'+L.charAt(i)+'</span><span class="txt">'+esc(it)+'</span></button>';
+  }).join('') + '</div>';
 }
 
 function renderStart(){
-  return '<div class="slide">' +
-    '<div class="start-bar"></div>' +
-    '<div class="start-body">' +
-      '<div class="logo-w"><img src="'+LOGO+'" alt="Frischmuth Design" style="height:28px;"></div>' +
-      '<div class="eyebrow">Babs Brand Mirror</div>' +
-      '<div class="h1">Dein<br>Archetyp.<br><span>Deine Position.</span></div>' +
-      '<div class="divider"></div>' +
-      '<p class="start-p">Die stärksten Marken der Welt haben eines gemeinsam: sie wissen, wer sie sind.</p>' +
-      '<p class="start-p" style="margin-top:4px;">Dein Archetyp ist der Kern deiner Marke.</p>' +
-      '<p class="start-p accent" style="margin-top:4px;">Finde heraus, wie du kommunizieren darfst, damit du ein Magnet für deine Traumkunden wirst.</p>' +
-      '<button class="btn-start" onclick="startQuiz()">Jetzt herausfinden &#8594;</button>' +
-      '<p class="footnote">9 Fragen &nbsp;&middot;&nbsp; 270 Sekunden &nbsp;&middot;&nbsp; Eine Gewissheit mehr</p>' +
-    '</div>' +
+  return '<div class="slide dark">' +
+    '<div class="topbar orange"></div>' +
+    '<img class="logo" src="'+LOGO+'" alt="Frischmuth Design">' +
+    '<h1 class="h-italic start-h">Finde deinen<br>Business-<br>Archetypen<br>heraus.</h1>' +
+    '<div class="accent-line" style="margin-top:20px"></div>' +
+    '<div class="start-meta">12 Fragen · 240 Sek. · Klares Ergebnis</div>' +
+    '<p class="start-p">Wer du wirklich bist, entscheidet, wen du anziehst – und wen nicht.</p>' +
+    '<div style="height:80px"></div>' +
+    '<button class="btn-primary" onclick="startQuiz()">Jetzt starten</button>' +
+    '<div class="start-foot">Kostenlos · Inklusive Farben &amp; Schriften für deine Marke</div>' +
   '</div>';
 }
 
 function renderQuestion(){
   var q = QUESTIONS[state.qi];
-  var pct = (state.qi/QUESTIONS.length)*100;
-  var lbls = ['A','B','C','D'];
-  var btns = q.answers.map(function(a,i){
-    return '<button class="ans-btn" onclick="pickAnswer('+i+')">' +
-      '<div class="ans-badge">'+lbls[i]+'</div>' +
-      '<div class="ans-text"><span class="ans-bold">'+a.t+'</span></div>' +
-    '</button>';
-  }).join('');
-  var nav = state.qi > 0 ? backBtn(false) : '<div style="height:14px"></div>';
-  return '<div class="slide q-screen">' +
-    '<div class="prog-wrap">' +
-      '<div class="prog-bar"><div class="prog-fill" style="width:'+pct+'%"></div></div>' +
-      '<div class="prog-label">Frage '+(state.qi+1)+' von '+QUESTIONS.length+'</div>' +
+  var n = state.qi+1;
+  return '<div class="slide">' +
+    '<div class="progress"><span style="width:'+(100*n/12)+'%"></span></div>' +
+    '<div class="step">Frage '+n+' von 12</div>' +
+    '<h2 class="h-q">'+esc(q.t)+'</h2>' +
+    '<p class="sub">'+esc(q.h)+'</p>' +
+    answerList(q.a.map(function(x){return x[0];}), 'pickAnswer') +
+    '<div class="spacer"></div>' +
+    backBtn('goBack') +
+  '</div>';
+}
+
+function renderTie(){
+  var many = state.tie.length > 2;
+  return '<div class="slide">' +
+    '<div class="progress"><span style="width:100%"></span></div>' +
+    '<div class="step">Zusatzfrage</div>' +
+    '<h2 class="h-q">Dein Ergebnis ist knapp. Noch eine Frage dazu:</h2>' +
+    '<p class="sub">Welche Beschreibung trifft im Kern '+(many?'am ehesten':'eher')+' auf dich zu?</p>' +
+    answerList(state.tie.map(function(t){return CORE[t];}), 'pickTie') +
+    '<div class="spacer"></div>' +
+    backBtn('goBack') +
+  '</div>';
+}
+
+function renderEmail(){
+  return '<div class="slide">' +
+    '<div class="topbar"></div>' +
+    '<h2 class="h-italic email-h">Fast da!</h2>' +
+    '<div class="accent-line" style="margin-top:12px"></div>' +
+    '<p style="font-size:17px;margin-top:22px">Dein Archetyp-Ergebnis wartet.</p>' +
+    '<p class="sub" style="margin-top:6px;font-size:15px">Trag deine E-Mail ein und sieh dein Ergebnis sofort.</p>' +
+    '<div style="margin-top:28px">' +
+      '<input class="field" id="emailInput" type="email" inputmode="email" autocomplete="email" placeholder="deine@email.de" onkeydown="if(event.key===\'Enter\')submitEmail()">' +
+      '<div class="err" id="emailError">Bitte gib eine gültige E-Mail-Adresse ein.</div>' +
     '</div>' +
-    nav +
-    '<div class="q-content">' +
-      '<h2 class="q-headline">'+q.text+'</h2>' +
-      '<p class="q-hint">'+q.hint+'</p>' +
-      '<div class="answers">'+btns+'</div>' +
+    '<button class="btn-primary" style="margin-top:14px" onclick="submitEmail()">Ergebnis anzeigen →</button>' +
+    '<p class="privacy">Kein Spam. Keine Weitergabe.<br>Nur dein Profil + wertvolle Branding-Tipps.</p>' +
+    '<p style="font-size:13px;font-weight:500;color:var(--muted);margin-top:30px">Bereits Kundin? Code eingeben →</p>' +
+    '<div class="code-row">' +
+      '<input class="field" id="codeInput" type="text" autocomplete="off" placeholder="Zugangscode" onkeydown="if(event.key===\'Enter\')submitCode()">' +
+      '<button class="btn-code" onclick="submitCode()" aria-label="Code bestätigen">→</button>' +
     '</div>' +
+    '<div class="err" id="codeError">Dieser Code ist ungültig.</div>' +
+    '<div class="spacer"></div>' +
+    backBtn('goBack') +
   '</div>';
 }
 
 function renderValidation(){
-  var v = VALIDATIONS[state.archetype]||'';
-  return '<div class="slide val-screen">' +
-    '<div class="prog-wrap">' +
-      '<div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>' +
-      '<div class="prog-label">Fast geschafft!</div>' +
-    '</div>' +
-    backBtn(false) +
-    '<div class="val-content">' +
-      '<div class="reveal-card">' +
-        '<div class="reveal-label">Wir denken, du bist ein &#8230;</div>' +
-        '<div class="reveal-name">'+state.archetype+'</div>' +
-        '<div class="reveal-bar"></div>' +
-        '<div class="reveal-text">'+v+'</div>' +
-      '</div>' +
-      '<h3 class="val-q">Stimmt das?</h3>' +
-      '<div class="val-btns">' +
-        '<button class="val-btn primary" onclick="validateYes()">&#10003; Ja, das bin ich.</button>' +
-        '<button class="val-btn" onclick="validatePartly()">&#8212; Teilweise – aber nicht ganz</button>' +
-        '<button class="val-btn" onclick="validateNo()">&#10007; Nein, das passt nicht.</button>' +
-      '</div>' +
-    '</div>' +
-  '</div>';
-}
-
-function renderCorrection(){
-  var alts = CORRECTIONS[state.archetype]||[];
-  var cards = alts.map(function(a){
-    return '<button class="alt-card" onclick="pickAlt(\''+a.n+'\')">'+
-      '<div><div class="alt-name">'+a.n+'</div><div class="alt-desc">'+a.d+'</div></div>'+
-    '</button>';
-  }).join('');
-  return '<div class="slide corr-screen">' +
-    '<div class="prog-wrap">' +
-      '<div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>' +
-      '<div class="prog-label">Kein Problem!</div>' +
-    '</div>' +
-    backBtn(false) +
-    '<div class="corr-content">' +
-      '<h2 class="corr-h">Welcher passt besser?</h2>' +
-      '<p class="corr-sub">"Einer davon trifft es. Garantiert."</p>' +
-      '<div class="alt-cards">'+cards+'</div>' +
-      '<button class="restart-link" onclick="restart()">Keiner davon trifft es? Von vorne starten.</button>' +
-    '</div>' +
-  '</div>';
-}
-
-function renderEmailCapture(){
+  var v = [['✓','Ja, absolut – das bin ich!','#218C21','validateYes'],
+           ['~','Teilweise – aber nicht ganz','#CC9900','validateNo'],
+           ['✗','Nein, das passt nicht','#B21A1A','validateNo']];
   return '<div class="slide">' +
-    '<div class="start-bar"></div>' +
-    '<div class="email-screen">' +
-      '<div class="email-icon">&#10024;</div>' +
-      '<h2 class="email-headline">Fast<br>geschafft!</h2>' +
-      '<p class="email-sub">Wohin schicken wir dein persönliches<br><span style="color:var(--orange);font-weight:500;">Brand Mirror</span> Profil?</p>' +
-      '<div class="email-form">' +
-        '<input class="email-input" id="emailInput" type="email" placeholder="deine@email.com">' +
-        '<div class="email-error" id="emailError" style="display:none;">Bitte gib eine gültige Email ein.</div>' +
-        '<button class="btn-email" onclick="submitEmail()">Mein Profil anzeigen &#8594;</button>' +
-      '</div>' +
-      '<div class="code-divider"><span>oder</span></div>' +
-      '<div class="code-section">' +
-        '<p class="code-label">Bereits Kund*in? Gib deinen Code ein:</p>' +
-        '<div class="code-row">' +
-          '<input class="code-input" id="codeInput" type="text" placeholder="Dein Code">' +
-          '<button class="btn-code" onclick="submitCode()">&#8594;</button>' +
-        '</div>' +
-        '<div class="code-error" id="codeError" style="display:none;">Ungültiger Code.</div>' +
-      '</div>' +
-      '<p class="email-privacy">Kein Spam. Keine Weitergabe.<br>Nur dein Profil + wertvolle Branding-Tipps.</p>' +
+    '<div class="topbar"></div>' +
+    '<div style="font-size:13px;font-weight:500;color:var(--muted);margin-top:30px">Fast geschafft!</div>' +
+    '<div class="reveal">' +
+      '<div class="rl">WIR DENKEN, DU BIST EIN …</div>' +
+      '<div class="h-italic big">Archetyp</div>' +
+      '<div class="bar"></div>' +
+      '<p>'+esc(VALIDATIONS[state.main])+'</p>' +
     '</div>' +
+    '<h2 class="h-italic val-q">Trifft das auf dich zu?</h2>' +
+    '<div class="vbtns">' + v.map(function(b){
+      return '<button class="vbtn" onclick="'+b[3]+'(this)"><span class="ic" style="color:'+b[2]+'">'+b[0]+'</span>'+b[1]+'</button>';
+    }).join('') + '</div>' +
+    '<div class="spacer"></div>' +
+    backBtn('goBack') +
   '</div>';
 }
 
-function renderLoading(){
-  return '<div class="slide load-screen">' +
-    '<div class="orbit-loader">' +
-      '<div class="orbit-ring"></div>' +
-      '<div class="orbit-ring"></div>' +
-      '<div class="orbit-ring"></div>' +
-      '<div class="orbit-dot"></div>' +
-    '</div>' +
-    '<div class="load-label">Dein Profil wird erstellt</div>' +
-    '<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>' +
+function altTypes(){
+  var r = ranked(state.scores);
+  return r.filter(function(t){ return t !== state.main; }).slice(0,3);
+}
+function renderAlt(){
+  return '<div class="slide">' +
+    '<div class="progress"><span style="width:100%"></span></div>' +
+    '<div class="step">Deine Alternativen</div>' +
+    '<h2 class="h-q">Welche Beschreibung passt besser zu dir?</h2>' +
+    '<p class="sub">Diese Typen liegen bei dir ebenfalls weit vorn.</p>' +
+    answerList(altTypes().map(function(t){return CORE[t];}), 'pickAlt') +
+    '<button class="link" onclick="toResult()">Doch mein erstes Ergebnis</button>' +
+    '<div class="spacer"></div>' +
+    backBtn('goBack') +
   '</div>';
 }
 
 function renderResult(){
-  var r = state.result;
-  var th = THEMES[state.archetype] || THEMES.OUTLAW;
-  if(!r) return '<div class="slide"><p style="padding:40px;color:red;">Kein Ergebnis.</p></div>';
-
-  function sec(label,html){return '<div><div class="sec-label">'+label+'</div>'+html+'</div>';}
-
-  var marken = r.marken && r.marken.length ? sec('Marken, die so ticken wie du','<div class="kw-row">'+r.marken.map(function(m){return '<span class="marke-pill">'+m+'</span>';}).join('')+'</div>') : '';
-
-  var farben = r.farben && r.farben.length ? sec('Deine Farbpalette',
-    '<div class="color-row">'+r.farben.map(function(f){return '<div class="sw-wrap"><div class="sw" style="background:'+f.hex+'"></div><div class="sw-name">'+f.name+'</div></div>';}).join('')+'</div>'+
-    '<p style="font-size:13px;color:var(--hint);margin-top:10px;line-height:1.5;">'+(r.farbharmonie||'')+'</p>') : '';
-
-  var typoFont = th.typoFonts ? '"'+th.typoFonts[0]+'",'+th.typoFonts[1] : '"Jost",sans-serif';
-  var typoTextColor = th.text || '#FFFFFF';
-  var typoAZ =
-    '<div class="typo-wrap" style="color:'+typoTextColor+';">'+
-      '<div class="tz-upper" style="font-family:'+typoFont+';color:'+typoTextColor+';">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</div>'+
-      '<div class="tz-lower" style="font-family:'+typoFont+';color:'+typoTextColor+';">a b c d e f g h i j k l m n o p q r s t u v w x y z</div>'+
-      '<div class="tz-num" style="color:'+th.accent+';">0 1 2 3 4 5 6 7 8 9</div>'+
-    '</div>';
-  var typo = r.typografie ? sec('Typografie – '+th.typoLabel,
-    '<div class="typo-spec" style="background:'+th.bg+';border-color:rgba(255,255,255,.1);">'+
-    typoAZ+
-    '<div class="typo-div" style="background:rgba(255,255,255,.1);"></div>'+
-    '<div class="typo-desc" style="color:'+th.text+';opacity:.8;">'+r.typografie+'</div>'+
-    '</div>') : '';
-
-  var bild = r.bildsprache ? sec('Bildsprache','<div class="res-box"><p style="font-size:14px;color:var(--muted);line-height:1.7;">'+r.bildsprache+'</p></div>') : '';
-
-  var quotes = r.quotes && r.quotes.length ? sec('Dein Wording','<div class="quote-list" style="border-left-color:'+th.accent+'">'+r.quotes.map(function(q){return '<div class="quote-item" style="border-left-color:'+th.accent+';background:'+th.accent+'15;">&#8220;'+q+'&#8221;</div>';}).join('')+'</div>') : '';
-
-  var kws = r.keywords && r.keywords.length ? sec('Schlüsselwörter','<div class="kw-row">'+r.keywords.map(function(k){return '<span class="kw" style="color:'+th.accent+'">'+k+'</span>';}).join('')+'</div>') : '';
-
-  var traum = r.traumkunden && r.traumkunden.length ? sec('Deine Traumkunden',
-    '<div class="client-list">'+r.traumkunden.map(function(c,i){
-      return '<div class="dd" id="dd'+i+'">'+
-        '<button class="dd-hdr" onclick="toggleDD('+i+')">'+
-          '<span class="dd-name">'+c.archetyp+'</span>'+
-          '<div class="dd-arrow"><svg viewBox="0 0 10 10"><path d="M2 3.5L5 6.5l3-3"/></svg></div>'+
-        '</button>'+
-        '<div class="dd-body">'+c.beschreibung+'</div>'+
-      '</div>';
-    }).join('')+'</div>') : '';
-
-  var anti = r.antikunden && r.antikunden.length ? sec('Anti-Kunden – vermeide diese!',
-    '<div class="client-list">'+r.antikunden.map(function(c,i){
-      return '<div class="dd anti-dd" id="add'+i+'">'+
-        '<button class="dd-hdr anti-hdr" onclick="toggleADD('+i+')">'+
-          '<span class="dd-name anti-dd-name">'+c.archetyp+'</span>'+
-          '<div class="dd-arrow anti-arrow"><svg viewBox="0 0 10 10" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M2 3.5L5 6.5l3-3"/></svg></div>'+
-        '</button>'+
-        '<div class="dd-body">'+c.beschreibung+'</div>'+
-      '</div>';
-    }).join('')+'</div>') : '';
-
-  var kond = r.konditionen_ja && r.konditionen_ja.length ? sec('Passende Projekte & Konditionen',
-    '<div class="res-box"><div class="contract-list">'+
-    r.konditionen_ja.map(function(k){return '<div class="ci yes">'+k+'</div>';}).join('')+
-    (r.konditionen_nein||[]).map(function(k){return '<div class="ci no">'+k+'</div>';}).join('')+
-    '</div></div>') : '';
-
-  var steps = r.next_steps && r.next_steps.length ? sec('Deine nächsten 3 Schritte',
-    '<div class="steps-list">'+r.next_steps.map(function(s,i){return '<div class="step"><div class="step-n" style="background:'+th.accent+';">'+(i+1)+'</div><div class="step-t">'+s+'</div></div>';}).join('')+'</div>') : '';
-
-  var ctaStyle = ''; /* Always use CSS class gradient */
-
-  return '<div class="slide res-screen">' +
-    '<div class="res-hero" style="background:'+th.bg+';">' +
-      '<div class="res-topbar" style="background:'+th.bar+';"></div>' +
-      '<div style="position:absolute;inset:0;'+th.heroGrad.replace('radial-gradient','background:radial-gradient')+';pointer-events:none;"></div>' +
-      '<div class="res-label" style="color:'+th.text+';position:relative;z-index:1;">Dein Archetyp</div>' +
-      '<div class="res-name" style="color:'+th.text+';'+th.font+'position:relative;z-index:1;">'+state.archetype+'</div>' +
-      '<div class="res-bar" style="background:'+th.accent+';"></div>' +
-      '<p class="res-tagline" style="color:'+th.text+';">'+(r.narrative||'')+'</p>' +
+  var m = PROFILE[state.main], s = PROFILE[state.second];
+  return '<div class="slide">' +
+    '<div class="topbar"></div>' +
+    '<div class="label" style="margin-top:34px">Dein Ergebnis</div>' +
+    '<p style="font-size:14px;margin-top:12px">Deine Antworten gewichten so:</p>' +
+    '<div class="res-card" style="background:var(--night);margin-top:24px">' +
+      '<div class="rl">DEIN HAUPTTYP</div>' +
+      '<div class="h-italic name">'+state.main+'</div>' +
+      '<div class="pct" style="color:'+m.th[2]+'">'+state.pctMain+' %</div>' +
+      '<div class="track"><span style="width:'+state.pctMain+'%;background:'+m.th[2]+'"></span></div>' +
+      '<div class="note">Auf diesen Typ baut dein Branding auf.</div>' +
     '</div>' +
-    '<div class="res-body">'+marken+farben+typo+bild+quotes+kws+traum+anti+kond+steps+'</div>' +
-    '<div class="res-cta" style="background:'+th.bg+';">' +
-      '<p class="cta-quote" style="color:'+th.text+';opacity:.8;">"Du weißt jetzt, wer du bist.<br>Die Frage ist: Was machst du damit?"</p>' +
-      '<button class="btn-cta" onclick="ctaClick(this)">Mit Babs zusammenarbeiten <span class="arrow">&#8594;</span></button>' +
-      '<button class="btn-ghost" onclick="restart()">Quiz nochmal machen</button>' +
-      '<button class="btn-download" onclick="window.print()">'+
-        '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'+
-        'Ergebnis als PDF speichern'+
-      '</button>' +
+    '<div class="res-card second">' +
+      '<div class="rl">DEIN NEBENTYP</div>' +
+      '<div class="h-italic name">'+state.second+'</div>' +
+      '<div class="pct" style="color:'+s.th[2]+'">'+state.pctSecond+' %</div>' +
+      '<div class="track"><span style="width:'+state.pctSecond+'%;background:'+s.th[2]+'"></span></div>' +
+      '<div class="note">Setzt Akzente, bestimmt aber nicht dein Branding.</div>' +
+    '</div>' +
+    '<div class="how-h">So liest du dein Ergebnis</div>' +
+    '<p class="how-p">Die Prozente zeigen, wie deine Antworten zwischen deinen beiden stärksten Typen verteilt sind. Sie sind keine Messung deiner Persönlichkeit, sondern eine Orientierung für dein Branding.</p>' +
+    '<button class="btn-primary" style="margin-top:32px" onclick="toCard()">Mein Branding ansehen →</button>' +
+    '<div class="spacer"></div>' +
+    backBtn('goBack') +
+  '</div>';
+}
+
+function renderCard(){
+  var t = state.main, p = PROFILE[t];
+  var f = p.font;
+  var fontCss = 'font-family:'+f[0]+';font-weight:'+f[1]+';font-style:'+f[2];
+  return '<div class="slide" id="card">' +
+    '<div class="topbar" style="background:'+p.th[2]+'"></div>' +
+    '<div class="label" style="margin-top:28px">Dein Archetyp</div>' +
+    '<h1 class="h-italic tc-name">'+t+'</h1>' +
+    '<p class="tc-narr">'+esc(p.narr)+'</p>' +
+    '<div class="sec"><div class="label">Deine Farbpalette</div><div class="swatches">' +
+      p.pal.map(function(c){
+        return '<div class="sw"><div class="chip" style="background:'+c[1]+'"></div><b>'+esc(c[0])+'</b><span>'+c[1]+'</span><span>'+c[2]+'</span></div>';
+      }).join('') +
+    '</div></div>' +
+    '<div class="sec"><div class="label">Typografie</div>' +
+      '<div class="preview" style="background:'+p.th[0]+';color:'+p.th[1]+'">' +
+        '<div class="aa" style="'+fontCss+'">Aa Bb Cc 123</div>' +
+        '<div class="pbar" style="background:'+p.th[2]+'"></div>' +
+        '<div class="plab" style="color:'+p.th[2]+'">Schriftvorschlag: '+esc(f[3])+'</div>' +
+      '</div></div>' +
+    '<div class="sec"><div class="label">Bildsprache</div><p class="body13">'+esc(p.bild)+'</p></div>' +
+    '<div class="sec"><div class="label">Ton</div><p class="body13">'+esc(p.ton)+'</p></div>' +
+    '<div class="sec kunden">' +
+      '<div><div class="label">Traumkunden</div>' + p.tk.map(function(k){return '<div class="k-item"><b>'+esc(k[0])+'</b><span>'+esc(k[1])+'</span></div>';}).join('') + '</div>' +
+      '<div><div class="label anti-label">Anti-Kunden</div>' + p.ak.map(function(k){return '<div class="k-item anti"><b>'+esc(k[0])+'</b><span>'+esc(k[1])+'</span></div>';}).join('') + '</div>' +
+    '</div>' +
+    '<h2 class="h-italic cta-h">Lass uns dein Branding aufbauen</h2>' +
+    '<a class="btn-primary" style="margin-top:10px;height:52px" href="'+CAL_LINK+'" target="_blank" rel="noopener">Erstgespräch buchen →</a>' +
+    '<div class="small-links" data-html2canvas-ignore="true">' +
+      '<button onclick="downloadAsImage(this)">Als Bild speichern</button>' +
+      '<button onclick="restart()">Test neu starten</button>' +
     '</div>' +
   '</div>';
 }
 
-// ── ACTIONS ─────────────────────────────────────
-function startQuiz(){
-  state.screen='question';state.qi=0;
-  state.scores=initScores();state.answers=[];
-  state.archetype=null;state.result=null;
-  render();
-}
+/* ───────── Aktionen ───────── */
+function startQuiz(){ resetState(); state.screen='question'; render(); }
 
-function pickAnswer(i){
-  if(document.activeElement) document.activeElement.blur();
-  var q = QUESTIONS[state.qi];
-  var a = q.answers[i];
-  Object.keys(a.s).forEach(function(arch){state.scores[arch]=(state.scores[arch]||0)+a.s[arch];});
-  state.answers.push(a.t);
-  state.qi++;
-  if(state.qi>=QUESTIONS.length){
-    state.archetype=topArchetype(state.scores);
-    state.screen='validation';
-  }
-  render();
+function flash(el, cb){
+  if(el){ el.classList.add('selected'); }
+  setTimeout(cb, 220);
 }
-
-function validateYes(){state.screen='email';render();}
-function validatePartly(){state.screen='correction';render();}
-function validateNo(){state.screen='correction';render();}
-function pickAlt(name){state.archetype=name;state.screen='email';render();}
+function pickAnswer(i, el){
+  flash(el, function(){
+    state.answers[state.qi] = QUESTIONS[state.qi].a[i][1];
+    state.answers.length = state.qi+1;
+    if(state.qi < QUESTIONS.length-1){ state.qi++; state.screen='question'; render(); }
+    else { afterQuestions(); }
+  });
+}
+function pickTie(i, el){
+  flash(el, function(){ state.tieChoice = state.tie[i]; finalize(); state.screen='email'; render(); });
+}
+function validateYes(el){ flash(el, function(){ state.screen='result'; render(); }); }
+function validateNo(el){ flash(el, function(){ state.screen='alt'; render(); }); }
+function pickAlt(i, el){
+  var t = altTypes()[i];
+  flash(el, function(){
+    state.main = t; state.override = true;
+    if(state.email){ saveEmailToBrevo(state.email); }
+    state.screen='card'; render();
+  });
+}
+function toResult(){ finalize(); state.screen='result'; render(); }
+function toCard(){ state.screen='card'; render(); }
+function restart(){ resetState(); render(); }
 
 function goBack(){
-  if(state.screen==='validation'||state.screen==='correction'){
-    state.qi--;state.answers.pop();
-    state.scores=initScores();
-    state.answers.forEach(function(t,qi){
-      var m=QUESTIONS[qi].answers.find(function(a){return a.t===t;});
-      if(m) Object.keys(m.s).forEach(function(arch){state.scores[arch]=(state.scores[arch]||0)+m.s[arch];});
-    });
-    state.screen='question';render();
-    var s=document.querySelector('.slide');if(s)s.classList.add('back');
-    return;
-  }
-  if(state.qi>0){
-    state.qi--;state.answers.pop();
-    state.scores=initScores();
-    state.answers.forEach(function(t,qi){
-      var m=QUESTIONS[qi].answers.find(function(a){return a.t===t;});
-      if(m) Object.keys(m.s).forEach(function(arch){state.scores[arch]=(state.scores[arch]||0)+m.s[arch];});
-    });
-    state.screen='question';render();
-    var s=document.querySelector('.slide');if(s)s.classList.add('back');
-  }
-}
-
-function restart(){
-  state.screen='start';state.qi=0;
-  state.scores=initScores();state.answers=[];
-  state.archetype=null;state.result=null;
+  var s = state.screen;
+  if(s==='question'){
+    if(state.qi===0){ state.screen='start'; }
+    else { state.qi--; }
+  } else if(s==='tie'){ state.qi=11; state.screen='question'; }
+  else if(s==='email'){ if(state.tie){ state.screen='tie'; } else { state.qi=11; state.screen='question'; } }
+  else if(s==='validation'){ state.screen='email'; }
+  else if(s==='alt'){ state.screen='validation'; }
+  else if(s==='result'){ state.screen='validation'; }
   render();
-}
-
-function toggleDD(i){var el=document.getElementById('dd'+i);if(el)el.classList.toggle('open');}
-function toggleADD(i){var el=document.getElementById('add'+i);if(el)el.classList.toggle('open');}
-
-function downloadAsImage(){
-  var btn = document.querySelector('.btn-download');
-  if(btn){
-    btn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path d="M12 6v6l4 2"/></svg> Wird erstellt…';
-    btn.disabled = true;
-  }
-  // Open all dropdowns
-  document.querySelectorAll('.dd').forEach(function(dd){ dd.classList.add('open'); });
-  var el = document.querySelector('.res-screen');
-  if(!el){ alert('Kein Ergebnis gefunden.'); return; }
-  setTimeout(function(){
-    html2canvas(el, {
-      backgroundColor: null,
-      scale: 2,
-      useCORS: true,
-      logging: false
-    }).then(function(canvas){
-      var link = document.createElement('a');
-      link.download = 'BrandMirror-' + (state.archetype||'Ergebnis') + '.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      if(btn){
-        btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Ergebnis als Bild speichern';
-        btn.disabled = false;
-      }
-    }).catch(function(e){
-      console.error(e);
-      if(btn){
-        btn.innerHTML = 'Fehler – bitte nochmal versuchen';
-        btn.disabled = false;
-      }
-    });
-  }, 400);
-}
-
-function ctaClick(btn){
-  btn.classList.add('firing');
-  btn.style.transform='scale(1.03)';
-  btn.style.boxShadow='0 12px 40px rgba(255,92,0,.6)';
-  setTimeout(function(){
-    btn.style.transform='';
-    btn.style.boxShadow='';
-    btn.classList.remove('firing');
-    window.open('mailto:hallo@frischmuth.design?subject=Brand Mirror Anfrage','_blank');
-  },500);
 }
 
 function submitEmail(){
-  var email = document.getElementById('emailInput').value.trim();
-  var errorEl = document.getElementById('emailError');
-  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if(!emailRegex.test(email)){
-    errorEl.style.display='block';
-    return;
-  }
-  errorEl.style.display='none';
-  // Save to Brevo
+  var input = document.getElementById('emailInput');
+  var email = input.value.trim();
+  var ok = email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  document.getElementById('emailError').style.display = ok ? 'none' : 'block';
+  if(!ok){ return; }
+  state.email = email;
   saveEmailToBrevo(email);
-  // Launch sparks and proceed
-  launchSparks();
-  setTimeout(function(){generateResult();},400);
+  state.screen='validation'; render();
 }
-
-function skipEmail(){
-  launchSparks();
-  setTimeout(function(){generateResult();},400);
-}
-
 function submitCode(){
   var code = document.getElementById('codeInput').value.trim().toLowerCase();
-  var errorEl = document.getElementById('codeError');
-  if(code === 'fun2take'){
-    errorEl.style.display='none';
-    launchSparks();
-    setTimeout(function(){generateResult();},400);
-  } else {
-    errorEl.style.display='block';
-  }
+  var ok = code === 'fun2take';
+  document.getElementById('codeError').style.display = ok ? 'none' : 'block';
+  if(ok){ state.screen='validation'; render(); }
 }
 
 async function saveEmailToBrevo(email){
@@ -1052,48 +631,27 @@ async function saveEmailToBrevo(email){
     await fetch('/api/subscribe',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email:email,archetype:state.archetype})
+      body:JSON.stringify({email:email,archetype:state.main})
     });
   }catch(e){
     console.log('Brevo error:',e);
   }
 }
 
-
-async function generateResult(){
-  state.screen='loading';render();
-  var th = THEMES[state.archetype]||THEMES.OUTLAW;
-  var prompt = 'Du bist Experte fuer Brand-Archetypen nach C.G. Jung. Archetyp: '+state.archetype+'. Antworten: '+state.answers.map(function(a,i){return 'F'+(i+1)+': '+a;}).join(' | ')+'. WICHTIG: Nutze NICHT die Farben #0D0B14 #FF5C00 #5B3FA0 #FAFAFA. Waehle AUSSERGEWOEHNLICHE, AKTUELLE 2025/2026 Farben fuer diesen Archetyp. Denke an Premium-Branding, nicht Standard. Antworte NUR mit JSON ohne Markdown: {"narrative":"3-4 Saetze Du-Ansprache konkret inspirierend","marken":["M1","M2","M3"],"farben":[{"name":"N","hex":"#XXX","rolle":"Basis"},{"name":"N","hex":"#XXX","rolle":"Akzent"},{"name":"N","hex":"#XXX","rolle":"Support"},{"name":"N","hex":"#XXX","rolle":"Hintergrund"}],"farbharmonie":"1 Satz","typografie":"Konkrete Schrift-Empfehlung 2-3 Saetze warum sie zu diesem Archetyp passt","bildsprache":"1-2 Saetze","quotes":["S1","S2","S3"],"keywords":["K1","K2","K3","K4","K5","K6"],"traumkunden":[{"archetyp":"N","beschreibung":"Persoenlichkeit wie er als Mensch ist was im Umgang wichtig"},{"archetyp":"N","beschreibung":"..."},{"archetyp":"N","beschreibung":"..."}],"antikunden":[{"archetyp":"N","beschreibung":"Warum nicht passend"},{"archetyp":"N","beschreibung":"..."}],"konditionen_ja":["P1","P2","P3"],"konditionen_nein":["P1","P2"],"next_steps":["S1","S2","Schreib 3 Saetze ueber dich die unerwartet sind und neugierig machen wer du bist"]}';
-  try{
-    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
-    var data=await res.json();
-    var txt=data.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');
-    var clean=txt.replace(/```json|```/g,'').trim();
-    state.result=JSON.parse(clean);
-  }catch(e){
-    state.result=getFallback(state.archetype);
-  }
-  state.screen='result';render();
-}
-
-function getFallback(a){
-  var ns={OUTLAW:"Du bist der Archetyp, der sagt was alle denken – aber niemand ausspricht. Dein Business funktioniert, weil du radikal ehrlich bist. Kunden wählen dich nicht trotz deiner Direktheit, sondern wegen ihr.",EXPLORER:"Du bist nie wirklich angekommen – und genau das ist deine Stärke. Dein Business lebt von Bewegung, neuen Perspektiven, der Frage: Was wäre, wenn?",MAGIER:"Du denkst in Zukunft, während andere noch über die Gegenwart diskutieren. Du verkaufst nicht nur eine Lösung – du verkaufst eine neue Realität.",HERRSCHER:"Du bist nicht hier um mitzuschwimmen – du bist hier um den Ton anzugeben. Klare Strukturen, hohe Standards, kein Kompromiss.",WEISER:"Während andere an der Oberfläche bleiben, gehst du in die Tiefe. Du bist die Stimme der Vernunft in einer Branche voller Buzzwords.",HELD:"Du redest nicht lange – du machst. Dein Business ist auf Ergebnisse ausgelegt: messbar, sichtbar, spürbar.",LIEBHABER:"Für dich ist Business nie nur Business – es ist Ausdruck, Hingabe, Verbindung. Menschen spüren, wenn etwas mit Liebe gemacht wurde.",LIEBENDER:"Du bist der ruhende Punkt für deine Kunden. Dein Business basiert auf Vertrauen, das über Jahre wächst.",JESTER:"Du nimmst dich selbst nicht zu ernst – und genau das macht dich unwiderstehlich. Humor ist bei dir keine Lücke, sondern die Strategie.",EVERYMAN:"Du machst keinen auf besonders – und genau das ist deine Stärke. Bei dir muss niemand etwas vorspielen.",UNSCHULDIGE:"In einer Welt voller Überforderung bist du die Ausnahme: bei dir wird es einfach.",
-    SCHOEPFER:"Du erschaffst was andere sich nicht vorstellen können. Dein Business ist dein Werk – und jedes Detail trägt deine Handschrift. Kunden wählen dich, weil du nicht reproduzierst. Du erschaffst."};
-  var fallFarben = {
-    OUTLAW:[{name:"Void",hex:"#0A0A0F",rolle:"Basis"},{name:"Ember",hex:"#E63946",rolle:"Akzent"},{name:"Ash",hex:"#6B6B76",rolle:"Support"},{name:"Chalk",hex:"#F5F5F0",rolle:"Hintergrund"}],
-    EXPLORER:[{name:"Deep Ocean",hex:"#0A1628",rolle:"Basis"},{name:"Teal Wave",hex:"#4ECDC4",rolle:"Akzent"},{name:"Horizon",hex:"#45B7D1",rolle:"Support"},{name:"Mist",hex:"#EEF6F8",rolle:"Hintergrund"}],
-    MAGIER:[{name:"Abyss",hex:"#0F0A1E",rolle:"Basis"},{name:"Amethyst",hex:"#A78BFA",rolle:"Akzent"},{name:"Mauve",hex:"#7C3AED",rolle:"Support"},{name:"Lavender",hex:"#F0EAFF",rolle:"Hintergrund"}],
-    HERRSCHER:[{name:"Obsidian",hex:"#0C0C0C",rolle:"Basis"},{name:"Champagne",hex:"#C9A84C",rolle:"Akzent"},{name:"Pewter",hex:"#3D3D3D",rolle:"Support"},{name:"Ivory",hex:"#F5F0E8",rolle:"Hintergrund"}],
-    WEISER:[{name:"Midnight Blue",hex:"#0E1620",rolle:"Basis"},{name:"Cerulean",hex:"#60A5FA",rolle:"Akzent"},{name:"Steel",hex:"#334155",rolle:"Support"},{name:"Ice",hex:"#EEF4FF",rolle:"Hintergrund"}],
-    HELD:[{name:"Carbon",hex:"#0D0B14",rolle:"Basis"},{name:"Amber",hex:"#F59E0B",rolle:"Akzent"},{name:"Rust",hex:"#D97706",rolle:"Support"},{name:"Cream",hex:"#FFFBEB",rolle:"Hintergrund"}],
-    LIEBHABER:[{name:"Burgundy Night",hex:"#1A0A0F",rolle:"Basis"},{name:"Rose Quartz",hex:"#F472B6",rolle:"Akzent"},{name:"Blush",hex:"#EC4899",rolle:"Support"},{name:"Petal",hex:"#FFF0F6",rolle:"Hintergrund"}],
-    LIEBENDER:[{name:"Forest",hex:"#0F1A14",rolle:"Basis"},{name:"Sage",hex:"#6EE7B7",rolle:"Akzent"},{name:"Moss",hex:"#34D399",rolle:"Support"},{name:"Dew",hex:"#ECFDF5",rolle:"Hintergrund"}],
-    JESTER:[{name:"Ink",hex:"#0A0A1A",rolle:"Basis"},{name:"Saffron",hex:"#FBBF24",rolle:"Akzent"},{name:"Paprika",hex:"#F97316",rolle:"Support"},{name:"Vanilla",hex:"#FFFBEB",rolle:"Hintergrund"}],
-    EVERYMAN:[{name:"Graphite",hex:"#141414",rolle:"Basis"},{name:"Slate",hex:"#94A3B8",rolle:"Akzent"},{name:"Pewter",hex:"#64748B",rolle:"Support"},{name:"Paper",hex:"#F8F9FA",rolle:"Hintergrund"}],
-    SCHOEPFER:[{name:"Warm Charcoal",hex:"#12100E",rolle:"Basis"},{name:"Vermillion",hex:"#E8531A",rolle:"Akzent"},{name:"Terracotta",hex:"#C2400F",rolle:"Support"},{name:"Ivory Cream",hex:"#F5EDD7",rolle:"Hintergrund"}],
-    UNSCHULDIGE:[{name:"Deep Sky",hex:"#0F1520",rolle:"Basis"},{name:"Periwinkle",hex:"#93C5FD",rolle:"Akzent"},{name:"Cornflower",hex:"#60A5FA",rolle:"Support"},{name:"Cloud",hex:"#EEF4FF",rolle:"Hintergrund"}]
-  };
-  return{narrative:ns[a]||ns.OUTLAW,marken:["Patagonia","Oatly","Innocent"],farben:fallFarben[a]||fallFarben.OUTLAW,farbharmonie:"Sorgfältig abgestimmte Palette mit starkem Kontrast – Tiefe trifft Präzision.",typografie:"Für diesen Archetyp empfehlen sich Schriften mit klarer Haltung. Die Buchstabenform spiegelt Charakter wider – nicht beliebig, sondern bewusst gewählt.",bildsprache:"Authentisch und ungestellt. Kein Stockphoto-Feeling – echte Momente, echte Menschen.",quotes:["Wir machen, was wir sagen.","Keine versteckten Kosten – keine versteckten Absichten.","Du weißt immer, woran du bist."],keywords:["Authentisch","Klar","Verlässlich","Direkt","Echt","Substanz"],traumkunden:[{archetyp:"Held",beschreibung:"Zielorientiert und direkt – will Ergebnisse sehen, nicht Versprechen hören."},{archetyp:"Weiser",beschreibung:"Analytisch und gründlich – schätzt Transparenz und fundierte Antworten."},{archetyp:"Explorer",beschreibung:"Rastlos und neugierig – sucht jemanden der mithält wenn er neue Wege geht."}],antikunden:[{archetyp:"Herrscher",beschreibung:"Braucht Kontrolle und gibt sie nicht ab – das führt zu Dauerreibung."},{archetyp:"Unschuldige",beschreibung:"Erwartet reibungslosen Ablauf ohne Eigeninitiative zu zeigen."}],konditionen_ja:["Klare Briefings mit echtem Ziel","Direkte Kommunikation ohne Umwege","Vertrauen in den Prozess ohne Mikromanagement"],konditionen_nein:["Projekte ohne definierten Erfolg","Kunden die Ergebnisse ablehnen aber keine Richtung geben"],next_steps:["Überprüfe deine Kommunikation – bist du wirklich so direkt wie du glaubst?","Definiere einen Kundentyp dem du ab jetzt bewusst Nein sagst","Schreib 3 Sätze über dich, die unerwartet sind und neugierig machen, wer du bist"]};
+function downloadAsImage(btn){
+  var el = document.getElementById('card');
+  if(!el || typeof html2canvas === 'undefined'){ return; }
+  var old = btn.textContent;
+  btn.textContent = 'Wird erstellt …'; btn.disabled = true;
+  html2canvas(el, {backgroundColor:'#F8F4EE', scale:2, useCORS:true, logging:false}).then(function(canvas){
+    var a = document.createElement('a');
+    a.download = 'BrandMirror-' + state.main + '.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+    btn.textContent = old; btn.disabled = false;
+  }).catch(function(){
+    btn.textContent = 'Fehler – bitte nochmal versuchen'; btn.disabled = false;
+  });
 }
 
 render();
